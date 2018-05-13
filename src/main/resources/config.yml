@@ -1,0 +1,46 @@
+################################################################################################
+#    ____                            _                        _           _                    #
+#   |  _ \    ___    _ __     __ _  | |_    ___    _ __      | |   ___   (_)  _ __      _      #
+#   | | | |  / _ \  | '_ \   / _` | | __|  / _ \  | '__|  _  | |  / _ \  | | | '_ \   _| |_    #
+#   | |_| | | (_) | | | | | | (_| | | |_  | (_) | | |    | |_| | | (_) | | | | | | | |_   _|   #
+#   |____/   \___/  |_| |_|  \__,_|  \__|  \___/  |_|     \___/   \___/  |_| |_| |_|   |_|     #
+#                                                                                              #
+################################################################################################
+
+# Set to false to disable default MC join message.
+joinmessage: false
+
+# Set to false to disable default MC quit message.
+quitmessage: false
+
+ranks:
+  - name: 'VIP'
+    join:
+      enabled: true
+      message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas joined the game!'
+      sound:
+        enabled: true
+        sound: ENTITY_IRONGOLEM_DEATH
+      firework: true
+    quit:
+      enabled: true
+      message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas left the game!'
+      sound:
+        enabled: true
+        sound: ENTITY_IRONGOLEM_DEATH
+      firework: false
+  - name: 'MVP'
+    join:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas joined the game!'
+      sound:
+        enabled: true
+        sound: BLOCK_PORTAL_TRAVEL
+      firework: true
+    quit:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas left the game!'
+      sound:
+        enabled: true
+        sound: BLOCK_PORTAL_TRAVEL
+      firework: false
