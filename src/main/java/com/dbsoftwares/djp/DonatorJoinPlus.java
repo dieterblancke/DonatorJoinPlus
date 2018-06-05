@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,8 @@ public class DonatorJoinPlus extends JavaPlugin {
 
             rankData.add(data);
         }
+
+        rankData.sort(Comparator.comparingInt(RankData::getPriority));
 
         disableJoinMessage = getConfig().getBoolean("joinmessage");
         disableQuitMessage = getConfig().getBoolean("quitmessage");

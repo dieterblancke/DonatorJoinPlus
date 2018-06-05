@@ -14,11 +14,13 @@ import java.util.Map;
 public class RankData {
 
     private String name;
+    private int priority;
     private EventData join;
     private EventData quit;
 
     public void fromMap(Map map) {
-        this.name = (String) map.get(name);
+        this.name = (String) map.get("name");
+        this.priority = (int) map.get("priority");
 
         this.join = getData(EventData.EventType.JOIN, map);
         this.quit = getData(EventData.EventType.QUIT, map);

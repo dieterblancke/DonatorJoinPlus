@@ -50,6 +50,10 @@ public class PlayerListener implements Listener {
                         p.getWorld().playSound(p.getLocation(), eventData.getSound(), 20F, -20F);
                     }
                 }
+
+                if (plugin.getConfig().getBoolean("usepriorities")) {
+                    break;
+                }
             }
         }
     }
@@ -78,6 +82,10 @@ public class PlayerListener implements Listener {
                     if (eventData.isSoundEnabled()) {
                         p.getWorld().playSound(p.getLocation(), eventData.getSound(), 20F, -20F);
                     }
+                }
+
+                if (plugin.getConfig().getBoolean("usepriorities")) {
+                    break;
                 }
             }
         }

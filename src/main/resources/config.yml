@@ -13,8 +13,13 @@ joinmessage: false
 # Set to false to disable default MC quit message.
 quitmessage: false
 
+# If true, only the highest priority rank will be broadcasted!
+# If false, a broadcast for any found rank will be sent.
+usepriorities: true
+
 ranks:
   - name: 'VIP'
+    priority: 10
     join:
       enabled: true
       message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas joined the game!'
@@ -30,6 +35,7 @@ ranks:
         sound: ENTITY_IRONGOLEM_DEATH
       firework: false
   - name: 'MVP'
+    priority: 20
     join:
       enabled: true
       message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas joined the game!'
