@@ -53,7 +53,7 @@ public class DonatorJoinPlus extends JavaPlugin {
             rankData.add(data);
         }
 
-        rankData.sort(Comparator.comparingInt(RankData::getPriority));
+        rankData.sort((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority()));
 
         disableJoinMessage = getConfig().getBoolean("joinmessage");
         disableQuitMessage = getConfig().getBoolean("quitmessage");
