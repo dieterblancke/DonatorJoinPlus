@@ -19,13 +19,16 @@ public class DJCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("donatorjoin")) {
             if (args.length != 1) {
                 sender.sendMessage(Utils.c("&ePlease use &b/dj reload&e!"));
-            } else if (sender.hasPermission("donatorjoin.reload")) {
+                return false;
+            }
+            if (sender.hasPermission("donatorjoin.reload")) {
                 DonatorJoinPlus.getPlugin(DonatorJoinPlus.class).reloadConfig();
                 sender.sendMessage(Utils.c("&eYou have reloaded the config!"));
+                return true;
             } else {
                 sender.sendMessage(Utils.c("&eYou do not have the permission to do this!"));
             }
         }
-        return true;
+        return false;
     }
 }
