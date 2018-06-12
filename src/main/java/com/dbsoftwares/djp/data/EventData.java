@@ -31,7 +31,9 @@ public class EventData {
 
         Map sound = (Map) map.get("sound");
         this.soundEnabled = (boolean) sound.get("enabled");
-        this.sound = Sound.valueOf(sound.get("sound").toString().toUpperCase());
+        if (soundEnabled) {
+            this.sound = Sound.valueOf(sound.get("sound").toString().toUpperCase());
+        }
         this.firework = (boolean) map.get("firework");
     }
 
