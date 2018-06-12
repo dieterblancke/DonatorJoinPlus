@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
                         Utils.spawnFirework(p.getLocation());
                     }
 
-                    if (eventData.isSoundEnabled()) {
+                    if (eventData.isSoundEnabled() && eventData.getSound() != null) {
                         p.getWorld().playSound(p.getLocation(), eventData.getSound(), 20F, -20F);
                     }
                 }
@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
                         Utils.spawnFirework(p.getLocation());
                     }
 
-                    if (eventData.isSoundEnabled()) {
+                    if (eventData.isSoundEnabled() && eventData.getSound() != null) {
                         p.getWorld().playSound(p.getLocation(), eventData.getSound(), 20F, -20F);
                     }
                 }
