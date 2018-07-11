@@ -25,6 +25,8 @@ public class DonatorJoinPlus extends JavaPlugin {
 
     @Getter private boolean disableJoinMessage;
     @Getter private boolean disableQuitMessage;
+    @Getter private boolean usePriorities;
+    @Getter private boolean usePermissions;
 
     @Override
     public void onEnable() {
@@ -39,8 +41,9 @@ public class DonatorJoinPlus extends JavaPlugin {
         getCommand("donatorjoin").setExecutor(new DJCommand());
     }
 
-    private void loadConfig() {
+    public void loadConfig() {
         saveDefaultConfig();
+        rankData.clear();
 
         List list = getConfig().getList("ranks");
 
@@ -55,5 +58,7 @@ public class DonatorJoinPlus extends JavaPlugin {
 
         disableJoinMessage = getConfig().getBoolean("joinmessage");
         disableQuitMessage = getConfig().getBoolean("quitmessage");
+        usePriorities = getConfig().getBoolean("usepriorities");
+        usePermissions = getConfig().getBoolean("usepermissions");
     }
 }

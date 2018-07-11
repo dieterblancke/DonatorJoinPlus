@@ -22,7 +22,11 @@ public class DJCommand implements CommandExecutor {
                 return false;
             }
             if (sender.hasPermission("donatorjoin.reload")) {
-                DonatorJoinPlus.getPlugin(DonatorJoinPlus.class).reloadConfig();
+                DonatorJoinPlus plugin = DonatorJoinPlus.getPlugin(DonatorJoinPlus.class);
+
+                plugin.reloadConfig();
+                plugin.loadConfig();
+
                 sender.sendMessage(Utils.c("&eYou have reloaded the config!"));
                 return true;
             } else {

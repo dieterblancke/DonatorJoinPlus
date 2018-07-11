@@ -17,8 +17,17 @@ quitmessage: false
 # If false, a broadcast for any found rank will be sent.
 usepriorities: true
 
+# If false, DonatorJoinPlus will use the 'name' you set in the ranks below as group identifiers.
+# People with a group with the same name as the rank will get the join message.
+#
+# If true, DonatorJoinPlus will use the 'permission' you set in the ranks below as identifier.
+# If the user has the permission it will send the highest priority join message,
+# or all if usepriorities is set to false.
+usepermissions: false
+
 ranks:
   - name: 'VIP'
+    permission: 'djp.vip'
     priority: 10
     join:
       enabled: true
@@ -35,6 +44,7 @@ ranks:
         sound: ENTITY_IRONGOLEM_DEATH
       firework: false
   - name: 'MVP'
+    permission: 'djp.mvp'
     priority: 20
     join:
       enabled: true
