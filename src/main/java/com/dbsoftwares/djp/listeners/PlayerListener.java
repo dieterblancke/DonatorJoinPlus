@@ -30,6 +30,10 @@ public class PlayerListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
 
+        if (Utils.isVanished(p)) {
+            return;
+        }
+
         if (!plugin.isDisableJoinMessage()) {
             event.setJoinMessage(null);
         }
@@ -61,6 +65,10 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
+
+        if (Utils.isVanished(p)) {
+            return;
+        }
 
         if (!plugin.isDisableJoinMessage()) {
             event.setQuitMessage(null);

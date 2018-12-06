@@ -11,9 +11,23 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.MetadataValue;
 
 public class Utils {
+
+    private Utils() {
+    }
+
+    public static boolean isVanished(Player player) {
+        for (MetadataValue meta : player.getMetadata("vanished")) {
+            if (meta.asBoolean()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void spawnFirework(Location loc) {
         Firework firework = loc.getWorld().spawn(loc, Firework.class);
