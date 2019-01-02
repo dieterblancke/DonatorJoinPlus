@@ -7,6 +7,36 @@
 #                                                                                              #
 ################################################################################################
 
+storage:
+  # Possible storage types: FILE, MYSQL, SQLITE, H2
+  type: 'FILE'
+
+  # The hostname (IP) to connect to
+  hostname: '127.0.0.1'
+  # Port to be used
+  port: 3306
+  # The database / scheme name
+  database: 'database'
+  # The username, should at least have write & read access to the database above!
+  username: 'username'
+  # The password corresponding to the username above
+  password: 'password'
+  # Should DonatorJoinPlus try to establish a SSL connection? (only for SQL)
+  useSSL: true
+
+  pool:
+    # How many connections are allowed to be made?
+    # Find more information at:
+    # https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+    max-pool-size: 5
+    # How many idle connections should be maintained?
+    # It is recommended to set this to the same value as the max-pool-size
+    min-idle: 5
+    # Maximum lifetime of a connection. Time in seconds.
+    max-lifetime: 1500
+    # How long should DonatorJoinPlus wait before timing out a connection?
+    connection-timeout: 8
+
 # Set to false to disable default MC join message.
 joinmessage: false
 

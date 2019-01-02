@@ -6,6 +6,7 @@ package com.dbsoftwares.djp.utils;
  * Project: DonatorJoinPlus
  */
 
+import com.dbsoftwares.djp.DonatorJoinPlus;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -13,11 +14,27 @@ import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 public class Utils {
 
+    public static final String TOGGLE_KEY = "DJP_TOGGLE";
+
     private Utils() {
+    }
+
+    public static void setMetaData(final Player player, final String key, final Object value) {
+        player.setMetadata(key, new FixedMetadataValue(DonatorJoinPlus.i(), value));
+    }
+
+    public static Object getMetaData(final Player player, final String key) {
+        for (MetadataValue meta : player.getMetadata("vanished")) {
+            if (meta.getOwningPlugin().equals(DonatorJoinPlus.i())) {
+                return meta.value();
+            }
+        }
+        return null;
     }
 
     public static boolean isVanished(Player player) {

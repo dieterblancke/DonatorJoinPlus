@@ -21,16 +21,20 @@ public class DJCommand implements CommandExecutor {
                 sender.sendMessage(Utils.c("&ePlease use &b/dj reload&e!"));
                 return false;
             }
-            if (sender.hasPermission("donatorjoin.reload")) {
-                DonatorJoinPlus plugin = DonatorJoinPlus.getPlugin(DonatorJoinPlus.class);
+            final String action = args[0];
 
-                plugin.reloadConfig();
-                plugin.loadConfig();
+            if (action.equalsIgnoreCase("reload")) {
+                if (sender.hasPermission("donatorjoin.reload")) {
+                    DonatorJoinPlus plugin = DonatorJoinPlus.getPlugin(DonatorJoinPlus.class);
 
-                sender.sendMessage(Utils.c("&eYou have reloaded the config!"));
-                return true;
-            } else {
-                sender.sendMessage(Utils.c("&eYou do not have the permission to do this!"));
+                    plugin.reloadConfig();
+                    plugin.loadConfig();
+
+                    sender.sendMessage(Utils.c("&eYou have reloaded the config!"));
+                    return true;
+                } else {
+                    sender.sendMessage(Utils.c("&eYou do not have the permission to do this!"));
+                }
             }
         }
         return false;
