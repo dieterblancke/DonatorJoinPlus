@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -28,11 +29,11 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerListener implements Listener {
 
-    private final LoadingCache<String, CompletableFuture<Boolean>> loadingCache = CacheBuilder.newBuilder()
+    private final LoadingCache<UUID, CompletableFuture<Boolean>> loadingCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
-            .build(new CacheLoader<String, CompletableFuture<Boolean>>() {
-                public CompletableFuture<Boolean> load(final String name) {
-                    return CompletableFuture.supplyAsync(() -> DonatorJoinPlus.i().getStorage().isToggled(name));
+            .build(new CacheLoader<UUID, CompletableFuture<Boolean>>() {
+                public CompletableFuture<Boolean> load(final UUID uuid) {
+                    return CompletableFuture.supplyAsync(() -> DonatorJoinPlus.i().getStorage().isToggled(uuid));
                 }
             });
 
@@ -47,15 +48,15 @@ public class PlayerListener implements Listener {
     public void onLoad(final PlayerLoginEvent event) {
         final Player player = event.getPlayer();
 
-        final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> DonatorJoinPlus.i().getStorage().isToggled(player.getName()));
-        loadingCache.put(player.getName(), future);
+        final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> DonatorJoinPlus.i().getStorage().isToggled(player.getUniqueId()));
+        loadingCache.put(player.getUniqueId(), future);
     }
 
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
         final Player p = event.getPlayer();
 
-        final boolean toggled = getToggledStatus(p.getName());
+        final boolean toggled = getToggledStatus(p.getUniqueId());
         Utils.setMetaData(p, Utils.TOGGLE_KEY, toggled);
 
         if (Utils.isVanished(p) || toggled) {
@@ -82,13 +83,13 @@ public class PlayerListener implements Listener {
         executeEvent(false, p);
     }
 
-    private boolean getToggledStatus(final String name) {
+    private boolean getToggledStatus(final UUID uuid) {
         try {
-            final CompletableFuture<Boolean> future = loadingCache.get(name);
+            final CompletableFuture<Boolean> future = loadingCache.get(uuid);
 
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
-            return DonatorJoinPlus.i().getStorage().isToggled(name);
+            return DonatorJoinPlus.i().getStorage().isToggled(uuid);
         }
     }
 

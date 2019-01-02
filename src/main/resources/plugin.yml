@@ -3,7 +3,3 @@ main: com.dbsoftwares.djp.DonatorJoinPlus
 version: ${project.version}
 depend: [Vault]
 author: didjee2
-
-commands:
-  donatorjoin:
-    aliases: [dj, djp, donatorjoinplus]

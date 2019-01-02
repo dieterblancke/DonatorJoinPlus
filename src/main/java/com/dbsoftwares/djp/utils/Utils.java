@@ -25,6 +25,10 @@ public class Utils {
     }
 
     public static void setMetaData(final Player player, final String key, final Object value) {
+        // Removing first to be sure
+        player.removeMetadata(key, DonatorJoinPlus.i());
+
+        // Setting meta data
         player.setMetadata(key, new FixedMetadataValue(DonatorJoinPlus.i(), value));
     }
 

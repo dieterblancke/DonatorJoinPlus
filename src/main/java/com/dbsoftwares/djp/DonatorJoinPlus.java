@@ -6,6 +6,7 @@ package com.dbsoftwares.djp;
  * Project: DonatorJoinPlus
  */
 
+import com.dbsoftwares.commandapi.CommandManager;
 import com.dbsoftwares.djp.commands.DJCommand;
 import com.dbsoftwares.djp.data.RankData;
 import com.dbsoftwares.djp.library.Library;
@@ -61,7 +62,8 @@ public class DonatorJoinPlus extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-        getCommand("donatorjoin").setExecutor(new DJCommand());
+
+        CommandManager.getInstance().registerCommand(new DJCommand());
 
         // Loading libraries for storage
         for (StandardLibrary standardLibrary : StandardLibrary.values()) {
