@@ -2,6 +2,7 @@ package com.dbsoftwares.djp.storage;
 
 
 import com.dbsoftwares.djp.DonatorJoinPlus;
+import com.dbsoftwares.djp.storage.managers.MySQLStorageManager;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 
 public abstract class AbstractStorageManager {
 
@@ -61,9 +63,9 @@ public abstract class AbstractStorageManager {
         }
     }
 
-    public abstract boolean isToggled(final String name);
+    public abstract boolean isToggled(final UUID uuid);
 
-    public abstract void toggle(final String name, final boolean toggled);
+    public abstract void toggle(final UUID uuid, final boolean toggled);
 
     public abstract Connection getConnection() throws SQLException;
 
@@ -72,8 +74,9 @@ public abstract class AbstractStorageManager {
     @Getter
     public enum StorageType {
 
-        MYSQL(AbstractStorageManager.class, "MySQL", "schemas/mysql.sql"),
+        MYSQL(MySQLStorageManager.class, "MySQL", "schemas/mysql.sql"),
         SQLITE(AbstractStorageManager.class, "SQLite", "schemas/sqlite.sql"),
+        H2(AbstractStorageManager.class, "H2", "schemas/h2.sql"),
         FILE(AbstractStorageManager.class, "PLAIN", null);
 
         private Class<? extends AbstractStorageManager> manager;

@@ -29,12 +29,16 @@ public class Utils {
     }
 
     public static Object getMetaData(final Player player, final String key) {
+        return getMetaData(player, key, null);
+    }
+
+    public static Object getMetaData(final Player player, final String key, Object defaultValue) {
         for (MetadataValue meta : player.getMetadata("vanished")) {
             if (meta.getOwningPlugin().equals(DonatorJoinPlus.i())) {
                 return meta.value();
             }
         }
-        return null;
+        return defaultValue;
     }
 
     public static boolean isVanished(Player player) {

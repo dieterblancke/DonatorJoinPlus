@@ -35,6 +35,8 @@ public class DJCommand implements CommandExecutor {
                 } else {
                     sender.sendMessage(Utils.c("&eYou do not have the permission to do this!"));
                 }
+            } else if (action.equalsIgnoreCase("toggle")) {
+
             }
         }
         return false;

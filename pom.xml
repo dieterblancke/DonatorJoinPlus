@@ -35,6 +35,16 @@
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>didjee2-DBSoftwares</id>
+            <url>https://packagecloud.io/didjee2/DBSoftwares/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -66,6 +76,12 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>3.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.dbsoftwares.configuration</groupId>
+            <artifactId>ConfigurationAPI</artifactId>
+            <version>1.1.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

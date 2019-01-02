@@ -29,11 +29,23 @@ public enum StandardLibrary {
             "3.25.2",
             checkType("SQLITE")
     ),
+    H2(
+            "",
+            "http://central.maven.org/maven2/com/h2database/h2/{version}/h2-{version}.jar",
+            "1.4.197",
+            checkType("H2")
+    ),
     HIKARIDB(
             "com.zaxxer.hikari.HikariDataSource",
             "http://central.maven.org/maven2/com/zaxxer/HikariCP/{version}/HikariCP-{version}.jar",
             "3.2.0",
             checkType("MYSQL", "SQLITE", "H2")
+    ),
+    CONFIGURATIONAPI(
+            "com.dbsoftwares.configuration.api.IConfiguration",
+            "https://packagecloud.io/didjee2/DBSoftwares/packages/java/com.dbsoftwares.configuration/ConfigurationAPI-{version}.jar/artifacts/ConfigurationAPI-{version}.jar/download",
+            "1.1.1",
+            checkType("FILE")
     );
 
     @Getter
@@ -45,8 +57,14 @@ public enum StandardLibrary {
 
     private static boolean checkType(String... types) {
         for (String type : types) {
-            if (DonatorJoinPlus.i().getConfig().getString("storage").equalsIgnoreCase(type)) {
+            final String storageType = DonatorJoinPlus.i().getConfig().getString("storage.type");
+
+            if (storageType.equalsIgnoreCase(type)) {
                 return true;
+            } else {
+                if (storageType.contains(":") && storageType.split(":")[0].equalsIgnoreCase(type)) {
+                    return true;
+                }
             }
         }
         return false;

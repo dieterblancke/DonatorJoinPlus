@@ -8,8 +8,13 @@
 ################################################################################################
 
 storage:
-  # Possible storage types: FILE, MYSQL, SQLITE, H2
-  type: 'FILE'
+  # Possible storage types: FILE:JSON, FILE:YAML, MYSQL, SQLITE, H2
+  type: 'FILE:JSON'
+
+  # FILE only: when set to true, the data will be written to disk every time a toggle happens.
+  # THIS CAN BE VERY INEFFICIENT, especially on larger servers.
+  # When on false, file only gets saved when server shuts down (data can get lost with f.e. crashes)
+  save-per-toggle: false
 
   # The hostname (IP) to connect to
   hostname: '127.0.0.1'

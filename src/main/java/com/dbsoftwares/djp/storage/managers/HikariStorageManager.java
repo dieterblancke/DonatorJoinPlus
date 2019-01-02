@@ -18,12 +18,19 @@
 
 package com.dbsoftwares.djp.storage.managers;
 
+import com.dbsoftwares.djp.DonatorJoinPlus;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -33,10 +40,20 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
     protected HikariDataSource dataSource;
 
     @SuppressWarnings("deprecation")
-    public HikariStorageManager(StorageType type, ConfigurationSection section, HikariConfig cfg) {
+    public HikariStorageManager(final StorageType type, final ConfigurationSection section) {
         super(type);
-        config = cfg == null ? new HikariConfig() : cfg;
+        config = new HikariConfig();
         config.setDataSourceClassName(getDataSourceClass());
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("alwaysSendSetIsolation", "false");
+        config.addDataSourceProperty("cacheServerConfiguration", "true");
+        config.addDataSourceProperty("elideSetAutoCommits", "true");
+        config.addDataSourceProperty("useLocalSessionState", "true");
+        config.addDataSourceProperty("useServerPrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("cacheCallableStmts", "true");
+
         config.addDataSourceProperty("serverName", section.getString("hostname"));
         config.addDataSourceProperty("port", section.getInt("storage.port"));
         config.addDataSourceProperty("databaseName", section.getString("database"));
@@ -62,5 +79,44 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
     @Override
     public void close() {
         dataSource.close();
+    }
+
+    @Override
+    public boolean isToggled(final UUID uuid) {
+        boolean toggled = false;
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement("SELECT toggled FROM djp_data WHERE uuid = ? AND toggled = ?;")) {
+            pstmt.setString(1, uuid.toString());
+            pstmt.setBoolean(2, true);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                toggled = rs.next();
+            }
+        } catch (SQLException e) {
+            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+        }
+        return toggled;
+    }
+
+    @Override
+    public void toggle(final UUID uuid, final boolean toggled) {
+        try (Connection connection = getConnection()) {
+            if (toggled) {
+                try (PreparedStatement pstmt = connection.prepareStatement("INSERT INTO djp_data(uuid, toggled) VALUES (?, ?);")) {
+                    pstmt.setString(1, uuid.toString());
+                    pstmt.setBoolean(2, toggled);
+
+                    pstmt.executeUpdate();
+                }
+            } else {
+                try (PreparedStatement pstmt = connection.prepareStatement("DELETE FROM djp_data WHERE uuid = ?;")) {
+                    pstmt.setString(1, uuid.toString());
+
+                    pstmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+        }
     }
 }

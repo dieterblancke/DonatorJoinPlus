@@ -12,6 +12,7 @@ import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.listeners.PlayerListener;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
+import com.dbsoftwares.djp.storage.AbstractStorageManager.StorageType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
@@ -21,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +72,35 @@ public class DonatorJoinPlus extends JavaPlugin {
             }
         }
 
-        // TODO: load storage
+        StorageType type;
+        final String typeString = getConfig().getString("storage.type").toUpperCase();
+        try {
+
+            if (typeString.contains(":")) {
+                type = StorageType.valueOf(typeString.split(":")[0]);
+            } else {
+                type = StorageType.valueOf(typeString);
+            }
+        } catch (IllegalArgumentException e) {
+            type = StorageType.MYSQL;
+        }
+        try {
+            storage = typeString.contains(":")
+                    ? type.getManager().getConstructor(String.class).newInstance(typeString.split(":")[1])
+                    : type.getManager().getConstructor().newInstance();
+            storage.initializeStorage();
+        } catch (Exception e) {
+            logger.error("An error occured: ", e);
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        try {
+            storage.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadConfig() {

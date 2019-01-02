@@ -19,20 +19,34 @@
 package com.dbsoftwares.djp.storage.managers;
 
 import com.dbsoftwares.djp.DonatorJoinPlus;
-import com.zaxxer.hikari.HikariConfig;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MySQLStorageManager extends HikariStorageManager {
+public class SQLiteStorageManager extends HikariStorageManager {
 
-    public MySQLStorageManager() {
+    public SQLiteStorageManager() {
         super(StorageType.MYSQL, DonatorJoinPlus.i().getConfig().getConfigurationSection("storage"));
+        final File database = new File(DonatorJoinPlus.i().getDataFolder(), "sqlite-storage.db");
+
+        try {
+            if (!database.exists() && !database.createNewFile()) {
+                return;
+            }
+        } catch (IOException e) {
+            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+        }
+
+        dataSource.addDataSourceProperty("url", "jdbc:sqlite:" + database.getPath());
+        config.setMaximumPoolSize(1);
+        config.setMinimumIdle(1);
     }
 
     @Override
     protected String getDataSourceClass() {
-        return "com.mysql.jdbc.jdbc2.optional.MysqlDataSource";
+        return "org.sqlite.SQLiteDataSource";
     }
 
     @Override
