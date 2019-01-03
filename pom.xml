@@ -36,14 +36,8 @@
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>didjee2-DBSoftwares</id>
-            <url>https://packagecloud.io/didjee2/DBSoftwares/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>dbsoftwares</id>
+            <url>http://nexus.diviwork.nl/repository/dbsoftwares/</url>
         </repository>
     </repositories>
 

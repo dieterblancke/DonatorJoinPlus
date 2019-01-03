@@ -43,7 +43,7 @@ public enum StandardLibrary {
     ),
     CONFIGURATIONAPI(
             "com.dbsoftwares.configuration.api.IConfiguration",
-            "https://packagecloud.io/didjee2/DBSoftwares/packages/java/com.dbsoftwares.configuration/ConfigurationAPI-{version}.jar/artifacts/ConfigurationAPI-{version}.jar/download",
+            "http://nexus.diviwork.nl/repository/dbsoftwares/com/dbsoftwares/configuration/ConfigurationAPI/{version}/ConfigurationAPI-{version}.jar",
             "1.1.1",
             checkType("FILE")
     ),
