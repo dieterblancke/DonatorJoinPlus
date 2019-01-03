@@ -60,6 +60,14 @@ usepriorities: true
 # or all if usepriorities is set to false.
 usepermissions: false
 
+messages:
+  prefix: '&e&lDonatorJoin&b&l+ &7» '
+  no-perm: '&cYou are not allowed to do this!'
+  reloaded: '&aThe plugin has been reloaded successfully!'
+  enabled: '&aJoin & quit messages are now enabled!'
+  disabled: '&cJoin & quit messages are now disabled!'
+  not-online: '&cThat player is not online!'
+
 ranks:
   - name: 'VIP'
     permission: 'djp.vip'
