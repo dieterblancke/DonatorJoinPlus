@@ -30,7 +30,7 @@ public enum StandardLibrary {
             checkType("SQLITE")
     ),
     H2(
-            "",
+            "org.h2.jdbcx.JdbcDataSource",
             "http://central.maven.org/maven2/com/h2database/h2/{version}/h2-{version}.jar",
             "1.4.197",
             checkType("H2")
@@ -46,6 +46,12 @@ public enum StandardLibrary {
             "https://packagecloud.io/didjee2/DBSoftwares/packages/java/com.dbsoftwares.configuration/ConfigurationAPI-{version}.jar/artifacts/ConfigurationAPI-{version}.jar/download",
             "1.1.1",
             checkType("FILE")
+    ),
+    COMMANDAPI(
+            "com.dbsoftwares.commandapi.SpigotCommand",
+            "http://nexus.diviwork.nl/repository/dbsoftwares/com/dbsoftwares/commandapi/CommandAPI/{version}/CommandAPI-{version}.jar",
+            "1.0.0",
+            true
     );
 
     @Getter
