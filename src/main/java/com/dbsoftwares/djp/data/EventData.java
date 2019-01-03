@@ -9,8 +9,9 @@ package com.dbsoftwares.djp.data;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import lombok.Data;
 import org.bukkit.Sound;
+import org.slf4j.Logger;
+
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Data
 public class EventData {
@@ -36,12 +37,12 @@ public class EventData {
             try {
                 this.sound = Sound.valueOf(sound.get("sound").toString().toUpperCase());
             } catch (IllegalArgumentException e) {
-                Logger logger = DonatorJoinPlus.getPlugin(DonatorJoinPlus.class).getLogger();
+                final Logger logger = DonatorJoinPlus.getLog();
 
-                logger.warning("The sound that was entered is invalid!");
-                logger.warning(" Please use a sound of one of these pages:");
-                logger.warning(" Version < 1.9: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html");
-                logger.warning(" Version >= 1.9: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html");
+                logger.warn("The sound that was entered is invalid!");
+                logger.warn(" Please use a sound of one of these pages:");
+                logger.warn(" Version < 1.9: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html");
+                logger.warn(" Version >= 1.9: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html");
                 return;
             }
         }

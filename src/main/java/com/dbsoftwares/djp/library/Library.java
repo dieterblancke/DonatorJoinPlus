@@ -77,25 +77,25 @@ public class Library {
 
         // Download libary if not present
         if (!path.exists()) {
-            DonatorJoinPlus.getLogger().info("Downloading libary for " + toString());
+            DonatorJoinPlus.getLog().info("Downloading libary for " + toString());
 
             try (final InputStream input = new URL(downloadURL).openStream();
                  final ReadableByteChannel channel = Channels.newChannel(input);
                  final FileOutputStream output = new FileOutputStream(path)) {
 
                 output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
-                DonatorJoinPlus.getLogger().info("Successfully downloaded libary for " + toString());
+                DonatorJoinPlus.getLog().info("Successfully downloaded libary for " + toString());
 
-                DonatorJoinPlus.getLogger().info("Removing older versions of " + toString());
+                DonatorJoinPlus.getLog().info("Removing older versions of " + toString());
                 getOutdatedFiles(folder).forEach(File::delete);
-                DonatorJoinPlus.getLogger().info("Successfully removed older versions of " + toString());
+                DonatorJoinPlus.getLog().info("Successfully removed older versions of " + toString());
             } catch (IOException e) {
                 throw new RuntimeException("Failed downloading library for " + toString().toLowerCase(), e);
             }
         }
 
         JarClassLoader.loadJar(path);
-        DonatorJoinPlus.getLogger().info("Loaded " + name + " libary!");
+        DonatorJoinPlus.getLog().info("Loaded " + name + " libary!");
     }
 
     private Collection<File> getOutdatedFiles(final File folder) {

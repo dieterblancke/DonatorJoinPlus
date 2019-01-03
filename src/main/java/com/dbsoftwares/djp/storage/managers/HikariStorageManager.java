@@ -93,7 +93,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
                 toggled = rs.next();
             }
         } catch (SQLException e) {
-            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
         return toggled;
     }
@@ -116,7 +116,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
                 }
             }
         } catch (SQLException e) {
-            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
     }
 }

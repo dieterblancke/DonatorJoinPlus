@@ -53,7 +53,7 @@ public class JarClassLoader {
         try {
             ADD_URL.invoke(classLoader, url);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
     }
 
@@ -61,7 +61,7 @@ public class JarClassLoader {
         try {
             loadJar(file.toURI().toURL());
         } catch (MalformedURLException e) {
-            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
     }
 }

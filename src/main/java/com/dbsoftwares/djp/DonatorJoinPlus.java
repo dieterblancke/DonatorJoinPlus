@@ -46,7 +46,7 @@ public class DonatorJoinPlus extends JavaPlugin {
     private AbstractStorageManager storage;
 
     @Getter
-    private static Logger logger = LoggerFactory.getLogger("BungeeUtilisals");
+    private static Logger log = LoggerFactory.getLogger("BungeeUtilisals");
 
     public static DonatorJoinPlus i() {
         return getPlugin(DonatorJoinPlus.class);
@@ -92,7 +92,7 @@ public class DonatorJoinPlus extends JavaPlugin {
                     : type.getManager().getConstructor().newInstance();
             storage.initializeStorage();
         } catch (Exception e) {
-            logger.error("An error occured: ", e);
+            log.error("An error occured: ", e);
         }
     }
 

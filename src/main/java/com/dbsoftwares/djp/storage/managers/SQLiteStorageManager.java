@@ -36,7 +36,7 @@ public class SQLiteStorageManager extends HikariStorageManager {
                 return;
             }
         } catch (IOException e) {
-            DonatorJoinPlus.getLogger().error("An error occured: ", e);
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
 
         dataSource.addDataSourceProperty("url", "jdbc:sqlite:" + database.getPath());

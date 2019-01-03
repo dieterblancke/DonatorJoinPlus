@@ -34,7 +34,7 @@ public class FileStorageManager extends AbstractStorageManager {
             try {
                 storageFile.createNewFile();
             } catch (IOException e) {
-                DonatorJoinPlus.getLogger().error("An error occured: ", e);
+                DonatorJoinPlus.getLog().error("An error occured: ", e);
             }
         }
         this.storage = IConfiguration.loadConfiguration(storageType, storageFile);
