@@ -7,12 +7,12 @@ package com.dbsoftwares.djp.commands;
  */
 
 import com.dbsoftwares.commandapi.SpigotCommand;
+import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -114,7 +114,7 @@ public class DJCommand extends SpigotCommand {
     }
 
     private String getMessage(final String path) {
-        final FileConfiguration config = DonatorJoinPlus.i().getConfig();
+        final IConfiguration config = DonatorJoinPlus.i().getConfiguration();
 
         return Utils.c(config.getString("messages.prefix") + config.getString("messages." + path));
     }

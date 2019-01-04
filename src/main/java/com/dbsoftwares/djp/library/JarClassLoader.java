@@ -29,17 +29,16 @@ import java.net.URLClassLoader;
 
 public class JarClassLoader {
 
-    private static final Method ADD_URL;
+    private static Method ADD_URL;
     private static final URLClassLoader classLoader;
 
     static {
-        Method addURL;
         try {
-            addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            ADD_URL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            ADD_URL.setAccessible(true);
         } catch (NoSuchMethodException e) {
-            addURL = null;
+            ADD_URL = null;
         }
-        ADD_URL = addURL;
 
         final ClassLoader loader = DonatorJoinPlus.class.getClassLoader();
         if (loader instanceof URLClassLoader) {
@@ -53,7 +52,7 @@ public class JarClassLoader {
         try {
             ADD_URL.invoke(classLoader, url);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+            e.printStackTrace();
         }
     }
 
@@ -61,7 +60,7 @@ public class JarClassLoader {
         try {
             loadJar(file.toURI().toURL());
         } catch (MalformedURLException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+            e.printStackTrace();
         }
     }
 }

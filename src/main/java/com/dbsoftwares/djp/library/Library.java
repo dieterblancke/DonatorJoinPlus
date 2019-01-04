@@ -21,6 +21,7 @@ package com.dbsoftwares.djp.library;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import com.google.common.collect.Lists;
 import lombok.Data;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -77,25 +78,25 @@ public class Library {
 
         // Download libary if not present
         if (!path.exists()) {
-            DonatorJoinPlus.getLog().info("Downloading libary for " + toString());
+            System.out.println("Downloading libary for " + toString());
 
             try (final InputStream input = new URL(downloadURL).openStream();
                  final ReadableByteChannel channel = Channels.newChannel(input);
                  final FileOutputStream output = new FileOutputStream(path)) {
 
                 output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
-                DonatorJoinPlus.getLog().info("Successfully downloaded libary for " + toString());
+                System.out.println("Successfully downloaded libary for " + toString());
 
-                DonatorJoinPlus.getLog().info("Removing older versions of " + toString());
+                System.out.println("Removing older versions of " + toString());
                 getOutdatedFiles(folder).forEach(File::delete);
-                DonatorJoinPlus.getLog().info("Successfully removed older versions of " + toString());
+                System.out.println("Successfully removed older versions of " + toString());
             } catch (IOException e) {
                 throw new RuntimeException("Failed downloading library for " + toString().toLowerCase(), e);
             }
         }
 
         JarClassLoader.loadJar(path);
-        DonatorJoinPlus.getLog().info("Loaded " + name + " libary!");
+        System.out.println("Loaded " + name + " libary!");
     }
 
     private Collection<File> getOutdatedFiles(final File folder) {

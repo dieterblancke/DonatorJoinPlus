@@ -28,7 +28,7 @@ import java.sql.SQLException;
 public class SQLiteStorageManager extends HikariStorageManager {
 
     public SQLiteStorageManager() {
-        super(StorageType.MYSQL, DonatorJoinPlus.i().getConfig().getConfigurationSection("storage"));
+        super(StorageType.SQLITE, DonatorJoinPlus.i().getConfiguration().getSection("storage"));
         final File database = new File(DonatorJoinPlus.i().getDataFolder(), "sqlite-storage.db");
 
         try {
@@ -39,9 +39,8 @@ public class SQLiteStorageManager extends HikariStorageManager {
             DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
 
-        dataSource.addDataSourceProperty("url", "jdbc:sqlite:" + database.getPath());
-        config.setMaximumPoolSize(1);
-        config.setMinimumIdle(1);
+        config.addDataSourceProperty("url", "jdbc:sqlite:" + database.getPath());
+        setupDataSource();
     }
 
     @Override

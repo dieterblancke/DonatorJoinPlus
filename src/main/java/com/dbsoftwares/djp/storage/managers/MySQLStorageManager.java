@@ -27,7 +27,7 @@ import java.sql.SQLException;
 public class MySQLStorageManager extends HikariStorageManager {
 
     public MySQLStorageManager() {
-        super(StorageType.MYSQL, DonatorJoinPlus.i().getConfig().getConfigurationSection("storage"));
+        super(StorageType.MYSQL, DonatorJoinPlus.i().getConfiguration().getSection("storage"));
     }
 
     @Override

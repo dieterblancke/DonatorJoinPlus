@@ -28,7 +28,7 @@ import java.sql.SQLException;
 public class H2StorageManager extends HikariStorageManager {
 
     public H2StorageManager() {
-        super(StorageType.MYSQL, DonatorJoinPlus.i().getConfig().getConfigurationSection("storage"));
+        super(StorageType.H2, DonatorJoinPlus.i().getConfiguration().getSection("storage"));
         final File database = new File(DonatorJoinPlus.i().getDataFolder(), "h2-storage.db");
 
         try {
@@ -39,9 +39,8 @@ public class H2StorageManager extends HikariStorageManager {
             DonatorJoinPlus.getLog().error("An error occured: ", e);
         }
 
-        dataSource.addDataSourceProperty("url", "jdbc:h2:" + database.getPath());
-        config.setMaximumPoolSize(1);
-        config.setMinimumIdle(1);
+        config.addDataSourceProperty("url", "jdbc:h2:" + database.getPath());
+        setupDataSource();
     }
 
     @Override

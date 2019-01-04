@@ -65,7 +65,7 @@ public class FileStorageManager extends AbstractStorageManager {
         }
 
         storage.set("toggled", toggleList);
-        if (DonatorJoinPlus.i().getConfig().getBoolean("storage.save-per-toggle")) {
+        if (DonatorJoinPlus.i().getConfiguration().getBoolean("storage.save-per-toggle")) {
             save();
         }
     }

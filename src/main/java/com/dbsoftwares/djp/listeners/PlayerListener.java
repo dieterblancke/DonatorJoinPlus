@@ -102,7 +102,7 @@ public class PlayerListener implements Listener {
                 if (plugin.getPermission().has(p, data.getPermission())) {
                     executeEventData(p, eventData);
 
-                    if (plugin.getConfig().getBoolean("usepriorities")) {
+                    if (plugin.getConfiguration().getBoolean("usepriorities")) {
                         break;
                     }
                 }
@@ -110,7 +110,7 @@ public class PlayerListener implements Listener {
                 if (Utils.contains(groups, data.getName())) {
                     executeEventData(p, eventData);
 
-                    if (plugin.getConfig().getBoolean("usepriorities")) {
+                    if (plugin.getConfiguration().getBoolean("usepriorities")) {
                         break;
                     }
                 }

@@ -18,6 +18,7 @@
 
 package com.dbsoftwares.djp.storage.managers;
 
+import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.zaxxer.hikari.HikariConfig;
@@ -40,7 +41,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
     protected HikariDataSource dataSource;
 
     @SuppressWarnings("deprecation")
-    public HikariStorageManager(final StorageType type, final ConfigurationSection section) {
+    public HikariStorageManager(final StorageType type, final ISection section) {
         super(type);
         config = new HikariConfig();
         config.setDataSourceClassName(getDataSourceClass());
@@ -55,23 +56,27 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
         config.addDataSourceProperty("cacheCallableStmts", "true");
 
         config.addDataSourceProperty("serverName", section.getString("hostname"));
-        config.addDataSourceProperty("port", section.getInt("storage.port"));
+        config.addDataSourceProperty("port", section.getInteger("storage.port"));
         config.addDataSourceProperty("databaseName", section.getString("database"));
         config.addDataSourceProperty("user", section.getString("username"));
         config.addDataSourceProperty("password", section.getString("password"));
         config.addDataSourceProperty("useSSL", section.getBoolean("useSSL"));
 
-        config.setMaximumPoolSize(section.getInt("storage.pool.max-pool-size"));
-        config.setMinimumIdle(section.getInt("storage.pool.min-idle"));
-        config.setMaxLifetime((long) (section.getInt("storage.pool.max-lifetime") * 1000));
-        config.setConnectionTimeout((long) (section.getInt("storage.pool.connection-timeout") * 1000));
+        config.setMaximumPoolSize(section.getInteger("storage.pool.max-pool-size"));
+        config.setMinimumIdle(section.getInteger("storage.pool.min-idle"));
+        config.setMaxLifetime(section.getLong("storage.pool.max-lifetime") * 1000);
+        config.setConnectionTimeout(section.getLong("storage.pool.connection-timeout") * 1000);
 
         config.setPoolName("DonatorJoinPlus");
         config.setLeakDetectionThreshold(10000);
         config.setConnectionTestQuery("/* DonatorJoinPlus ping */ SELECT 1;");
         config.setInitializationFailTimeout(-1);
+    }
 
-        dataSource = new HikariDataSource(config);
+    protected void setupDataSource() {
+        if (dataSource == null) {
+            dataSource = new HikariDataSource(config);
+        }
     }
 
     protected abstract String getDataSourceClass();

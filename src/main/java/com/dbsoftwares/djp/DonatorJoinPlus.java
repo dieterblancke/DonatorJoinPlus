@@ -79,7 +79,7 @@ public class DonatorJoinPlus extends JavaPlugin {
         CommandManager.getInstance().registerCommand(new DJCommand());
 
         StorageType type;
-        final String typeString = getConfig().getString("storage.type").toUpperCase();
+        final String typeString = configuration.getString("storage.type").toUpperCase();
         try {
 
             if (typeString.contains(":")) {
@@ -128,9 +128,9 @@ public class DonatorJoinPlus extends JavaPlugin {
 
         rankData.sort((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority()));
 
-        disableJoinMessage = getConfig().getBoolean("joinmessage");
-        disableQuitMessage = getConfig().getBoolean("quitmessage");
-        usePriorities = getConfig().getBoolean("usepriorities");
-        usePermissions = getConfig().getBoolean("usepermissions");
+        disableJoinMessage = configuration.getBoolean("joinmessage");
+        disableQuitMessage = configuration.getBoolean("quitmessage");
+        usePriorities = configuration.getBoolean("usepriorities");
+        usePermissions = configuration.getBoolean("usepermissions");
     }
 }
