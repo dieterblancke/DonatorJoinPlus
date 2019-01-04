@@ -30,7 +30,7 @@ public class DJCommand extends SpigotCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
         return null;
     }
 
@@ -98,7 +98,7 @@ public class DJCommand extends SpigotCommand {
     }
 
     private void enable(final Player player) {
-        final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> DonatorJoinPlus.i().getStorage().toggle(player.getUniqueId(), true));
+        final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> DonatorJoinPlus.i().getStorage().toggle(player.getUniqueId(), false));
         future.thenRun(() -> {
             player.sendMessage(getMessage("enabled"));
             Utils.setMetaData(player, Utils.TOGGLE_KEY, false);
@@ -106,7 +106,7 @@ public class DJCommand extends SpigotCommand {
     }
 
     private void disable(final Player player) {
-        final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> DonatorJoinPlus.i().getStorage().toggle(player.getUniqueId(), false));
+        final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> DonatorJoinPlus.i().getStorage().toggle(player.getUniqueId(), true));
         future.thenRun(() -> {
             player.sendMessage(getMessage("disabled"));
             Utils.setMetaData(player, Utils.TOGGLE_KEY, true);
@@ -129,9 +129,9 @@ public class DJCommand extends SpigotCommand {
             final boolean toggled = (boolean) Utils.getMetaData(target, Utils.TOGGLE_KEY, false);
 
             if (toggled) {
-                disable(target);
-            } else {
                 enable(target);
+            } else {
+                disable(target);
             }
         } else if (action.equalsIgnoreCase("enable")) {
             if (!sender.hasPermission(permission)) {
