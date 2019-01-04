@@ -59,11 +59,12 @@ public class PlayerListener implements Listener {
         final boolean toggled = getToggledStatus(p.getUniqueId());
         Utils.setMetaData(p, Utils.TOGGLE_KEY, toggled);
 
-        if (Utils.isVanished(p) || toggled) {
-            return;
-        }
         if (!plugin.isDisableJoinMessage()) {
             event.setJoinMessage(null);
+        }
+
+        if (Utils.isVanished(p) || toggled) {
+            return;
         }
 
         executeEvent(true, p);
@@ -73,12 +74,11 @@ public class PlayerListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         final Player p = event.getPlayer();
 
-        if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
-            return;
-        }
-
         if (!plugin.isDisableJoinMessage()) {
             event.setQuitMessage(null);
+        }
+        if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
+            return;
         }
         executeEvent(false, p);
     }

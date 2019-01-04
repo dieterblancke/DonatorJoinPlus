@@ -7,6 +7,8 @@ package com.dbsoftwares.djp;
  */
 
 import com.dbsoftwares.commandapi.CommandManager;
+import com.dbsoftwares.configuration.api.IConfiguration;
+import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.commands.DJCommand;
 import com.dbsoftwares.djp.data.RankData;
 import com.dbsoftwares.djp.library.Library;
@@ -23,30 +25,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
+@Getter
 public class DonatorJoinPlus extends JavaPlugin {
 
     @Getter
+    private static Logger log;
     private Permission permission;
-    @Getter
     private List<RankData> rankData = Lists.newArrayList();
-
-    @Getter
     private boolean disableJoinMessage;
-    @Getter
     private boolean disableQuitMessage;
-    @Getter
     private boolean usePriorities;
-    @Getter
     private boolean usePermissions;
-    @Getter
     private AbstractStorageManager storage;
-
-    @Getter
-    private static Logger log = LoggerFactory.getLogger("BungeeUtilisals");
+    private IConfiguration configuration;
 
     public static DonatorJoinPlus i() {
         return getPlugin(DonatorJoinPlus.class);
@@ -54,16 +50,13 @@ public class DonatorJoinPlus extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        loadConfig();
+        final File configFile = new File(getDataFolder(), "config.yml");
 
-        RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServicesManager().getRegistration(Permission.class);
-        if (permissionProvider != null) {
-            permission = permissionProvider.getProvider();
+        if (!configFile.exists()) {
+            IConfiguration.createDefaultFile(getResource("config.yml"), configFile);
         }
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-
-        CommandManager.getInstance().registerCommand(new DJCommand());
+        configuration = IConfiguration.loadYamlConfiguration(configFile);
 
         // Loading libraries for storage
         for (StandardLibrary standardLibrary : StandardLibrary.values()) {
@@ -73,6 +66,17 @@ public class DonatorJoinPlus extends JavaPlugin {
                 library.load();
             }
         }
+        log = LoggerFactory.getLogger("DonatorJoin+");
+
+        loadConfig();
+
+        RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServicesManager().getRegistration(Permission.class);
+        if (permissionProvider != null) {
+            permission = permissionProvider.getProvider();
+        }
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        CommandManager.getInstance().registerCommand(new DJCommand());
 
         StorageType type;
         final String typeString = getConfig().getString("storage.type").toUpperCase();
@@ -101,22 +105,26 @@ public class DonatorJoinPlus extends JavaPlugin {
         try {
             storage.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("An error occured", e);
         }
     }
 
     public void loadConfig() {
-        saveDefaultConfig();
+        try {
+            configuration.reload();
+        } catch (IOException e) {
+            log.error("An error occured", e);
+        }
         rankData.clear();
 
-        List list = getConfig().getList("ranks");
+        final List<ISection> sections = configuration.getSectionList("ranks");
 
-        for (Object rank : list) {
-            RankData data = new RankData();
-            data.fromMap((Map) rank);
+        sections.forEach(section -> {
+            final RankData data = new RankData();
+            data.fromSection(section);
 
             rankData.add(data);
-        }
+        });
 
         rankData.sort((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority()));
 

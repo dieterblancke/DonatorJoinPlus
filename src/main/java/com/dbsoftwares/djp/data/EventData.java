@@ -6,6 +6,7 @@ package com.dbsoftwares.djp.data;
  * Project: DonatorJoinPlus
  */
 
+import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import lombok.Data;
 import org.bukkit.Sound;
@@ -23,30 +24,31 @@ public class EventData {
     private Sound sound;
     private boolean firework;
 
-    public EventData(EventType type) {
+    public EventData(final EventType type) {
         this.type = type;
     }
 
-    public void fromMap(Map map) {
-        this.enabled = (boolean) map.get("enabled");
-        this.message = (String) map.get("message");
+    public void fromSection(final ISection section) {
+        this.enabled = section.getBoolean("enabled");
+        this.message = section.getString("message");
 
-        Map sound = (Map) map.get("sound");
-        this.soundEnabled = (boolean) sound.get("enabled");
+        final ISection sound = section.getSection("sound");
+        this.soundEnabled = sound.getBoolean("enabled");
         if (soundEnabled) {
             try {
-                this.sound = Sound.valueOf(sound.get("sound").toString().toUpperCase());
+                this.sound = Sound.valueOf(sound.getString("sound").toUpperCase());
             } catch (IllegalArgumentException e) {
                 final Logger logger = DonatorJoinPlus.getLog();
 
                 logger.warn("The sound that was entered is invalid!");
-                logger.warn(" Please use a sound of one of these pages:");
-                logger.warn(" Version < 1.9: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html");
-                logger.warn(" Version >= 1.9: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html");
+                logger.warn("Please use a sound of one of these pages:");
+                logger.warn("- Version < 1.9: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html");
+                logger.warn("- Version 1.9 - 1.12.2: http://bit.ly/2RuwTrj");
+                logger.warn("- Newest version: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html");
                 return;
             }
         }
-        this.firework = (boolean) map.get("firework");
+        this.firework = section.getBoolean("firework");
     }
 
     public enum EventType {

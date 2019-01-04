@@ -40,18 +40,6 @@ public enum StandardLibrary {
             "http://central.maven.org/maven2/com/zaxxer/HikariCP/{version}/HikariCP-{version}.jar",
             "3.2.0",
             checkType("MYSQL", "SQLITE", "H2")
-    ),
-    CONFIGURATIONAPI(
-            "com.dbsoftwares.configuration.api.IConfiguration",
-            "http://nexus.diviwork.nl/repository/dbsoftwares/com/dbsoftwares/configuration/ConfigurationAPI/{version}/ConfigurationAPI-{version}.jar",
-            "1.1.1",
-            checkType("FILE")
-    ),
-    COMMANDAPI(
-            "com.dbsoftwares.commandapi.SpigotCommand",
-            "http://nexus.diviwork.nl/repository/dbsoftwares/com/dbsoftwares/commandapi/CommandAPI/{version}/CommandAPI-{version}.jar",
-            "1.0.0",
-            true
     );
 
     @Getter

@@ -37,8 +37,8 @@ public class Utils {
     }
 
     public static Object getMetaData(final Player player, final String key, Object defaultValue) {
-        for (MetadataValue meta : player.getMetadata("vanished")) {
-            if (meta.getOwningPlugin().equals(DonatorJoinPlus.i())) {
+        for (MetadataValue meta : player.getMetadata(key)) {
+            if (meta.getOwningPlugin().getName().equalsIgnoreCase(DonatorJoinPlus.i().getName())) {
                 return meta.value();
             }
         }

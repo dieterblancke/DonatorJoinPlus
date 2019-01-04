@@ -6,9 +6,9 @@ package com.dbsoftwares.djp.data;
  * Project: DonatorJoinPlus
  */
 
+import com.dbsoftwares.configuration.api.ISection;
 import lombok.Data;
-
-import java.util.Map;
+import com.dbsoftwares.djp.data.EventData.EventType;
 
 @Data
 public class RankData {
@@ -19,19 +19,18 @@ public class RankData {
     private EventData join;
     private EventData quit;
 
-    @SuppressWarnings("unchecked")
-    public void fromMap(Map map) {
-        this.name = (String) map.get("name");
-        this.priority = (int) map.get("priority");
-        this.permission = (String) map.get("permission");
+    public void fromSection(final ISection section) {
+        this.name = section.getString("name");
+        this.priority = section.getInteger("priority");
+        this.permission = section.getString("permission");
 
-        this.join = getData(EventData.EventType.JOIN, map);
-        this.quit = getData(EventData.EventType.QUIT, map);
+        this.join = getData(EventType.JOIN, section);
+        this.quit = getData(EventType.QUIT, section);
     }
 
-    private EventData getData(EventData.EventType type, Map map) {
-        EventData data = new EventData(type);
-        data.fromMap((Map) map.get(type.toString().toLowerCase()));
+    private EventData getData(EventType type, ISection section) {
+        final EventData data = new EventData(type);
+        data.fromSection(section.getSection(type.toString().toLowerCase()));
         return data;
     }
 }

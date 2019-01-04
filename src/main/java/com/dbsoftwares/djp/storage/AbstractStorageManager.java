@@ -2,7 +2,10 @@ package com.dbsoftwares.djp.storage;
 
 
 import com.dbsoftwares.djp.DonatorJoinPlus;
+import com.dbsoftwares.djp.storage.managers.FileStorageManager;
+import com.dbsoftwares.djp.storage.managers.H2StorageManager;
 import com.dbsoftwares.djp.storage.managers.MySQLStorageManager;
+import com.dbsoftwares.djp.storage.managers.SQLiteStorageManager;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -75,9 +78,9 @@ public abstract class AbstractStorageManager {
     public enum StorageType {
 
         MYSQL(MySQLStorageManager.class, "MySQL", "schemas/mysql.sql"),
-        SQLITE(AbstractStorageManager.class, "SQLite", "schemas/sqlite.sql"),
-        H2(AbstractStorageManager.class, "H2", "schemas/h2.sql"),
-        FILE(AbstractStorageManager.class, "PLAIN", null);
+        SQLITE(SQLiteStorageManager.class, "SQLite", "schemas/sqlite.sql"),
+        H2(H2StorageManager.class, "H2", "schemas/h2.sql"),
+        FILE(FileStorageManager.class, "PLAIN", null);
 
         private Class<? extends AbstractStorageManager> manager;
         private String name;

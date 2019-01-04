@@ -25,26 +25,27 @@ public class DJCommand extends SpigotCommand {
     }
 
     @Override
-    public List<String> onTabComplete(Player player, String[] strings) {
+    public List<String> onTabComplete(Player player, String[] args) {
         return null;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, String[] strings) {
+    public List<String> onTabComplete(CommandSender commandSender, String[] args) {
         return null;
     }
 
     @Override
     public void onExecute(Player player, String[] args) {
-        final String action = args[0];
-
         if (args.length == 1) {
+            final String action = args[0];
+
             if (action.equalsIgnoreCase("reload")) {
                 reload(player);
             } else {
                 executeToggleFor(action, player, player, "donatorjoinplus.toggle");
             }
         } else if (args.length == 2) {
+            final String action = args[0];
             final Player target = Bukkit.getPlayer(args[1]);
 
             if (target == null) {
@@ -60,15 +61,16 @@ public class DJCommand extends SpigotCommand {
 
     @Override
     public void onExecute(CommandSender sender, String[] args) {
-        final String action = args[0];
-
         if (args.length == 1) {
+            final String action = args[0];
+
             if (action.equalsIgnoreCase("reload")) {
                 reload(sender);
             } else {
                 sendHelp(sender);
             }
         } else if (args.length == 2) {
+            final String action = args[0];
             final Player target = Bukkit.getPlayer(args[1]);
 
             if (target == null) {
@@ -99,7 +101,7 @@ public class DJCommand extends SpigotCommand {
         final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> DonatorJoinPlus.i().getStorage().toggle(player.getUniqueId(), true));
         future.thenRun(() -> {
             player.sendMessage(getMessage("enabled"));
-            Utils.setMetaData(player, Utils.TOGGLE_KEY, true);
+            Utils.setMetaData(player, Utils.TOGGLE_KEY, false);
         });
     }
 
@@ -107,7 +109,7 @@ public class DJCommand extends SpigotCommand {
         final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> DonatorJoinPlus.i().getStorage().toggle(player.getUniqueId(), false));
         future.thenRun(() -> {
             player.sendMessage(getMessage("disabled"));
-            Utils.setMetaData(player, Utils.TOGGLE_KEY, false);
+            Utils.setMetaData(player, Utils.TOGGLE_KEY, true);
         });
     }
 
