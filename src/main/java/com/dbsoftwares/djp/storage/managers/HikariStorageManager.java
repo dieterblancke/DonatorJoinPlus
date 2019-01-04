@@ -25,8 +25,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.bukkit.configuration.ConfigurationSection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,27 +43,31 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
         super(type);
         config = new HikariConfig();
         config.setDataSourceClassName(getDataSourceClass());
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("alwaysSendSetIsolation", "false");
-        config.addDataSourceProperty("cacheServerConfiguration", "true");
-        config.addDataSourceProperty("elideSetAutoCommits", "true");
-        config.addDataSourceProperty("useLocalSessionState", "true");
-        config.addDataSourceProperty("useServerPrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("cacheCallableStmts", "true");
 
-        config.addDataSourceProperty("serverName", section.getString("hostname"));
-        config.addDataSourceProperty("port", section.getInteger("storage.port"));
-        config.addDataSourceProperty("databaseName", section.getString("database"));
-        config.addDataSourceProperty("user", section.getString("username"));
-        config.addDataSourceProperty("password", section.getString("password"));
-        config.addDataSourceProperty("useSSL", section.getBoolean("useSSL"));
+        // Mysql-only properties
+        if (type == StorageType.MYSQL) {
+            config.addDataSourceProperty("serverName", section.getString("hostname"));
+            config.addDataSourceProperty("port", section.getInteger("port"));
+            config.addDataSourceProperty("databaseName", section.getString("database"));
+            config.addDataSourceProperty("user", section.getString("username"));
+            config.addDataSourceProperty("password", section.getString("password"));
+            config.addDataSourceProperty("useSSL", section.getBoolean("useSSL"));
 
-        config.setMaximumPoolSize(section.getInteger("storage.pool.max-pool-size"));
-        config.setMinimumIdle(section.getInteger("storage.pool.min-idle"));
-        config.setMaxLifetime(section.getLong("storage.pool.max-lifetime") * 1000);
-        config.setConnectionTimeout(section.getLong("storage.pool.connection-timeout") * 1000);
+            config.addDataSourceProperty("cacheServerConfiguration", "true");
+            config.addDataSourceProperty("elideSetAutoCommits", "true");
+            config.addDataSourceProperty("useServerPrepStmts", "true");
+            config.addDataSourceProperty("cacheCallableStmts", "true");
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("alwaysSendSetIsolation", "false");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            config.addDataSourceProperty("useLocalSessionState", "true");
+        }
+
+        config.setMaximumPoolSize(section.getInteger("pool.max-pool-size"));
+        config.setMinimumIdle(section.getInteger("pool.min-idle"));
+        config.setMaxLifetime(section.getLong("pool.max-lifetime") * 1000);
+        config.setConnectionTimeout(section.getLong("pool.connection-timeout") * 1000);
 
         config.setPoolName("DonatorJoinPlus");
         config.setLeakDetectionThreshold(10000);
