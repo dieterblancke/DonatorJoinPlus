@@ -2,6 +2,7 @@ package com.dbsoftwares.djp.listeners;
 
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import com.dbsoftwares.djp.data.EventData;
+import com.dbsoftwares.djp.data.EventData.EventType;
 import com.dbsoftwares.djp.data.RankData;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.cache.CacheBuilder;
@@ -9,9 +10,11 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -67,7 +70,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        executeEvent(true, p);
+        executeEvent(true, null, p);
     }
 
     @EventHandler
@@ -80,7 +83,18 @@ public class PlayerListener implements Listener {
         if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
             return;
         }
-        executeEvent(false, p);
+        executeEvent(false, null, p);
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        final Player p = event.getPlayer();
+
+        if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
+            return;
+        }
+        executeEvent(false, event.getFrom(), p);
+        executeEvent(true, event.getPlayer().getWorld(), p);
     }
 
     private boolean getToggledStatus(final UUID uuid) {
@@ -93,14 +107,15 @@ public class PlayerListener implements Listener {
         }
     }
 
-    private void executeEvent(final boolean join, final Player p) {
+    private void executeEvent(final boolean join, final World world, final Player p) {
         final String[] groups = plugin.getPermission().getPlayerGroups(p);
         for (RankData data : plugin.getRankData()) {
-            final EventData eventData = join ? data.getJoin() : data.getQuit();
+            final EventType type = join ? EventType.JOIN : EventType.QUIT;
+            final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).get(type);
 
             if (plugin.isUsePermissions()) {
                 if (plugin.getPermission().has(p, data.getPermission())) {
-                    executeEventData(p, eventData);
+                    executeEventData(p, eventData, world);
 
                     if (plugin.getConfiguration().getBoolean("usepriorities")) {
                         break;
@@ -108,7 +123,7 @@ public class PlayerListener implements Listener {
                 }
             } else {
                 if (Utils.contains(groups, data.getName())) {
-                    executeEventData(p, eventData);
+                    executeEventData(p, eventData, world);
 
                     if (plugin.getConfiguration().getBoolean("usepriorities")) {
                         break;
@@ -118,7 +133,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    private void executeEventData(final Player p, final EventData eventData) {
+    private void executeEventData(final Player p, final EventData eventData, final World world) {
         if (eventData.isEnabled()) {
             String message = eventData.getMessage().replace("%player%", p.getName());
             message = Utils.c(message);
@@ -127,7 +142,14 @@ public class PlayerListener implements Listener {
                 message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders((OfflinePlayer) p, message);
             }
 
-            Bukkit.broadcastMessage(message);
+            if (world != null) {
+                for (Player player : world.getPlayers()) {
+                    player.sendMessage(message);
+                }
+                Bukkit.getConsoleSender().sendMessage(message);
+            } else {
+                Bukkit.broadcastMessage(message);
+            }
 
             if (eventData.isFirework()) {
                 Utils.spawnFirework(p.getLocation());

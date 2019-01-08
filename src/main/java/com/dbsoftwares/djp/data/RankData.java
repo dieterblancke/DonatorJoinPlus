@@ -10,22 +10,30 @@ import com.dbsoftwares.configuration.api.ISection;
 import lombok.Data;
 import com.dbsoftwares.djp.data.EventData.EventType;
 
+import java.util.Map;
+
 @Data
 public class RankData {
 
     private String name;
     private int priority;
     private String permission;
-    private EventData join;
-    private EventData quit;
+    private Map<EventType, EventData> events;
+    private boolean worldMessages;
+    private Map<EventType, EventData> worldEvents;
 
     public void fromSection(final ISection section) {
         this.name = section.getString("name");
         this.priority = section.getInteger("priority");
         this.permission = section.getString("permission");
 
-        this.join = getData(EventType.JOIN, section);
-        this.quit = getData(EventType.QUIT, section);
+        final ISection worldSection = section.getSection("world");
+        this.worldMessages = worldSection.getBoolean("enabled");
+
+        for (EventType type : EventType.values()) {
+            events.put(type, getData(type, section));
+            worldEvents.put(type, getData(type, worldSection));
+        }
     }
 
     private EventData getData(EventType type, ISection section) {

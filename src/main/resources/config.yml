@@ -87,6 +87,21 @@ ranks:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH
       firework: false
+    world:
+      join:
+        enabled: false
+        message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas joined the world!'
+        sound:
+          enabled: true
+          sound: ENTITY_IRONGOLEM_DEATH
+        firework: true
+      quit:
+        enabled: false
+        message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas left the world!'
+        sound:
+          enabled: true
+          sound: ENTITY_IRONGOLEM_DEATH
+        firework: false
   - name: 'MVP'
     permission: 'djp.mvp'
     priority: 20
@@ -104,3 +119,18 @@ ranks:
         enabled: true
         sound: BLOCK_PORTAL_TRAVEL
       firework: false
+    world:
+      join:
+        enabled: false
+        message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas joined the world!'
+        sound:
+          enabled: true
+          sound: BLOCK_PORTAL_TRAVEL
+        firework: true
+      quit:
+        enabled: false
+        message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas left the world!'
+        sound:
+          enabled: true
+          sound: BLOCK_PORTAL_TRAVEL
+        firework: false
