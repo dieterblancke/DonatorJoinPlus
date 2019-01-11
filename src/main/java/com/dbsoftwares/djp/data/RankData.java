@@ -7,6 +7,7 @@ package com.dbsoftwares.djp.data;
  */
 
 import com.dbsoftwares.configuration.api.ISection;
+import com.google.common.collect.Maps;
 import lombok.Data;
 import com.dbsoftwares.djp.data.EventData.EventType;
 
@@ -18,9 +19,8 @@ public class RankData {
     private String name;
     private int priority;
     private String permission;
-    private Map<EventType, EventData> events;
-    private boolean worldMessages;
-    private Map<EventType, EventData> worldEvents;
+    private Map<EventType, EventData> events = Maps.newHashMap();
+    private Map<EventType, EventData> worldEvents = Maps.newHashMap();
 
     public void fromSection(final ISection section) {
         this.name = section.getString("name");
@@ -28,7 +28,6 @@ public class RankData {
         this.permission = section.getString("permission");
 
         final ISection worldSection = section.getSection("world");
-        this.worldMessages = worldSection.getBoolean("enabled");
 
         for (EventType type : EventType.values()) {
             events.put(type, getData(type, section));

@@ -41,12 +41,6 @@ public class PlayerListener implements Listener {
             });
 
 
-    private DonatorJoinPlus plugin;
-
-    public PlayerListener(DonatorJoinPlus plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onLoad(final PlayerLoginEvent event) {
         final Player player = event.getPlayer();
@@ -62,7 +56,7 @@ public class PlayerListener implements Listener {
         final boolean toggled = getToggledStatus(p.getUniqueId());
         Utils.setMetaData(p, Utils.TOGGLE_KEY, toggled);
 
-        if (!plugin.isDisableJoinMessage()) {
+        if (!DonatorJoinPlus.i().isDisableJoinMessage()) {
             event.setJoinMessage(null);
         }
 
@@ -77,7 +71,7 @@ public class PlayerListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         final Player p = event.getPlayer();
 
-        if (!plugin.isDisableJoinMessage()) {
+        if (!DonatorJoinPlus.i().isDisableJoinMessage()) {
             event.setQuitMessage(null);
         }
         if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
@@ -108,16 +102,16 @@ public class PlayerListener implements Listener {
     }
 
     private void executeEvent(final boolean join, final World world, final Player p) {
-        final String[] groups = plugin.getPermission().getPlayerGroups(p);
-        for (RankData data : plugin.getRankData()) {
+        final String[] groups = DonatorJoinPlus.i().getPermission().getPlayerGroups(p);
+        for (RankData data : DonatorJoinPlus.i().getRankData()) {
             final EventType type = join ? EventType.JOIN : EventType.QUIT;
             final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).get(type);
 
-            if (plugin.isUsePermissions()) {
-                if (plugin.getPermission().has(p, data.getPermission())) {
+            if (DonatorJoinPlus.i().isUsePermissions()) {
+                if (DonatorJoinPlus.i().getPermission().has(p, data.getPermission())) {
                     executeEventData(p, eventData, world);
 
-                    if (plugin.getConfiguration().getBoolean("usepriorities")) {
+                    if (DonatorJoinPlus.i().getConfiguration().getBoolean("usepriorities")) {
                         break;
                     }
                 }
@@ -125,7 +119,7 @@ public class PlayerListener implements Listener {
                 if (Utils.contains(groups, data.getName())) {
                     executeEventData(p, eventData, world);
 
-                    if (plugin.getConfiguration().getBoolean("usepriorities")) {
+                    if (DonatorJoinPlus.i().getConfiguration().getBoolean("usepriorities")) {
                         break;
                     }
                 }

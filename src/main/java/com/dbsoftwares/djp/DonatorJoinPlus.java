@@ -14,6 +14,7 @@ import com.dbsoftwares.djp.data.RankData;
 import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.listeners.PlayerListener;
+import com.dbsoftwares.djp.listeners.SlotListener;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.storage.AbstractStorageManager.StorageType;
 import com.google.common.collect.Lists;
@@ -75,7 +76,8 @@ public class DonatorJoinPlus extends JavaPlugin {
             permission = permissionProvider.getProvider();
         }
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new SlotListener(), this);
         CommandManager.getInstance().registerCommand(new DJCommand());
 
         StorageType type;
