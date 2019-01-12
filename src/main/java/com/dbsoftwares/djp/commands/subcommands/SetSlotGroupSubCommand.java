@@ -1,10 +1,13 @@
 package com.dbsoftwares.djp.commands.subcommands;
 
 import com.dbsoftwares.commandapi.command.SubCommand;
+import com.dbsoftwares.djp.DonatorJoinPlus;
+import com.dbsoftwares.djp.utils.Utils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SetSlotGroupSubCommand extends SubCommand {
 
@@ -29,7 +32,26 @@ public class SetSlotGroupSubCommand extends SubCommand {
 
     @Override
     public void onExecute(final CommandSender sender, final String[] args) {
-        // TODO
+        final String playerName = args[0];
+        final String groupName = args[1];
+        final UUID uuid = Utils.getUuid(playerName);
+
+        if (uuid == null) {
+            sender.sendMessage(Utils.getMessage("never-joined"));
+            return;
+        }
+        if (DonatorJoinPlus.i().getSlotLimits().stream().noneMatch(l -> l.getName().equalsIgnoreCase(groupName))) {
+            sender.sendMessage(Utils.getMessage("group-not-found").replace("{group}", groupName));
+            return;
+        }
+
+        try {
+            DonatorJoinPlus.i().getStorage().setSlotGroup(uuid, groupName);
+            sender.sendMessage(Utils.getMessage("group-set").replace("{player}", playerName).replace("{group}", groupName));
+        } catch (Exception e) {
+            e.printStackTrace();
+            sender.sendMessage(Utils.getMessage("error"));
+        }
     }
 
     @Override

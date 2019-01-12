@@ -2,6 +2,7 @@ package com.dbsoftwares.djp.slots;
 
 import com.dbsoftwares.djp.utils.ReflectionUtils;
 import com.google.common.collect.Maps;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
@@ -11,9 +12,10 @@ import java.util.UUID;
 
 public class SlotResizer {
 
+    @Getter
+    private final int max;
     private final Map<UUID, SlotLimit> playerLimits = Collections.synchronizedMap(Maps.newHashMap());
     private final Map<SlotLimit, Integer> slotLimits = Collections.synchronizedMap(Maps.newHashMap());
-    private int max;
 
     public SlotResizer() {
         // max players on initialize, we're manipulating this value, so making sure we have the original stored

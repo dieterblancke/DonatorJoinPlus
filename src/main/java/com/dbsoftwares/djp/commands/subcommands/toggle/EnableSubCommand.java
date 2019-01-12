@@ -38,6 +38,10 @@ public class EnableSubCommand extends ToggableSubCommand {
             }
 
             final UUID uuid = Utils.getUuid(args[0]);
+            if (uuid == null) {
+                sender.sendMessage(Utils.getMessage("never-joined"));
+                return;
+            }
             enable(uuid);
 
             sender.sendMessage(Utils.getMessage("enabled-other").replace("{player}", args[0]));

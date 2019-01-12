@@ -63,6 +63,10 @@ public class ToggableSubCommand extends SubCommand {
             }
 
             final UUID uuid = Utils.getUuid(args[0]);
+            if (uuid == null) {
+                sender.sendMessage(Utils.getMessage("never-joined"));
+                return;
+            }
             final Player target = Bukkit.getPlayer(uuid);
 
             final boolean toggled;

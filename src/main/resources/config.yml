@@ -63,18 +63,22 @@ usepermissions: false
 
 messages:
   prefix: '&e&lDonatorJoin&b&l+ &7» '
+  never-joined: '&cThat player didn''t join before!'
   no-perm: '&cYou are not allowed to do this!'
   reloaded: '&aThe plugin has been reloaded successfully!'
   enabled: '&aJoin & quit messages are now enabled!'
   enabled-other: '&aJoin & quit messages are now enabled for &b{player}!'
   disabled: '&cJoin & quit messages are now disabled!'
   disabled-other: '&aJoin & quit messages are now enabled for &b{player}!'
-  not-online: '&cThat player is not online!'
   not-for-console: '&cThe console cannot use this!'
   usage: '&ePlease use &b{usage}&e!'
+  group-not-found: '&eSlotGroup &b{group} &ewas not found!'
+  group-set: '&b{player}''s &eslot group has been set to &b{group}&e!'
+  error: '&cAn error occured, check the console for more info!'
 
 # Some permission plugins do not load permissions quicky enough for this to work.
 # If your permission plugin seems to be one of them, please use: /djp setslotgroup (player) (groupname / none) instead
+# DO NOTE THAT THIS FEATURE IS EXPERIMENTAL, NOT MUCH TESTING HAS BEEN DONE
 slotforcer:
   enabled: false
 
