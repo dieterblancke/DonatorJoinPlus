@@ -88,6 +88,21 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
         dataSource.close();
     }
 
+    private boolean exists(final UUID uuid) {
+        boolean exists = false;
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement("SELECT toggled FROM djp_data WHERE uuid = ?;")) {
+            pstmt.setString(1, uuid.toString());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                exists = rs.next();
+            }
+        } catch (SQLException e) {
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+        return exists;
+    }
+
     @Override
     public boolean isToggled(final UUID uuid) {
         boolean toggled = false;
@@ -107,17 +122,63 @@ public abstract class HikariStorageManager extends AbstractStorageManager {
 
     @Override
     public void toggle(final UUID uuid, final boolean toggled) {
+        final boolean exists = exists(uuid);
+
         try (Connection connection = getConnection()) {
-            if (toggled) {
+            if (exists) {
+                try (PreparedStatement pstmt = connection.prepareStatement("UPDATE djp_data SET toggled = ? WHERE uuid = ?;")) {
+                    pstmt.setBoolean(1, toggled);
+                    pstmt.setString(2, uuid.toString());
+
+                    pstmt.executeUpdate();
+                }
+            } else {
                 try (PreparedStatement pstmt = connection.prepareStatement("INSERT INTO djp_data(uuid, toggled) VALUES (?, ?);")) {
                     pstmt.setString(1, uuid.toString());
                     pstmt.setBoolean(2, toggled);
 
                     pstmt.executeUpdate();
                 }
+            }
+        } catch (SQLException e) {
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+    }
+
+    @Override
+    public String getSlotGroup(final UUID uuid) {
+        String slotGroup = "none";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement("SELECT slotgroup FROM djp_data WHERE uuid = ?;")) {
+            pstmt.setString(1, uuid.toString());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    slotGroup = rs.getString("slotgroup");
+                }
+            }
+        } catch (SQLException e) {
+            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+        return slotGroup;
+    }
+
+    @Override
+    public void setSlotGroup(final UUID uuid, final String slotGroup) {
+        final boolean exists = exists(uuid);
+
+        try (Connection connection = getConnection()) {
+            if (exists) {
+                try (PreparedStatement pstmt = connection.prepareStatement("UPDATE djp_data SET slotgroup = ? WHERE uuid = ?;")) {
+                    pstmt.setString(1, slotGroup);
+                    pstmt.setString(2, uuid.toString());
+
+                    pstmt.executeUpdate();
+                }
             } else {
-                try (PreparedStatement pstmt = connection.prepareStatement("DELETE FROM djp_data WHERE uuid = ?;")) {
+                try (PreparedStatement pstmt = connection.prepareStatement("INSERT INTO djp_data(uuid, slotgroup) VALUES (?, ?);")) {
                     pstmt.setString(1, uuid.toString());
+                    pstmt.setString(2, slotGroup);
 
                     pstmt.executeUpdate();
                 }

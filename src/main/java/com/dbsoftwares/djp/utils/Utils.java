@@ -6,6 +6,7 @@ package com.dbsoftwares.djp.utils;
  * Project: DonatorJoinPlus
  */
 
+import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import org.bukkit.*;
 import org.bukkit.entity.Firework;
@@ -13,6 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class Utils {
 
@@ -80,5 +85,29 @@ public class Utils {
 
     public static String c(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public static UUID getUuid(final String name) {
+        final CompletableFuture<UUID> future = CompletableFuture.supplyAsync(() -> {
+            OfflinePlayer player = Bukkit.getPlayer(name);
+
+            if (player == null) {
+                player = Bukkit.getOfflinePlayer(name);
+            }
+
+            return player == null || !player.hasPlayedBefore() ? null : player.getUniqueId();
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            return null;
+        }
+    }
+
+    public static String getMessage(final String path) {
+        final IConfiguration config = DonatorJoinPlus.i().getConfiguration();
+
+        return Utils.c(config.getString("messages.prefix") + config.getString("messages." + path));
     }
 }

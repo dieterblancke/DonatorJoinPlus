@@ -1,27 +1,80 @@
 package com.dbsoftwares.djp.slots;
 
 import com.dbsoftwares.djp.utils.ReflectionUtils;
+import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 
 public class SlotResizer {
 
+    private final Map<UUID, SlotLimit> playerLimits = Collections.synchronizedMap(Maps.newHashMap());
+    private final Map<SlotLimit, Integer> slotLimits = Collections.synchronizedMap(Maps.newHashMap());
     private int max;
 
     public SlotResizer() {
+        // max players on initialize, we're manipulating this value, so making sure we have the original stored
         this.max = Bukkit.getMaxPlayers();
     }
 
-    private void resize() {
+    public boolean isPlaceAvailable(final SlotLimit limit) {
+        final int currentlyUsed = slotLimits.getOrDefault(limit, 0);
+
+        return currentlyUsed < limit.getLimit();
+    }
+
+    public synchronized boolean grantSlot(final UUID uuid, final SlotLimit limit) {
+        if (!isPlaceAvailable(limit)) {
+            return false;
+        }
+
+        playerLimits.put(uuid, limit);
+        slotLimits.put(limit, slotLimits.getOrDefault(limit, 0) + 1);
+
+        return resize();
+    }
+
+    public synchronized void removePlayer(final UUID uuid) {
+        if (!playerLimits.containsKey(uuid)) {
+            return;
+        }
+        final SlotLimit limit = playerLimits.remove(uuid);
+        final int currentlyUsed = slotLimits.getOrDefault(limit, 0) - 1;
+
+        if (currentlyUsed > 0) {
+            slotLimits.put(limit, currentlyUsed);
+        } else {
+            slotLimits.remove(limit);
+        }
+
+        resize();
+    }
+
+    public boolean isPlaceAvailable() {
+        return getOnlinePlayers() < max;
+    }
+
+    private int calculateMax() {
+        final int additional = slotLimits.values().stream().mapToInt(Integer::intValue).sum();
+
+        return max + additional;
+    }
+
+    private boolean resize() {
+        final int max = calculateMax();
         final Class<?> craftServer = ReflectionUtils.getCraftBukkitClass("CraftServer");
         final Object playerList = ReflectionUtils.getHandle(craftServer, Bukkit.getServer());
         final Field maxPlayers = ReflectionUtils.getField(playerList.getClass().getSuperclass(), "maxPlayers");
 
         try {
             maxPlayers.set(playerList, max);
+
+            return true;
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Could not update max player slots.", e);
+            return false;
         }
     }
 

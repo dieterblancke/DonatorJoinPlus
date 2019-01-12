@@ -45,14 +45,14 @@ public class FileStorageManager extends AbstractStorageManager {
     }
 
     @Override
-    public boolean isToggled(UUID uuid) {
+    public boolean isToggled(final UUID uuid) {
         final List<String> toggleList = storage.getStringList("toggled");
 
         return toggleList.contains(uuid.toString());
     }
 
     @Override
-    public void toggle(UUID uuid, boolean toggled) {
+    public void toggle(final UUID uuid, final boolean toggled) {
         final List<String> toggleList = storage.getStringList("toggled");
         final String uuidString = uuid.toString();
 
@@ -65,7 +65,21 @@ public class FileStorageManager extends AbstractStorageManager {
         }
 
         storage.set("toggled", toggleList);
-        if (DonatorJoinPlus.i().getConfiguration().getBoolean("storage.save-per-toggle")) {
+        if (DonatorJoinPlus.i().getConfiguration().getBoolean("storage.save-per-change")) {
+            save();
+        }
+    }
+
+    @Override
+    public String getSlotGroup(final UUID uuid) {
+        return storage.exists(uuid.toString()) ? storage.getString(uuid.toString()) : "none";
+    }
+
+    @Override
+    public void setSlotGroup(final UUID uuid, final String slotGroup) {
+        storage.set(uuid.toString(), slotGroup);
+
+        if (DonatorJoinPlus.i().getConfiguration().getBoolean("storage.save-per-change")) {
             save();
         }
     }

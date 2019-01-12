@@ -70,6 +70,10 @@ public abstract class AbstractStorageManager {
 
     public abstract void toggle(final UUID uuid, final boolean toggled);
 
+    public abstract String getSlotGroup(final UUID uuid);
+
+    public abstract void setSlotGroup(final UUID uuid, final String slotGroup);
+
     public abstract Connection getConnection() throws SQLException;
 
     public abstract void close() throws SQLException;

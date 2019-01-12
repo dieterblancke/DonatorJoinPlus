@@ -14,7 +14,7 @@ storage:
   # FILE only: when set to true, the data will be written to disk every time a toggle happens.
   # THIS CAN BE VERY INEFFICIENT, especially on larger servers.
   # When on false, file only gets saved when server shuts down (data can get lost with f.e. crashes)
-  save-per-toggle: false
+  save-per-change: false
 
   # The hostname (IP) to connect to
   hostname: '127.0.0.1'
@@ -66,23 +66,33 @@ messages:
   no-perm: '&cYou are not allowed to do this!'
   reloaded: '&aThe plugin has been reloaded successfully!'
   enabled: '&aJoin & quit messages are now enabled!'
+  enabled-other: '&aJoin & quit messages are now enabled for &b{player}!'
   disabled: '&cJoin & quit messages are now disabled!'
+  disabled-other: '&aJoin & quit messages are now enabled for &b{player}!'
   not-online: '&cThat player is not online!'
+  not-for-console: '&cThe console cannot use this!'
+  usage: '&ePlease use &b{usage}&e!'
 
-# Note that this will not work with most permission plugins, as they usually haven't loaded permissions yet
+# Some permission plugins do not load permissions quicky enough for this to work.
+# If your permission plugin seems to be one of them, please use: /djp setslotgroup (player) (groupname / none) instead
 slotforcer:
   enabled: false
 
   # This in total would allow the maxplayers on a server to go up with 23 slots.
   # If your hosting service RESTRICTS the max players, then YOU SHOULD NOT USE THIS (as your server can be suspended)
   limits:
-  # These are ADDITIONAL slots that can be allocated.
-  # For example with maxplayers set to 20, then 5 extra people with a permission can join.
-  - additional: 5
+  # Make sure the name is UNIQUE (this is CASE INSENSITIVE)
+  - name: 'vip'
+    # These are ADDITIONAL slots that can be allocated.
+    # For example with maxplayers set to 20, then 5 extra people with a permission can join.
+    additional: 5
+    # The permission to identify the limit with
     permission: 'donatorjoin.limit.exceed.vip'
-  - additional: 8
+  - name: 'mvp'
+    additional: 8
     permission: 'donatorjoin.limit.exceed.mvp'
-  - additional: 10
+  - name: 'staff'
+    additional: 10
     permission: 'donatorjoin.limit.exceed.staff'
 
 ranks:

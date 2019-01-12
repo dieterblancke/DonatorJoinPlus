@@ -15,6 +15,8 @@ import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.listeners.PlayerListener;
 import com.dbsoftwares.djp.listeners.SlotListener;
+import com.dbsoftwares.djp.slots.SlotLimit;
+import com.dbsoftwares.djp.slots.SlotResizer;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.storage.AbstractStorageManager.StorageType;
 import com.google.common.collect.Lists;
@@ -45,6 +47,9 @@ public class DonatorJoinPlus extends JavaPlugin {
     private AbstractStorageManager storage;
     private IConfiguration configuration;
 
+    private SlotResizer slotResizer;
+    private List<SlotLimit> slotLimits = Lists.newArrayList();
+
     public static DonatorJoinPlus i() {
         return getPlugin(DonatorJoinPlus.class);
     }
@@ -69,6 +74,7 @@ public class DonatorJoinPlus extends JavaPlugin {
         }
         log = LoggerFactory.getLogger("DonatorJoin+");
 
+        slotResizer = new SlotResizer();
         loadConfig();
 
         RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServicesManager().getRegistration(Permission.class);
@@ -118,17 +124,25 @@ public class DonatorJoinPlus extends JavaPlugin {
             log.error("An error occured", e);
         }
         rankData.clear();
+        slotLimits.clear();
 
-        final List<ISection> sections = configuration.getSectionList("ranks");
+        final List<ISection> ranks = configuration.getSectionList("ranks");
 
-        sections.forEach(section -> {
+        ranks.forEach(section -> {
             final RankData data = new RankData();
             data.fromSection(section);
 
             rankData.add(data);
         });
-
         rankData.sort((o1, o2) -> Integer.compare(o2.getPriority(), o1.getPriority()));
+
+        if (configuration.getBoolean("slotforcer.enabled")) {
+            SlotLimit.resetCounter();
+            configuration.getSectionList("slotforcer.limits")
+                    .forEach(section -> slotLimits.add(new SlotLimit(section)));
+
+            slotLimits.sort((o1, o2) -> Integer.compare(o2.getLimit(), o1.getLimit()));
+        }
 
         disableJoinMessage = configuration.getBoolean("joinmessage");
         disableQuitMessage = configuration.getBoolean("quitmessage");
