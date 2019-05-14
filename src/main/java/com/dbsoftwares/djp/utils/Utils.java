@@ -108,6 +108,14 @@ public class Utils {
     public static String getMessage(final String path) {
         final IConfiguration config = DonatorJoinPlus.i().getConfiguration();
 
-        return Utils.c(config.getString("messages.prefix") + config.getString("messages." + path));
+        return Utils.c(getPrefix() + config.getString("messages." + path));
+    }
+
+    public static String prefixedMessage(final String message) {
+        return Utils.c(getPrefix() + message);
+    }
+
+    public static String getPrefix() {
+        return Utils.c(DonatorJoinPlus.i().getConfiguration().getString("messages.prefix"));
     }
 }
