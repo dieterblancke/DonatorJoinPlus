@@ -27,11 +27,14 @@ public class RankData {
         this.priority = section.getInteger("priority");
         this.permission = section.getString("permission");
 
-        final ISection worldSection = section.getSection("world");
+        final ISection worldSection = section.exists("world") ? section.getSection("world") : null;
 
         for (EventType type : EventType.values()) {
             events.put(type, getData(type, section));
-            worldEvents.put(type, getData(type, worldSection));
+
+            if (worldSection != null) {
+                worldEvents.put(type, getData(type, worldSection));
+            }
         }
     }
 

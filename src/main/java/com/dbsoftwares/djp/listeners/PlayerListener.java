@@ -105,7 +105,11 @@ public class PlayerListener implements Listener {
         final String[] groups = DonatorJoinPlus.i().getPermission().getPlayerGroups(p);
         for (RankData data : DonatorJoinPlus.i().getRankData()) {
             final EventType type = join ? EventType.JOIN : EventType.QUIT;
-            final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).get(type);
+            final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).getOrDefault(type, null);
+
+            if (eventData == null) {
+                continue;
+            }
 
             if (DonatorJoinPlus.i().isUsePermissions()) {
                 if (DonatorJoinPlus.i().getPermission().has(p, data.getPermission())) {
