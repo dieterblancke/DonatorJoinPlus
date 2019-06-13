@@ -25,6 +25,10 @@
             <id>dbsoftwares</id>
             <url>http://nexus.diviwork.nl/repository/dbsoftwares/</url>
         </repository>
+        <repository>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -76,6 +80,12 @@
             <version>1.7.25</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>1.5</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,12 +102,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.1.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>com.dbsoftwares.bungeeutilisals.metrics</shadedPattern>
+                            <shadedPattern>com.dbsoftwares.djp.metrics</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

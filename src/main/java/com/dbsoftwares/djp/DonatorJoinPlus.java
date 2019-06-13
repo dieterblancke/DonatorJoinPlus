@@ -22,6 +22,7 @@ import com.dbsoftwares.djp.storage.AbstractStorageManager.StorageType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -106,6 +107,8 @@ public class DonatorJoinPlus extends JavaPlugin {
         } catch (Exception e) {
             log.error("An error occured: ", e);
         }
+
+        new Metrics(this);
     }
 
     @Override
