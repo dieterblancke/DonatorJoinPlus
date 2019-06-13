@@ -7,6 +7,9 @@
 #                                                                                              #
 ################################################################################################
 
+# Debugging mode, this will help you give extra information if something is not working.
+debug: false
+
 storage:
   # Possible storage types: FILE:JSON, FILE:YAML, MYSQL, SQLITE, H2. If using H2 or SQLITE, make sure to set max-pool-size to 1!
   type: 'FILE:JSON'
@@ -110,6 +113,11 @@ ranks:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH
       firework: true
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &a&lVIP &b%player% %nl% &ehas joined the game!'
     quit:
       enabled: true
       message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas left the game!'
@@ -117,6 +125,11 @@ ranks:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH
       firework: false
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &a&lVIP &b%player% %nl% &ehas left the game!'
     world:
       join:
         enabled: false
@@ -125,6 +138,11 @@ ranks:
           enabled: true
           sound: ENTITY_IRONGOLEM_DEATH
         firework: true
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &a&lVIP &b%player% %nl% &ehas joined the world!'
       quit:
         enabled: false
         message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas left the world!'
@@ -132,6 +150,11 @@ ranks:
           enabled: true
           sound: ENTITY_IRONGOLEM_DEATH
         firework: false
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &a&lVIP &b%player% %nl% &ehas left the world!'
   - name: 'MVP'
     permission: 'djp.mvp'
     priority: 20
@@ -142,6 +165,11 @@ ranks:
         enabled: true
         sound: BLOCK_PORTAL_TRAVEL
       firework: true
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &9&lMVP &b%player% %nl% &ehas joined the game!'
     quit:
       enabled: true
       message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas left the game!'
@@ -149,6 +177,11 @@ ranks:
         enabled: true
         sound: BLOCK_PORTAL_TRAVEL
       firework: false
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &9&lMVP &b%player% %nl% &ehas left the game!'
     world:
       join:
         enabled: false
@@ -157,6 +190,11 @@ ranks:
           enabled: true
           sound: BLOCK_PORTAL_TRAVEL
         firework: true
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &9&lMVP &b%player% %nl% &ehas joined the world!'
       quit:
         enabled: false
         message: '&8(&cServer&8) &7(&9MVP&7) &b%player% &ehas left the world!'
@@ -164,3 +202,8 @@ ranks:
           enabled: true
           sound: BLOCK_PORTAL_TRAVEL
         firework: false
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &9&lMVP &b%player% %nl% &ehas left the world!'

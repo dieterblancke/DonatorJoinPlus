@@ -149,4 +149,14 @@ public class DonatorJoinPlus extends JavaPlugin {
         usePriorities = configuration.getBoolean("usepriorities");
         usePermissions = configuration.getBoolean("usepermissions");
     }
+
+    public boolean isDebugMode() {
+        return configuration.get("debug", false);
+    }
+
+    public void debug(final String message) {
+        if (isDebugMode()) {
+            log.debug(message);
+        }
+    }
 }

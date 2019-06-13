@@ -12,6 +12,7 @@ import lombok.Data;
 import org.bukkit.Sound;
 import org.slf4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -23,6 +24,8 @@ public class EventData {
     private boolean soundEnabled;
     private Sound sound;
     private boolean firework;
+    private boolean commandsEnabled;
+    private List<String> commands;
 
     public EventData(final EventType type) {
         this.type = type;
@@ -45,10 +48,18 @@ public class EventData {
                 logger.warn("- Version < 1.9: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html");
                 logger.warn("- Version 1.9 - 1.12.2: http://bit.ly/2RuwTrj");
                 logger.warn("- Newest version: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html");
+                logger.warn("You could also use /djp listsounds to get a list of sounds available in your current version.");
                 return;
             }
         }
         this.firework = section.getBoolean("firework");
+
+        if (section.exists("commands")) {
+            final ISection commands = section.getSection("commands");
+
+            this.commandsEnabled = commands.getBoolean("enabled");
+            this.commands = commands.getStringList("commands");
+        }
     }
 
     public enum EventType {

@@ -14,11 +14,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -45,6 +43,8 @@ public class PlayerListener implements Listener {
     public void onLoad(final PlayerLoginEvent event) {
         final Player player = event.getPlayer();
 
+        DonatorJoinPlus.i().debug("Initializing loading of storage for player " + player.getName() + ".");
+
         final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> DonatorJoinPlus.i().getStorage().isToggled(player.getUniqueId()));
         loadingCache.put(player.getUniqueId(), future);
     }
@@ -64,20 +64,33 @@ public class PlayerListener implements Listener {
             return;
         }
 
+        DonatorJoinPlus.i().debug("Executing login event for player " + p.getName() + ".");
+
         executeEvent(true, null, p);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        final Player p = event.getPlayer();
-
-        if (!DonatorJoinPlus.i().isDisableJoinMessage()) {
+        if (!DonatorJoinPlus.i().isDisableQuitMessage()) {
             event.setQuitMessage(null);
         }
+
+        handleLogout(event);
+    }
+
+    @EventHandler
+    public void onKick(PlayerKickEvent event) {
+        handleLogout(event);
+    }
+
+    private void handleLogout(final PlayerEvent event) {
+        final Player p = event.getPlayer();
+
         if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
             return;
         }
         executeEvent(false, null, p);
+        DonatorJoinPlus.i().debug("Executing logout event for player " + p.getName() + ".");
     }
 
     @EventHandler
@@ -103,6 +116,9 @@ public class PlayerListener implements Listener {
 
     private void executeEvent(final boolean join, final World world, final Player p) {
         final String[] groups = DonatorJoinPlus.i().getPermission().getPlayerGroups(p);
+
+        DonatorJoinPlus.i().debug("List of groups for player " + p.getName() + ": " + Arrays.toString(groups));
+
         for (RankData data : DonatorJoinPlus.i().getRankData()) {
             final EventType type = join ? EventType.JOIN : EventType.QUIT;
             final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).getOrDefault(type, null);
@@ -113,14 +129,19 @@ public class PlayerListener implements Listener {
 
             if (DonatorJoinPlus.i().isUsePermissions()) {
                 if (DonatorJoinPlus.i().getPermission().has(p, data.getPermission())) {
+                    DonatorJoinPlus.i().debug("Player " + p.getName() + " has the permission " + data.getPermission() + ", executing event ...");
+
                     executeEventData(p, eventData, world);
 
                     if (DonatorJoinPlus.i().getConfiguration().getBoolean("usepriorities")) {
                         break;
                     }
+                } else {
+                    DonatorJoinPlus.i().debug("Player " + p.getName() + " does not have the permission " + data.getPermission() + ".");
                 }
             } else {
                 if (Utils.contains(groups, data.getName())) {
+                    DonatorJoinPlus.i().debug("Player " + p.getName() + " is in the group " + data.getName() + ", executing event ...");
                     executeEventData(p, eventData, world);
 
                     if (DonatorJoinPlus.i().getConfiguration().getBoolean("usepriorities")) {
@@ -133,12 +154,7 @@ public class PlayerListener implements Listener {
 
     private void executeEventData(final Player p, final EventData eventData, final World world) {
         if (eventData.isEnabled()) {
-            String message = eventData.getMessage().replace("%player%", p.getName());
-            message = Utils.c(message);
-
-            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders((OfflinePlayer) p, message);
-            }
+            final String message = formatString(p, eventData.getMessage());
 
             if (world != null) {
                 for (Player player : world.getPlayers()) {
@@ -156,6 +172,26 @@ public class PlayerListener implements Listener {
             if (eventData.isSoundEnabled() && eventData.getSound() != null) {
                 p.getWorld().playSound(p.getLocation(), eventData.getSound(), 20F, -20F);
             }
+
+            if (eventData.isCommandsEnabled() && eventData.getCommands() != null && !eventData.getCommands().isEmpty()) {
+                for (String command : eventData.getCommands()) {
+                    command = formatString(p, command);
+
+                    DonatorJoinPlus.i().debug("Executing command " + command + " for player " + p.getName() + ".");
+
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                }
+            }
         }
+    }
+
+    private String formatString(final Player p, String str) {
+        str = str.replace("%player%", p.getName());
+        str = Utils.c(str);
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            str = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders((OfflinePlayer) p, str);
+        }
+        return str;
     }
 }
