@@ -151,7 +151,7 @@ public class DonatorJoinPlus extends JavaPlugin {
     }
 
     public boolean isDebugMode() {
-        return configuration.get("debug", false);
+        return configuration.exists("debug") && configuration.getBoolean("debug");
     }
 
     public void debug(final String message) {

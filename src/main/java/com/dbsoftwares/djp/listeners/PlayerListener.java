@@ -156,13 +156,15 @@ public class PlayerListener implements Listener {
         if (eventData.isEnabled()) {
             final String message = formatString(p, eventData.getMessage());
 
-            if (world != null) {
-                for (Player player : world.getPlayers()) {
-                    player.sendMessage(message);
+            for (String msg : message.split("<nl>")) {
+                if (world != null) {
+                    for (Player player : world.getPlayers()) {
+                        player.sendMessage(msg);
+                    }
+                    Bukkit.getConsoleSender().sendMessage(msg);
+                } else {
+                    Bukkit.broadcastMessage(msg);
                 }
-                Bukkit.getConsoleSender().sendMessage(message);
-            } else {
-                Bukkit.broadcastMessage(message);
             }
 
             if (eventData.isFirework()) {
