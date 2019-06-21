@@ -75,15 +75,6 @@ public class PlayerListener implements Listener {
             event.setQuitMessage(null);
         }
 
-        handleLogout(event);
-    }
-
-    @EventHandler
-    public void onKick(PlayerKickEvent event) {
-        handleLogout(event);
-    }
-
-    private void handleLogout(final PlayerEvent event) {
         final Player p = event.getPlayer();
 
         if (Utils.isVanished(p) || (boolean) Utils.getMetaData(p, Utils.TOGGLE_KEY, false)) {
