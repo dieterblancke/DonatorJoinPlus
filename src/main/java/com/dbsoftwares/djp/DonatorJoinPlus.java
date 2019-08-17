@@ -19,6 +19,7 @@ import com.dbsoftwares.djp.slots.SlotLimit;
 import com.dbsoftwares.djp.slots.SlotResizer;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.storage.AbstractStorageManager.StorageType;
+import com.dbsoftwares.djp.utils.SimpleDjpLogger;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
@@ -27,7 +28,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,8 @@ import java.util.List;
 public class DonatorJoinPlus extends JavaPlugin {
 
     @Getter
-    private static Logger log;
+    private static final Logger log = new SimpleDjpLogger();
+
     private Permission permission;
     private List<RankData> rankData = Lists.newArrayList();
     private boolean disableJoinMessage;
@@ -73,7 +74,6 @@ public class DonatorJoinPlus extends JavaPlugin {
                 library.load();
             }
         }
-        log = LoggerFactory.getLogger("DonatorJoin+");
 
         slotResizer = new SlotResizer();
         loadConfig();
