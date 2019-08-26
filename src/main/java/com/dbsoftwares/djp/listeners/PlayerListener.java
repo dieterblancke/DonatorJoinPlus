@@ -15,7 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -33,11 +35,28 @@ public class PlayerListener implements Listener {
     private final LoadingCache<UUID, CompletableFuture<Boolean>> loadingCache = CacheBuilder.newBuilder()
             .expireAfterWrite(15, TimeUnit.SECONDS)
             .build(new CacheLoader<UUID, CompletableFuture<Boolean>>() {
+                @ParametersAreNonnullByDefault
                 public CompletableFuture<Boolean> load(final UUID uuid) {
                     return CompletableFuture.supplyAsync(() -> DonatorJoinPlus.i().getStorage().isToggled(uuid));
                 }
             });
 
+    public PlayerListener() {
+        // Cleanup task, runs every 3 minutes to ensure the PlayerListener loadingCache is cleaned up.
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (DonatorJoinPlus.i().isDebugMode()) {
+                    DonatorJoinPlus.getLog().debug("Cleaning up loading cache ... [initialSize={}]", loadingCache.size());
+                }
+                loadingCache.cleanUp();
+
+                if (DonatorJoinPlus.i().isDebugMode()) {
+                    DonatorJoinPlus.getLog().debug("Successfully up loading cache ... [currentSize={}]", loadingCache.size());
+                }
+            }
+        }.runTaskTimerAsynchronously(DonatorJoinPlus.i(), 3600, 3600);
+    }
 
     @EventHandler
     public void onLoad(final PlayerLoginEvent event) {
