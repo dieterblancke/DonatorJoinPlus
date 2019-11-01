@@ -18,7 +18,7 @@ public class SimpleDjpLogger implements Logger
         {
             this.logger = LoggerFactory.getLogger( "DonatorJoin+" );
         }
-        catch ( Exception e )
+        catch ( Throwable e )
         {
             // fail gracefully
         }
