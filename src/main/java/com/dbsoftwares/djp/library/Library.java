@@ -33,7 +33,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-public class Library {
+public class Library
+{
 
     private final static List<Library> registry = Lists.newArrayList();
 
@@ -43,71 +44,87 @@ public class Library {
     private final String version;
     private final boolean toLoad;
 
-    public Library(String name, String className, String downloadURL, String version, boolean toLoad) {
+    public Library( String name, String className, String downloadURL, String version, boolean toLoad )
+    {
         this.name = name;
         this.className = className;
-        this.downloadURL = downloadURL.replace("{version}", version);
+        this.downloadURL = downloadURL.replace( "{version}", version );
         this.version = version;
         this.toLoad = toLoad;
 
-        registry.add(this);
+        registry.add( this );
     }
 
-    public static Library getLibrary(final String name) {
-        return registry.stream().filter(library -> library.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    public static Library getLibrary( final String name )
+    {
+        return registry.stream().filter( library -> library.getName().equalsIgnoreCase( name ) ).findFirst().orElse( null );
     }
 
-    public boolean isPresent() {
-        try {
-            Class.forName(className);
+    public boolean isPresent()
+    {
+        try
+        {
+            Class.forName( className );
             return true;
-        } catch (ClassNotFoundException e) {
+        }
+        catch ( ClassNotFoundException e )
+        {
             return false;
         }
     }
 
-    public void load() {
-        if (isPresent()) {
+    public void load()
+    {
+        if ( isPresent() )
+        {
             return;
         }
-        final File folder = new File(DonatorJoinPlus.i().getDataFolder(), "libraries");
-        if (!folder.exists() && !folder.mkdir()) {
+        final File folder = new File( DonatorJoinPlus.i().getDataFolder(), "libraries" );
+        if ( !folder.exists() && !folder.mkdir() )
+        {
             return;
         }
-        final File path = new File(folder, String.format("%s-v%s.jar", name.toLowerCase(), version));
+        final File path = new File( folder, String.format( "%s-v%s.jar", name.toLowerCase(), version ) );
 
         // Download libary if not present
-        if (!path.exists()) {
-            System.out.println("Downloading libary for " + toString());
+        if ( !path.exists() )
+        {
+            System.out.println( "Downloading libary for " + toString() );
 
-            try (final InputStream input = new URL(downloadURL).openStream();
-                 final ReadableByteChannel channel = Channels.newChannel(input);
-                 final FileOutputStream output = new FileOutputStream(path)) {
+            try ( final InputStream input = new URL( downloadURL ).openStream();
+                  final ReadableByteChannel channel = Channels.newChannel( input );
+                  final FileOutputStream output = new FileOutputStream( path ) )
+            {
 
-                output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
-                System.out.println("Successfully downloaded libary for " + toString());
+                output.getChannel().transferFrom( channel, 0, Long.MAX_VALUE );
+                System.out.println( "Successfully downloaded libary for " + toString() );
 
-                System.out.println("Removing older versions of " + toString());
-                getOutdatedFiles(folder).forEach(File::delete);
-                System.out.println("Successfully removed older versions of " + toString());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed downloading library for " + toString().toLowerCase(), e);
+                System.out.println( "Removing older versions of " + toString() );
+                getOutdatedFiles( folder ).forEach( File::delete );
+                System.out.println( "Successfully removed older versions of " + toString() );
+            }
+            catch ( IOException e )
+            {
+                throw new RuntimeException( "Failed downloading library for " + toString().toLowerCase(), e );
             }
         }
 
-        JarClassLoader.loadJar(path);
-        System.out.println("Loaded " + name + " libary!");
+        JarClassLoader.loadJar( path );
+        System.out.println( "Loaded " + name + " libary!" );
     }
 
-    private Collection<File> getOutdatedFiles(final File folder) {
+    private Collection<File> getOutdatedFiles( final File folder )
+    {
         final List<File> outdatedFiles = Lists.newArrayList();
         final String name = toString().toLowerCase();
 
-        for (File library : folder.listFiles()) {
+        for ( File library : folder.listFiles() )
+        {
             final String jarName = library.getName();
 
-            if (jarName.startsWith(name) && !jarName.equals(String.format("%s-v%s.jar", name.toLowerCase(), version))) {
-                outdatedFiles.add(library);
+            if ( jarName.startsWith( name ) && !jarName.equals( String.format( "%s-v%s.jar", name.toLowerCase(), version ) ) )
+            {
+                outdatedFiles.add( library );
             }
         }
 
@@ -115,7 +132,8 @@ public class Library {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return name;
     }
 }

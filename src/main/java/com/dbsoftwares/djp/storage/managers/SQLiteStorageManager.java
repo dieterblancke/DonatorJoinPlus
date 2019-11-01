@@ -25,31 +25,39 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class SQLiteStorageManager extends HikariStorageManager {
+public class SQLiteStorageManager extends HikariStorageManager
+{
 
-    public SQLiteStorageManager() {
-        super(StorageType.SQLITE, DonatorJoinPlus.i().getConfiguration().getSection("storage"));
-        final File database = new File(DonatorJoinPlus.i().getDataFolder(), "sqlite-storage.db");
+    public SQLiteStorageManager()
+    {
+        super( StorageType.SQLITE, DonatorJoinPlus.i().getConfiguration().getSection( "storage" ) );
+        final File database = new File( DonatorJoinPlus.i().getDataFolder(), "sqlite-storage.db" );
 
-        try {
-            if (!database.exists() && !database.createNewFile()) {
+        try
+        {
+            if ( !database.exists() && !database.createNewFile() )
+            {
                 return;
             }
-        } catch (IOException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+        catch ( IOException e )
+        {
+            DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
 
-        config.addDataSourceProperty("url", "jdbc:sqlite:" + database.getPath());
+        config.addDataSourceProperty( "url", "jdbc:sqlite:" + database.getPath() );
         setupDataSource();
     }
 
     @Override
-    protected String getDataSourceClass() {
+    protected String getDataSourceClass()
+    {
         return "org.sqlite.SQLiteDataSource";
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException
+    {
         return dataSource.getConnection();
     }
 }

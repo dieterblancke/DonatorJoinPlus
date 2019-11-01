@@ -19,24 +19,29 @@
 package com.dbsoftwares.djp.storage.managers;
 
 import com.dbsoftwares.djp.DonatorJoinPlus;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MySQLStorageManager extends HikariStorageManager {
+public class MySQLStorageManager extends HikariStorageManager
+{
 
-    public MySQLStorageManager() {
-        super(StorageType.MYSQL, DonatorJoinPlus.i().getConfiguration().getSection("storage"));
+    public MySQLStorageManager()
+    {
+        super( StorageType.MYSQL, DonatorJoinPlus.i().getConfiguration().getSection( "storage" ) );
 
         setupDataSource();
     }
 
     @Override
-    protected String getDataSourceClass() {
+    protected String getDataSourceClass()
+    {
         return "com.mysql.jdbc.jdbc2.optional.MysqlDataSource";
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException
+    {
         return dataSource.getConnection();
     }
 }

@@ -25,6 +25,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,158 +34,198 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class HikariStorageManager extends AbstractStorageManager {
+public abstract class HikariStorageManager extends AbstractStorageManager
+{
 
     protected HikariConfig config;
     protected HikariDataSource dataSource;
 
     @SuppressWarnings("deprecation")
-    public HikariStorageManager(final StorageType type, final ISection section) {
-        super(type);
+    public HikariStorageManager( final StorageType type, final ISection section )
+    {
+        super( type );
         config = new HikariConfig();
-        config.setDataSourceClassName(getDataSourceClass());
+        config.setDataSourceClassName( getDataSourceClass() );
 
         // Mysql-only properties
-        if (type == StorageType.MYSQL) {
-            config.addDataSourceProperty("serverName", section.getString("hostname"));
-            config.addDataSourceProperty("port", section.getInteger("port"));
-            config.addDataSourceProperty("databaseName", section.getString("database"));
-            config.addDataSourceProperty("user", section.getString("username"));
-            config.addDataSourceProperty("password", section.getString("password"));
-            config.addDataSourceProperty("useSSL", section.getBoolean("useSSL"));
+        if ( type == StorageType.MYSQL )
+        {
+            config.addDataSourceProperty( "serverName", section.getString( "hostname" ) );
+            config.addDataSourceProperty( "port", section.getInteger( "port" ) );
+            config.addDataSourceProperty( "databaseName", section.getString( "database" ) );
+            config.addDataSourceProperty( "user", section.getString( "username" ) );
+            config.addDataSourceProperty( "password", section.getString( "password" ) );
+            config.addDataSourceProperty( "useSSL", section.getBoolean( "useSSL" ) );
 
-            config.addDataSourceProperty("cacheServerConfiguration", "true");
-            config.addDataSourceProperty("elideSetAutoCommits", "true");
-            config.addDataSourceProperty("useServerPrepStmts", "true");
-            config.addDataSourceProperty("cacheCallableStmts", "true");
-            config.addDataSourceProperty("cachePrepStmts", "true");
-            config.addDataSourceProperty("alwaysSendSetIsolation", "false");
-            config.addDataSourceProperty("prepStmtCacheSize", "250");
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-            config.addDataSourceProperty("useLocalSessionState", "true");
+            config.addDataSourceProperty( "cacheServerConfiguration", "true" );
+            config.addDataSourceProperty( "elideSetAutoCommits", "true" );
+            config.addDataSourceProperty( "useServerPrepStmts", "true" );
+            config.addDataSourceProperty( "cacheCallableStmts", "true" );
+            config.addDataSourceProperty( "cachePrepStmts", "true" );
+            config.addDataSourceProperty( "alwaysSendSetIsolation", "false" );
+            config.addDataSourceProperty( "prepStmtCacheSize", "250" );
+            config.addDataSourceProperty( "prepStmtCacheSqlLimit", "2048" );
+            config.addDataSourceProperty( "useLocalSessionState", "true" );
         }
 
-        config.setMaximumPoolSize(section.getInteger("pool.max-pool-size"));
-        config.setMinimumIdle(section.getInteger("pool.min-idle"));
-        config.setMaxLifetime(section.getLong("pool.max-lifetime") * 1000);
-        config.setConnectionTimeout(section.getLong("pool.connection-timeout") * 1000);
+        config.setMaximumPoolSize( section.getInteger( "pool.max-pool-size" ) );
+        config.setMinimumIdle( section.getInteger( "pool.min-idle" ) );
+        config.setMaxLifetime( section.getLong( "pool.max-lifetime" ) * 1000 );
+        config.setConnectionTimeout( section.getLong( "pool.connection-timeout" ) * 1000 );
 
-        config.setPoolName("DonatorJoinPlus");
-        config.setLeakDetectionThreshold(10000);
-        config.setConnectionTestQuery("/* DonatorJoinPlus ping */ SELECT 1;");
-        config.setInitializationFailTimeout(-1);
+        config.setPoolName( "DonatorJoinPlus" );
+        config.setLeakDetectionThreshold( 10000 );
+        config.setConnectionTestQuery( "/* DonatorJoinPlus ping */ SELECT 1;" );
+        config.setInitializationFailTimeout( -1 );
     }
 
-    protected void setupDataSource() {
-        if (dataSource == null) {
-            dataSource = new HikariDataSource(config);
+    protected void setupDataSource()
+    {
+        if ( dataSource == null )
+        {
+            dataSource = new HikariDataSource( config );
         }
     }
 
     protected abstract String getDataSourceClass();
 
     @Override
-    public void close() {
+    public void close()
+    {
         dataSource.close();
     }
 
-    private boolean exists(final UUID uuid) {
+    private boolean exists( final UUID uuid )
+    {
         boolean exists = false;
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement("SELECT toggled FROM djp_data WHERE uuid = ?;")) {
-            pstmt.setString(1, uuid.toString());
+        try ( Connection connection = getConnection();
+              PreparedStatement pstmt = connection.prepareStatement( "SELECT toggled FROM djp_data WHERE uuid = ?;" ) )
+        {
+            pstmt.setString( 1, uuid.toString() );
 
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try ( ResultSet rs = pstmt.executeQuery() )
+            {
                 exists = rs.next();
             }
-        } catch (SQLException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
         return exists;
     }
 
     @Override
-    public boolean isToggled(final UUID uuid) {
+    public boolean isToggled( final UUID uuid )
+    {
         boolean toggled = false;
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement("SELECT toggled FROM djp_data WHERE uuid = ? AND toggled = ?;")) {
-            pstmt.setString(1, uuid.toString());
-            pstmt.setBoolean(2, true);
+        try ( Connection connection = getConnection();
+              PreparedStatement pstmt = connection.prepareStatement( "SELECT toggled FROM djp_data WHERE uuid = ? AND toggled = ?;" ) )
+        {
+            pstmt.setString( 1, uuid.toString() );
+            pstmt.setBoolean( 2, true );
 
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try ( ResultSet rs = pstmt.executeQuery() )
+            {
                 toggled = rs.next();
             }
-        } catch (SQLException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
         return toggled;
     }
 
     @Override
-    public void toggle(final UUID uuid, final boolean toggled) {
-        final boolean exists = exists(uuid);
+    public void toggle( final UUID uuid, final boolean toggled )
+    {
+        final boolean exists = exists( uuid );
 
-        try (Connection connection = getConnection()) {
-            if (exists) {
-                try (PreparedStatement pstmt = connection.prepareStatement("UPDATE djp_data SET toggled = ? WHERE uuid = ?;")) {
-                    pstmt.setBoolean(1, toggled);
-                    pstmt.setString(2, uuid.toString());
-
-                    pstmt.executeUpdate();
-                }
-            } else {
-                try (PreparedStatement pstmt = connection.prepareStatement("INSERT INTO djp_data(uuid, toggled) VALUES (?, ?);")) {
-                    pstmt.setString(1, uuid.toString());
-                    pstmt.setBoolean(2, toggled);
+        try ( Connection connection = getConnection() )
+        {
+            if ( exists )
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET toggled = ? WHERE uuid = ?;" ) )
+                {
+                    pstmt.setBoolean( 1, toggled );
+                    pstmt.setString( 2, uuid.toString() );
 
                     pstmt.executeUpdate();
                 }
             }
-        } catch (SQLException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+            else
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement( "INSERT INTO djp_data(uuid, toggled) VALUES (?, ?);" ) )
+                {
+                    pstmt.setString( 1, uuid.toString() );
+                    pstmt.setBoolean( 2, toggled );
+
+                    pstmt.executeUpdate();
+                }
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
     }
 
     @Override
-    public String getSlotGroup(final UUID uuid) {
+    public String getSlotGroup( final UUID uuid )
+    {
         String slotGroup = "none";
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement("SELECT slotgroup FROM djp_data WHERE uuid = ?;")) {
-            pstmt.setString(1, uuid.toString());
+        try ( Connection connection = getConnection();
+              PreparedStatement pstmt = connection.prepareStatement( "SELECT slotgroup FROM djp_data WHERE uuid = ?;" ) )
+        {
+            pstmt.setString( 1, uuid.toString() );
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    slotGroup = rs.getString("slotgroup");
+            try ( ResultSet rs = pstmt.executeQuery() )
+            {
+                if ( rs.next() )
+                {
+                    slotGroup = rs.getString( "slotgroup" );
                 }
             }
-        } catch (SQLException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
         return slotGroup;
     }
 
     @Override
-    public void setSlotGroup(final UUID uuid, final String slotGroup) {
-        final boolean exists = exists(uuid);
+    public void setSlotGroup( final UUID uuid, final String slotGroup )
+    {
+        final boolean exists = exists( uuid );
 
-        try (Connection connection = getConnection()) {
-            if (exists) {
-                try (PreparedStatement pstmt = connection.prepareStatement("UPDATE djp_data SET slotgroup = ? WHERE uuid = ?;")) {
-                    pstmt.setString(1, slotGroup);
-                    pstmt.setString(2, uuid.toString());
-
-                    pstmt.executeUpdate();
-                }
-            } else {
-                try (PreparedStatement pstmt = connection.prepareStatement("INSERT INTO djp_data(uuid, slotgroup) VALUES (?, ?);")) {
-                    pstmt.setString(1, uuid.toString());
-                    pstmt.setString(2, slotGroup);
+        try ( Connection connection = getConnection() )
+        {
+            if ( exists )
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET slotgroup = ? WHERE uuid = ?;" ) )
+                {
+                    pstmt.setString( 1, slotGroup );
+                    pstmt.setString( 2, uuid.toString() );
 
                     pstmt.executeUpdate();
                 }
             }
-        } catch (SQLException e) {
-            DonatorJoinPlus.getLog().error("An error occured: ", e);
+            else
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement( "INSERT INTO djp_data(uuid, slotgroup) VALUES (?, ?);" ) )
+                {
+                    pstmt.setString( 1, uuid.toString() );
+                    pstmt.setString( 2, slotGroup );
+
+                    pstmt.executeUpdate();
+                }
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
     }
 }

@@ -9,44 +9,52 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class ReloadSubCommand extends SubCommand {
+public class ReloadSubCommand extends SubCommand
+{
 
-    public ReloadSubCommand() {
-        super("reload");
+    public ReloadSubCommand()
+    {
+        super( "reload" );
     }
 
     @Override
-    public String getUsage() {
+    public String getUsage()
+    {
         return "/djp reload";
     }
 
     @Override
-    public String getPermission() {
+    public String getPermission()
+    {
         return "donatorjoinplus.reload";
     }
 
     @Override
-    public void onExecute(final Player player, final String[] args) {
-        this.onExecute((CommandSender) player, args);
+    public void onExecute( final Player player, final String[] args )
+    {
+        this.onExecute( (CommandSender) player, args );
     }
 
     @Override
-    public void onExecute(final CommandSender sender, final String[] args) {
+    public void onExecute( final CommandSender sender, final String[] args )
+    {
         final DonatorJoinPlus plugin = DonatorJoinPlus.i();
 
         plugin.reloadConfig();
         plugin.loadConfig();
 
-        sender.sendMessage(Utils.getMessage("reloaded"));
+        sender.sendMessage( Utils.getMessage( "reloaded" ) );
     }
 
     @Override
-    public List<String> getCompletions(final CommandSender sender, final String[] args) {
+    public List<String> getCompletions( final CommandSender sender, final String[] args )
+    {
         return ImmutableList.of();
     }
 
     @Override
-    public List<String> getCompletions(final Player player, final String[] args) {
+    public List<String> getCompletions( final Player player, final String[] args )
+    {
         return ImmutableList.of();
     }
 }

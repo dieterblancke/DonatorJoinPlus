@@ -22,89 +22,104 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class ListSoundsSubCommand extends SubCommand {
+public class ListSoundsSubCommand extends SubCommand
+{
 
-    public ListSoundsSubCommand() {
-        super("listsounds");
+    public ListSoundsSubCommand()
+    {
+        super( "listsounds" );
     }
 
     @Override
-    public String getUsage() {
+    public String getUsage()
+    {
         return "/djp listsounds";
     }
 
     @Override
-    public String getPermission() {
+    public String getPermission()
+    {
         return "donatorjoinplus.listsounds";
     }
 
     @Override
-    public void onExecute(final Player player, final String[] args) {
-        this.onExecute((CommandSender) player, args);
+    public void onExecute( final Player player, final String[] args )
+    {
+        this.onExecute( (CommandSender) player, args );
     }
 
     @Override
-    public void onExecute(final CommandSender sender, final String[] args) {
-        Bukkit.getScheduler().runTaskAsynchronously(DonatorJoinPlus.i(), () -> {
+    public void onExecute( final CommandSender sender, final String[] args )
+    {
+        Bukkit.getScheduler().runTaskAsynchronously( DonatorJoinPlus.i(), () ->
+        {
             final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-            try {
-                final HttpURLConnection con = (HttpURLConnection) new URL("https://paste.dbsoftwares.eu/documents/").openConnection();
+            try
+            {
+                final HttpURLConnection con = (HttpURLConnection) new URL( "https://paste.dbsoftwares.eu/documents/" ).openConnection();
 
                 con.addRequestProperty(
                         "User-Agent", "DonatorJoin+ v" + DonatorJoinPlus.i().getDescription().getVersion()
                 );
-                con.setRequestMethod("POST");
-                con.setRequestProperty("Content-Type", "application/json");
-                con.setRequestProperty("charset", "utf-8");
-                con.setDoOutput(true);
+                con.setRequestMethod( "POST" );
+                con.setRequestProperty( "Content-Type", "application/json" );
+                con.setRequestProperty( "charset", "utf-8" );
+                con.setDoOutput( true );
 
                 final StringBuilder builder = new StringBuilder();
 
-                builder.append("Sounds for Spigot ").append(ReflectionUtils.getServerVersion()).append(": \n");
+                builder.append( "Sounds for Spigot " ).append( ReflectionUtils.getServerVersion() ).append( ": \n" );
 
-                for (Sound sound : Sound.values()) {
-                    builder.append("- ").append(sound.toString()).append("\n");
+                for ( Sound sound : Sound.values() )
+                {
+                    builder.append( "- " ).append( sound.toString() ).append( "\n" );
                 }
 
                 final OutputStream out = con.getOutputStream();
-                out.write(builder.toString().getBytes(Charset.forName("UTF-8")));
+                out.write( builder.toString().getBytes( Charset.forName( "UTF-8" ) ) );
                 out.close();
 
-                if (con.getResponseCode() == 429) {
-                    sender.sendMessage(Utils.prefixedMessage("&eYou have exceeded the allowed amount of dumps per minute."));
+                if ( con.getResponseCode() == 429 )
+                {
+                    sender.sendMessage( Utils.prefixedMessage( "&eYou have exceeded the allowed amount of dumps per minute." ) );
                     return;
                 }
 
-                final String response = CharStreams.toString(new InputStreamReader(con.getInputStream()));
+                final String response = CharStreams.toString( new InputStreamReader( con.getInputStream() ) );
                 con.getInputStream().close();
 
-                final JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+                final JsonObject jsonResponse = gson.fromJson( response, JsonObject.class );
 
-                if (!jsonResponse.has("key")) {
-                    throw new IllegalStateException("Could not create dump correctly, did something go wrong?");
+                if ( !jsonResponse.has( "key" ) )
+                {
+                    throw new IllegalStateException( "Could not create dump correctly, did something go wrong?" );
                 }
 
-                sender.sendMessage(Utils.prefixedMessage(
+                sender.sendMessage( Utils.prefixedMessage(
                         "&eSuccessfully created a dump at: &bhttps://paste.dbsoftwares.eu/"
-                                + jsonResponse.get("key").getAsString() + ".dump"
-                ));
-            } catch (IOException e) {
-                sender.sendMessage(
-                        Utils.prefixedMessage("Could not create dump. Please check the console for errors.")
-                );
-                DonatorJoinPlus.getLog().warn("Could not create dump request");
-                DonatorJoinPlus.getLog().error("An error occured: ", e);
+                                + jsonResponse.get( "key" ).getAsString() + ".dump"
+                ) );
             }
-        });
+            catch ( IOException e )
+            {
+                sender.sendMessage(
+                        Utils.prefixedMessage( "Could not create dump. Please check the console for errors." )
+                );
+                DonatorJoinPlus.getLog().warn( "Could not create dump request" );
+                DonatorJoinPlus.getLog().error( "An error occured: ", e );
+            }
+        } );
     }
 
     @Override
-    public List<String> getCompletions(final CommandSender sender, final String[] args) {
+    public List<String> getCompletions( final CommandSender sender, final String[] args )
+    {
         return ImmutableList.of();
     }
 
     @Override
-    public List<String> getCompletions(final Player player, final String[] args) {
+    public List<String> getCompletions( final Player player, final String[] args )
+    {
         return ImmutableList.of();
     }
 }

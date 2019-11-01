@@ -21,42 +21,50 @@ package com.dbsoftwares.djp.library;
 import com.dbsoftwares.djp.DonatorJoinPlus;
 import lombok.Getter;
 
-public enum StandardLibrary {
+public enum StandardLibrary
+{
 
     SQLITE(
             "org.sqlite.JDBC",
             "http://central.maven.org/maven2/org/xerial/sqlite-jdbc/{version}/sqlite-jdbc-{version}.jar",
             "3.25.2",
-            checkType("SQLITE")
+            checkType( "SQLITE" )
     ),
     H2(
             "org.h2.jdbcx.JdbcDataSource",
             "http://central.maven.org/maven2/com/h2database/h2/{version}/h2-{version}.jar",
             "1.4.197",
-            checkType("H2")
+            checkType( "H2" )
     ),
     HIKARIDB(
             "com.zaxxer.hikari.HikariDataSource",
             "http://central.maven.org/maven2/com/zaxxer/HikariCP/{version}/HikariCP-{version}.jar",
             "3.2.0",
-            checkType("MYSQL", "SQLITE", "H2")
+            checkType( "MYSQL", "SQLITE", "H2" )
     );
 
     @Getter
     private final Library library;
 
-    StandardLibrary(String className, String downloadURL, String version, boolean load) {
-        this.library = new Library(toString(), className, downloadURL, version, load);
+    StandardLibrary( String className, String downloadURL, String version, boolean load )
+    {
+        this.library = new Library( toString(), className, downloadURL, version, load );
     }
 
-    private static boolean checkType(String... types) {
-        for (String type : types) {
-            final String storageType = DonatorJoinPlus.i().getConfig().getString("storage.type");
+    private static boolean checkType( String... types )
+    {
+        for ( String type : types )
+        {
+            final String storageType = DonatorJoinPlus.i().getConfig().getString( "storage.type" );
 
-            if (storageType.equalsIgnoreCase(type)) {
+            if ( storageType.equalsIgnoreCase( type ) )
+            {
                 return true;
-            } else {
-                if (storageType.contains(":") && storageType.split(":")[0].equalsIgnoreCase(type)) {
+            }
+            else
+            {
+                if ( storageType.contains( ":" ) && storageType.split( ":" )[0].equalsIgnoreCase( type ) )
+                {
                     return true;
                 }
             }

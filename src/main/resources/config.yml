@@ -62,7 +62,7 @@ usepriorities: true
 # If true, DonatorJoinPlus will use the 'permission' you set in the ranks below as identifier.
 # If the user has the permission it will send the highest priority join message,
 # or all if usepriorities is set to false.
-usepermissions: false
+usepermissions: true
 
 messages:
   prefix: '&e&lDonatorJoin&b&l+ &7» '
@@ -79,6 +79,11 @@ messages:
   group-set: '&b{player}''s &eslot group has been set to &b{group}&e!'
   error: '&cAn error occured, check the console for more info!'
 
+firstjoin:
+  enabled: true
+  message:
+    - '&eWelcome &b{player} &eto the network! &7&oGood luck and have fun!'
+
 # Some permission plugins do not load permissions quicky enough for this to work.
 # If your permission plugin seems to be one of them, please use: /djp setslotgroup (player) (groupname / none) instead
 # DO NOTE THAT THIS FEATURE IS EXPERIMENTAL, NOT MUCH TESTING HAS BEEN DONE
@@ -88,27 +93,27 @@ slotforcer:
   # This in total would allow the maxplayers on a server to go up with 23 slots.
   # If your hosting service RESTRICTS the max players, then YOU SHOULD NOT USE THIS (as your server can be suspended)
   limits:
-  # Make sure the name is UNIQUE (this is CASE INSENSITIVE)
-  - name: 'vip'
-    # These are ADDITIONAL slots that can be allocated.
-    # For example with maxplayers set to 20, then 5 extra people with a permission can join.
-    additional: 5
-    # The permission to identify the limit with
-    permission: 'donatorjoin.limit.exceed.vip'
-  - name: 'mvp'
-    additional: 8
-    permission: 'donatorjoin.limit.exceed.mvp'
-  - name: 'staff'
-    additional: 10
-    permission: 'donatorjoin.limit.exceed.staff'
+    # Make sure the name is UNIQUE (this is CASE INSENSITIVE)
+    - name: 'vip'
+      # These are ADDITIONAL slots that can be allocated.
+      # For example with maxplayers set to 20, then 5 extra people with a permission can join.
+      additional: 5
+      # The permission to identify the limit with
+      permission: 'donatorjoin.limit.exceed.vip'
+    - name: 'mvp'
+      additional: 8
+      permission: 'donatorjoin.limit.exceed.mvp'
+    - name: 'staff'
+      additional: 10
+      permission: 'donatorjoin.limit.exceed.staff'
 
 ranks:
-  - name: 'VIP'
+  - name: 'vip'
     permission: 'djp.vip'
     priority: 10
     join:
       enabled: true
-      message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas joined the game!'
+      message: '&6[&3VIP&6] &b%player% &ehas joined the game!'
       sound:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH
@@ -118,9 +123,24 @@ ranks:
         commands:
           # TitleManager example
           - 'tm bc &a&lVIP &b%player% %nl% &ehas joined the game!'
+  - name: 'elite'
+    permission: 'djp.elite'
+    priority: 20
+    join:
+      enabled: true
+      message: '&6[&aElite&6] &b%player% &ehas joined the game!'
+      sound:
+        enabled: true
+        sound: ENTITY_IRONGOLEM_DEATH
+      firework: true
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &a&lElite &b%player% %nl% &ehas joined the game!'
     quit:
       enabled: true
-      message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas left the game!'
+      message: '&e%player% has left the game'
       sound:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH

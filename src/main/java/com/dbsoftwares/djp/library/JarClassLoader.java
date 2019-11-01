@@ -27,39 +27,55 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class JarClassLoader {
+public class JarClassLoader
+{
 
-    private static Method ADD_URL;
     private static final URLClassLoader classLoader;
+    private static Method ADD_URL;
 
-    static {
-        try {
-            ADD_URL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            ADD_URL.setAccessible(true);
-        } catch (NoSuchMethodException e) {
+    static
+    {
+        try
+        {
+            ADD_URL = URLClassLoader.class.getDeclaredMethod( "addURL", URL.class );
+            ADD_URL.setAccessible( true );
+        }
+        catch ( NoSuchMethodException e )
+        {
             ADD_URL = null;
         }
 
         final ClassLoader loader = DonatorJoinPlus.class.getClassLoader();
-        if (loader instanceof URLClassLoader) {
+        if ( loader instanceof URLClassLoader )
+        {
             classLoader = (URLClassLoader) loader;
-        } else {
-            throw new IllegalStateException("Plugin ClassLoader is not instance of URLClassLoader");
+        }
+        else
+        {
+            throw new IllegalStateException( "Plugin ClassLoader is not instance of URLClassLoader" );
         }
     }
 
-    public static void loadJar(URL url) {
-        try {
-            ADD_URL.invoke(classLoader, url);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+    public static void loadJar( URL url )
+    {
+        try
+        {
+            ADD_URL.invoke( classLoader, url );
+        }
+        catch ( IllegalAccessException | InvocationTargetException e )
+        {
             e.printStackTrace();
         }
     }
 
-    public static void loadJar(File file) {
-        try {
-            loadJar(file.toURI().toURL());
-        } catch (MalformedURLException e) {
+    public static void loadJar( File file )
+    {
+        try
+        {
+            loadJar( file.toURI().toURL() );
+        }
+        catch ( MalformedURLException e )
+        {
             e.printStackTrace();
         }
     }
