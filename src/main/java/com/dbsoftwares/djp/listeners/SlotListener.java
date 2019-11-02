@@ -51,8 +51,7 @@ public class SlotListener implements Listener
                     return;
                 }
             }
-        }
-        catch ( InterruptedException | ExecutionException e )
+        } catch ( InterruptedException | ExecutionException e )
         {
             throw new RuntimeException( "Could not execute async group request ...", e );
         }

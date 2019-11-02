@@ -56,8 +56,7 @@ public class SlotResizer
         if ( currentlyUsed > 0 )
         {
             slotLimits.put( limit, currentlyUsed );
-        }
-        else
+        } else
         {
             slotLimits.remove( limit );
         }
@@ -89,8 +88,7 @@ public class SlotResizer
             maxPlayers.set( playerList, max );
 
             return true;
-        }
-        catch ( IllegalAccessException e )
+        } catch ( IllegalAccessException e )
         {
             return false;
         }

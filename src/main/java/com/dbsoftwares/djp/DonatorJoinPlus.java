@@ -102,13 +102,11 @@ public class DonatorJoinPlus extends JavaPlugin
             if ( typeString.contains( ":" ) )
             {
                 type = StorageType.valueOf( typeString.split( ":" )[0] );
-            }
-            else
+            } else
             {
                 type = StorageType.valueOf( typeString );
             }
-        }
-        catch ( IllegalArgumentException e )
+        } catch ( IllegalArgumentException e )
         {
             type = StorageType.MYSQL;
         }
@@ -118,8 +116,7 @@ public class DonatorJoinPlus extends JavaPlugin
                     ? type.getManager().getConstructor( String.class ).newInstance( typeString.split( ":" )[1] )
                     : type.getManager().getConstructor().newInstance();
             storage.initializeStorage();
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             log.error( "An error occured: ", e );
         }
@@ -133,8 +130,7 @@ public class DonatorJoinPlus extends JavaPlugin
         try
         {
             storage.close();
-        }
-        catch ( SQLException e )
+        } catch ( SQLException e )
         {
             log.error( "An error occured", e );
         }
@@ -145,8 +141,7 @@ public class DonatorJoinPlus extends JavaPlugin
         try
         {
             configuration.reload();
-        }
-        catch ( IOException e )
+        } catch ( IOException e )
         {
             log.error( "An error occured", e );
         }

@@ -17,8 +17,7 @@ public class SimpleDjpLogger implements Logger
         try
         {
             this.logger = LoggerFactory.getLogger( "DonatorJoin+" );
-        }
-        catch ( Throwable e )
+        } catch ( Throwable e )
         {
             // fail gracefully
         }
@@ -114,8 +113,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s );
-        }
-        else
+        } else
         {
             logger.debug( s );
         }
@@ -127,8 +125,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, o );
-        }
-        else
+        } else
         {
             logger.debug( s, o );
         }
@@ -140,8 +137,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, new Object[]{ o, o1 } );
-        }
-        else
+        } else
         {
             logger.debug( s, o, o1 );
         }
@@ -153,8 +149,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, objects );
-        }
-        else
+        } else
         {
             logger.debug( s, objects );
         }
@@ -166,8 +161,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, throwable );
-        }
-        else
+        } else
         {
             logger.debug( s, throwable );
         }
@@ -221,8 +215,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s );
-        }
-        else
+        } else
         {
             logger.info( s );
         }
@@ -234,8 +227,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, o );
-        }
-        else
+        } else
         {
             logger.info( s, o );
         }
@@ -247,8 +239,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, new Object[]{ o, o1 } );
-        }
-        else
+        } else
         {
             logger.info( s, o, o1 );
         }
@@ -260,8 +251,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, objects );
-        }
-        else
+        } else
         {
             logger.info( s, objects );
         }
@@ -273,8 +263,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.INFO, s, throwable );
-        }
-        else
+        } else
         {
             logger.info( s, throwable );
         }
@@ -328,8 +317,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.WARNING, s );
-        }
-        else
+        } else
         {
             logger.warn( s );
         }
@@ -341,8 +329,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.WARNING, s, o );
-        }
-        else
+        } else
         {
             logger.warn( s, o );
         }
@@ -354,8 +341,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.WARNING, s, new Object[]{ o, o1 } );
-        }
-        else
+        } else
         {
             logger.warn( s, o, o1 );
         }
@@ -367,8 +353,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.WARNING, s, objects );
-        }
-        else
+        } else
         {
             logger.warn( s, objects );
         }
@@ -380,8 +365,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.WARNING, s, throwable );
-        }
-        else
+        } else
         {
             logger.warn( s, throwable );
         }
@@ -435,8 +419,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.SEVERE, s );
-        }
-        else
+        } else
         {
             logger.error( s );
         }
@@ -448,8 +431,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.SEVERE, s, o );
-        }
-        else
+        } else
         {
             logger.error( s, o );
         }
@@ -461,8 +443,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.SEVERE, s, new Object[]{ o, o1 } );
-        }
-        else
+        } else
         {
             logger.error( s, o, o1 );
         }
@@ -474,8 +455,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.SEVERE, s, objects );
-        }
-        else
+        } else
         {
             logger.error( s, objects );
         }
@@ -487,8 +467,7 @@ public class SimpleDjpLogger implements Logger
         if ( logger == null )
         {
             DonatorJoinPlus.i().getLogger().log( Level.SEVERE, s, throwable );
-        }
-        else
+        } else
         {
             logger.error( s, throwable );
         }

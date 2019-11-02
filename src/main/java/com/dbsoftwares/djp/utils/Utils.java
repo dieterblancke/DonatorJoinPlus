@@ -119,8 +119,7 @@ public class Utils
         try
         {
             return future.get();
-        }
-        catch ( InterruptedException | ExecutionException e )
+        } catch ( InterruptedException | ExecutionException e )
         {
             return null;
         }

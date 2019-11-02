@@ -39,8 +39,7 @@ public class JarClassLoader
         {
             ADD_URL = URLClassLoader.class.getDeclaredMethod( "addURL", URL.class );
             ADD_URL.setAccessible( true );
-        }
-        catch ( NoSuchMethodException e )
+        } catch ( NoSuchMethodException e )
         {
             ADD_URL = null;
         }
@@ -49,8 +48,7 @@ public class JarClassLoader
         if ( loader instanceof URLClassLoader )
         {
             classLoader = (URLClassLoader) loader;
-        }
-        else
+        } else
         {
             throw new IllegalStateException( "Plugin ClassLoader is not instance of URLClassLoader" );
         }
@@ -61,8 +59,7 @@ public class JarClassLoader
         try
         {
             ADD_URL.invoke( classLoader, url );
-        }
-        catch ( IllegalAccessException | InvocationTargetException e )
+        } catch ( IllegalAccessException | InvocationTargetException e )
         {
             e.printStackTrace();
         }
@@ -73,8 +70,7 @@ public class JarClassLoader
         try
         {
             loadJar( file.toURI().toURL() );
-        }
-        catch ( MalformedURLException e )
+        } catch ( MalformedURLException e )
         {
             e.printStackTrace();
         }

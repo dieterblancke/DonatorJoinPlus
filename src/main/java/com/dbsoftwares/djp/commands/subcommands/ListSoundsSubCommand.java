@@ -99,8 +99,7 @@ public class ListSoundsSubCommand extends SubCommand
                         "&eSuccessfully created a dump at: &bhttps://paste.dbsoftwares.eu/"
                                 + jsonResponse.get( "key" ).getAsString() + ".dump"
                 ) );
-            }
-            catch ( IOException e )
+            } catch ( IOException e )
             {
                 sender.sendMessage(
                         Utils.prefixedMessage( "Could not create dump. Please check the console for errors." )

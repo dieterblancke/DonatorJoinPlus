@@ -60,8 +60,7 @@ public enum StandardLibrary
             if ( storageType.equalsIgnoreCase( type ) )
             {
                 return true;
-            }
-            else
+            } else
             {
                 if ( storageType.contains( ":" ) && storageType.split( ":" )[0].equalsIgnoreCase( type ) )
                 {

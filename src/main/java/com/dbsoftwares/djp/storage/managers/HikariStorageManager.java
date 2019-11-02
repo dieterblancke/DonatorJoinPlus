@@ -107,8 +107,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             {
                 exists = rs.next();
             }
-        }
-        catch ( SQLException e )
+        } catch ( SQLException e )
         {
             DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
@@ -129,8 +128,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             {
                 toggled = rs.next();
             }
-        }
-        catch ( SQLException e )
+        } catch ( SQLException e )
         {
             DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
@@ -153,8 +151,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
 
                     pstmt.executeUpdate();
                 }
-            }
-            else
+            } else
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement( "INSERT INTO djp_data(uuid, toggled) VALUES (?, ?);" ) )
                 {
@@ -164,8 +161,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
                     pstmt.executeUpdate();
                 }
             }
-        }
-        catch ( SQLException e )
+        } catch ( SQLException e )
         {
             DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
@@ -187,8 +183,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
                     slotGroup = rs.getString( "slotgroup" );
                 }
             }
-        }
-        catch ( SQLException e )
+        } catch ( SQLException e )
         {
             DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }
@@ -211,8 +206,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
 
                     pstmt.executeUpdate();
                 }
-            }
-            else
+            } else
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement( "INSERT INTO djp_data(uuid, slotgroup) VALUES (?, ?);" ) )
                 {
@@ -222,8 +216,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
                     pstmt.executeUpdate();
                 }
             }
-        }
-        catch ( SQLException e )
+        } catch ( SQLException e )
         {
             DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }

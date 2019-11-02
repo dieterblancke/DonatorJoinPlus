@@ -33,19 +33,37 @@ public class RankData
 
         for ( EventType type : EventType.values() )
         {
-            events.put( type, getData( type, section ) );
+            final EventData eventData = getData( type, section );
+
+            if ( eventData != null )
+            {
+                events.put( type, eventData );
+            }
 
             if ( worldSection != null )
             {
-                worldEvents.put( type, getData( type, worldSection ) );
+                final EventData worldEventData = getData( type, worldSection );
+
+                if ( worldEventData != null )
+                {
+                    worldEvents.put( type, worldEventData );
+                }
             }
         }
     }
 
     private EventData getData( EventType type, ISection section )
     {
+        final String path = type.toString().toLowerCase();
+        section = section.exists( path ) ? section.getSection( path ) : null;
+
+        if ( section == null )
+        {
+            return null;
+        }
+
         final EventData data = new EventData( type );
-        data.fromSection( section.getSection( type.toString().toLowerCase() ) );
+        data.fromSection( section );
         return data;
     }
 }
