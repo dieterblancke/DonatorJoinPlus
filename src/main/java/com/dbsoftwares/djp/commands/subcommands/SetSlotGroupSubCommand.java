@@ -47,7 +47,8 @@ public class SetSlotGroupSubCommand extends SubCommand
             sender.sendMessage( Utils.getMessage( "never-joined" ) );
             return;
         }
-        if ( DonatorJoinPlus.i().getSlotLimits().stream().noneMatch( l -> l.getName().equalsIgnoreCase( groupName ) ) )
+        if ( !groupName.equalsIgnoreCase( "none" )
+                && DonatorJoinPlus.i().getSlotLimits().stream().noneMatch( l -> l.getName().equalsIgnoreCase( groupName ) ) )
         {
             sender.sendMessage( Utils.getMessage( "group-not-found" ).replace( "{group}", groupName ) );
             return;
