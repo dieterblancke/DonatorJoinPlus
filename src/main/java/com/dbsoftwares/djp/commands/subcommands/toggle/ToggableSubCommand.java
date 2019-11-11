@@ -53,13 +53,11 @@ public class ToggableSubCommand extends SubCommand
             if ( toggled )
             {
                 enable( uuid );
-            }
-            else
+            } else
             {
                 disable( uuid );
             }
-        }
-        else
+        } else
         {
             onExecute( (CommandSender) player, args );
         }
@@ -71,8 +69,7 @@ public class ToggableSubCommand extends SubCommand
         if ( args.length == 0 )
         {
             sender.sendMessage( Utils.getMessage( "not-for-console" ) );
-        }
-        else
+        } else
         {
             if ( !sender.hasPermission( getPermission() + ".others" ) )
             {
@@ -92,8 +89,7 @@ public class ToggableSubCommand extends SubCommand
             if ( target == null )
             {
                 toggled = DonatorJoinPlus.i().getStorage().isToggled( uuid );
-            }
-            else
+            } else
             {
                 toggled = (boolean) Utils.getMetaData( target, Utils.TOGGLE_KEY, false );
             }
@@ -101,8 +97,7 @@ public class ToggableSubCommand extends SubCommand
             if ( toggled )
             {
                 enable( uuid );
-            }
-            else
+            } else
             {
                 disable( uuid );
             }

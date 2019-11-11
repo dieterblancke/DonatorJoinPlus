@@ -39,8 +39,7 @@ public class SQLiteStorageManager extends HikariStorageManager
             {
                 return;
             }
-        }
-        catch ( IOException e )
+        } catch ( IOException e )
         {
             DonatorJoinPlus.getLog().error( "An error occured: ", e );
         }

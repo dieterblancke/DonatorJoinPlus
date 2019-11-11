@@ -20,8 +20,7 @@ public class ReflectionUtils
         try
         {
             return clazz.getMethod( "getHandle" ).invoke( o );
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             return null;
         }
@@ -32,8 +31,7 @@ public class ReflectionUtils
         try
         {
             return getMethod( "getHandle", o.getClass() ).invoke( o );
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             return null;
         }
@@ -44,8 +42,7 @@ public class ReflectionUtils
         try
         {
             return getField( handle.getClass(), "playerConnection" ).get( handle );
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             return null;
         }
@@ -56,8 +53,7 @@ public class ReflectionUtils
         try
         {
             return Class.forName( name );
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -71,8 +67,7 @@ public class ReflectionUtils
         try
         {
             clazz = Class.forName( cname );
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -86,8 +81,7 @@ public class ReflectionUtils
         try
         {
             clazz = Class.forName( cname );
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -112,7 +106,7 @@ public class ReflectionUtils
     {
         for ( Method m : clazz.getMethods() )
         {
-            if ( m.getName().equals( name ) && (args.length == 0 || classList( args, m.getParameterTypes() )) )
+            if ( m.getName().equals( name ) && ( args.length == 0 || classList( args, m.getParameterTypes() ) ) )
             {
                 m.setAccessible( true );
                 return m;
@@ -133,8 +127,7 @@ public class ReflectionUtils
             Field field = clazz.getDeclaredField( name );
             field.setAccessible( true );
             return field;
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -183,8 +176,7 @@ public class ReflectionUtils
             Constructor<?> constructor = clazz.getConstructor( parameterTypes );
             constructor.setAccessible( true );
             return constructor;
-        }
-        catch ( Exception e )
+        } catch ( Exception e )
         {
             return null;
         }
@@ -264,8 +256,7 @@ public class ReflectionUtils
             Method sendPacket = getMethod( connection.getClass(), "sendPacket" );
 
             sendPacket.invoke( connection, packet );
-        }
-        catch ( IllegalAccessException | InvocationTargetException e )
+        } catch ( IllegalAccessException | InvocationTargetException e )
         {
             e.printStackTrace();
         }
@@ -316,8 +307,7 @@ public class ReflectionUtils
             try
             {
                 return Class.forName( this + "." + className );
-            }
-            catch ( ClassNotFoundException e )
+            } catch ( ClassNotFoundException e )
             {
                 return null;
             }

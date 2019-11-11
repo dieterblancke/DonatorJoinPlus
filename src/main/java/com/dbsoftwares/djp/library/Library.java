@@ -66,8 +66,7 @@ public class Library
         {
             Class.forName( className );
             return true;
-        }
-        catch ( ClassNotFoundException e )
+        } catch ( ClassNotFoundException e )
         {
             return false;
         }
@@ -102,8 +101,7 @@ public class Library
                 System.out.println( "Removing older versions of " + toString() );
                 getOutdatedFiles( folder ).forEach( File::delete );
                 System.out.println( "Successfully removed older versions of " + toString() );
-            }
-            catch ( IOException e )
+            } catch ( IOException e )
             {
                 throw new RuntimeException( "Failed downloading library for " + toString().toLowerCase(), e );
             }

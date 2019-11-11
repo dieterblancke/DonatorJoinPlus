@@ -44,8 +44,7 @@ public class EventData
             try
             {
                 this.sound = Sound.valueOf( sound.getString( "sound" ).toUpperCase() );
-            }
-            catch ( IllegalArgumentException e )
+            } catch ( IllegalArgumentException e )
             {
                 final Logger logger = DonatorJoinPlus.getLog();
 

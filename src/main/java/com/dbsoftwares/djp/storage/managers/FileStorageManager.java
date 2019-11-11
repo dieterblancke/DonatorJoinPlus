@@ -26,22 +26,20 @@ public class FileStorageManager extends AbstractStorageManager
         try
         {
             storageType = FileStorageType.valueOf( type );
-        }
-        catch ( IllegalArgumentException e )
+        } catch ( IllegalArgumentException e )
         {
             storageType = FileStorageType.JSON;
         }
         final File storageFile = new File(
                 DonatorJoinPlus.i().getDataFolder(),
-                "file-storage." + (storageType.equals( FileStorageType.JSON ) ? "json" : "yml")
+                "file-storage." + ( storageType.equals( FileStorageType.JSON ) ? "json" : "yml" )
         );
         if ( !storageFile.exists() )
         {
             try
             {
                 storageFile.createNewFile();
-            }
-            catch ( IOException e )
+            } catch ( IOException e )
             {
                 DonatorJoinPlus.getLog().error( "An error occured: ", e );
             }
@@ -74,8 +72,7 @@ public class FileStorageManager extends AbstractStorageManager
             {
                 toggleList.add( uuidString );
             }
-        }
-        else
+        } else
         {
             toggleList.remove( uuidString );
         }
@@ -121,8 +118,7 @@ public class FileStorageManager extends AbstractStorageManager
         try
         {
             storage.save();
-        }
-        catch ( IOException e )
+        } catch ( IOException e )
         {
             e.printStackTrace();
         }

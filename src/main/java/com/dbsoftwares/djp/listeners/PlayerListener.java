@@ -159,8 +159,7 @@ public class PlayerListener implements Listener
             final CompletableFuture<Boolean> future = loadingCache.get( uuid );
 
             return future.get();
-        }
-        catch ( InterruptedException | ExecutionException e )
+        } catch ( InterruptedException | ExecutionException e )
         {
             return DonatorJoinPlus.i().getStorage().isToggled( uuid );
         }
@@ -175,7 +174,7 @@ public class PlayerListener implements Listener
         for ( RankData data : DonatorJoinPlus.i().getRankData() )
         {
             final EventType type = join ? EventType.JOIN : EventType.QUIT;
-            final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).getOrDefault( type, null );
+            final EventData eventData = ( world != null ? data.getWorldEvents() : data.getEvents() ).getOrDefault( type, null );
 
             if ( eventData == null )
             {
@@ -194,13 +193,11 @@ public class PlayerListener implements Listener
                     {
                         break;
                     }
-                }
-                else
+                } else
                 {
                     DonatorJoinPlus.i().debug( "Player " + p.getName() + " does not have the permission " + data.getPermission() + "." );
                 }
-            }
-            else
+            } else
             {
                 if ( Utils.contains( groups, data.getName() ) )
                 {
@@ -231,8 +228,7 @@ public class PlayerListener implements Listener
                         player.sendMessage( msg );
                     }
                     Bukkit.getConsoleSender().sendMessage( msg );
-                }
-                else
+                } else
                 {
                     Bukkit.broadcastMessage( msg );
                 }
