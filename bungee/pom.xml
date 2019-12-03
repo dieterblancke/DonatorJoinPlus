@@ -18,7 +18,6 @@
         </repository>
     </repositories>
 
-
     <dependencies>
         <dependency>
             <groupId>net.md-5</groupId>
