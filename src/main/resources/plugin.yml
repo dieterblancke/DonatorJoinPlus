@@ -1,6 +1,0 @@
-name: DonatorJoinPlus
-main: com.dbsoftwares.djp.DonatorJoinPlus
-version: ${project.version}
-depend: [Vault]
-author: didjee2
-api-version: 1.13

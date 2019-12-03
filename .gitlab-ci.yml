@@ -1,0 +1,32 @@
+image: maven:3.6.2-jdk-8
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+build:
+  stage: build
+  script:
+    - mvn compile $MAVEN_OPTS
+
+test:
+  stage: test
+  script:
+    - mvn test $MAVEN_OPTS
+
+deploy:
+  stage: deploy
+  script:
+    - mvn install $MAVEN_OPTS
+  only:
+    - master
+  artifacts:
+    name: "DonatorJoin+"
+    expire_in: 2 weeks
+    paths:
+      - spigot/target/DonatorJoin+*.jar
+      - bungee/target/DonatorJoin+*.jar
