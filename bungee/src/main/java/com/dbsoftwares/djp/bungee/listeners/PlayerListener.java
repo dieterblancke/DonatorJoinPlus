@@ -196,8 +196,12 @@ public class PlayerListener implements Listener
     {
         str = str.replace( "%player%", p.getName() );
         str = str.replace( "{player}", p.getName() );
-        str = str.replace( "%server%", p.getServer().getInfo().getName() );
-        str = str.replace( "{server}", p.getServer().getInfo().getName() );
+
+        if ( p.getServer() != null && p.getServer().getInfo() != null )
+        {
+            str = str.replace( "%server%", p.getServer().getInfo().getName() );
+            str = str.replace( "{server}", p.getServer().getInfo().getName() );
+        }
         str = Utils.c( str );
 
         if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )

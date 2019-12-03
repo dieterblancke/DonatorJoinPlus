@@ -120,6 +120,7 @@ public class DJCommand extends Command
                 {
                     disable( player.getUniqueId() );
                 }
+                sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "enabled-other" ).replace( "{player}", args[1] ) ) );
                 return;
             }
             else if ( args[0].equalsIgnoreCase( "enable" ) )
@@ -139,6 +140,7 @@ public class DJCommand extends Command
                 }
 
                 enable( player.getUniqueId() );
+                sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "enabled-other" ).replace( "{player}", args[1] ) ) );
                 return;
             }
             else if ( args[0].equalsIgnoreCase( "disable" ) )
@@ -158,6 +160,7 @@ public class DJCommand extends Command
                 }
 
                 disable( player.getUniqueId() );
+                sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "enabled-other" ).replace( "{player}", args[1] ) ) );
                 return;
             }
         }
@@ -190,7 +193,7 @@ public class DJCommand extends Command
 
             if ( player != null && player.isConnected() )
             {
-                player.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "enabled" ) ) );
+                player.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "disabled" ) ) );
                 BungeeUtils.get( player ).setToggled( true );
             }
         } );

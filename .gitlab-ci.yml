@@ -26,7 +26,6 @@ deploy:
     - master
   artifacts:
     name: "DonatorJoin+"
-    expire_in: 2 weeks
     paths:
       - spigot/target/DonatorJoin+*.jar
       - bungee/target/DonatorJoin+*.jar
