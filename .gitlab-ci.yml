@@ -22,10 +22,14 @@ deploy:
   stage: deploy
   script:
     - mvn install $MAVEN_OPTS
+    - mv spigot/target/* spigot
+    - mv bungee/target/* bungee
+    - rm -rf spigot/target
+    - rm -rf bungee/target
   only:
     - master
   artifacts:
     name: "DonatorJoin+"
     paths:
-      - spigot/target/DonatorJoin+*.jar
-      - bungee/target/DonatorJoin+*.jar
+      - spigot/DonatorJoin+*.jar
+      - bungee/DonatorJoin+*.jar
