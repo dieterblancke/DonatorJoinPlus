@@ -186,7 +186,21 @@ public class PlayerListener implements Listener
 
                     DonatorJoinPlus.i().debug( "Executing command " + command + " for player " + p.getName() + "." );
 
-                    ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), command );
+
+                    if ( command.startsWith( "player:" ) )
+                    {
+                        ProxyServer.getInstance().getPluginManager().dispatchCommand(
+                                p,
+                                command.replaceFirst( "player:", "" )
+                        );
+                    }
+                    else
+                    {
+                        ProxyServer.getInstance().getPluginManager().dispatchCommand(
+                                ProxyServer.getInstance().getConsole(),
+                                command
+                        );
+                    }
                 }
             }
         }

@@ -248,7 +248,14 @@ public class PlayerListener implements Listener
 
                     DonatorJoinPlus.i().debug( "Executing command " + command + " for player " + p.getName() + "." );
 
-                    Bukkit.dispatchCommand( Bukkit.getConsoleSender(), command );
+                    if ( command.startsWith( "player:" ) )
+                    {
+                        p.performCommand( command.replaceFirst( "player:", "" ) );
+                    }
+                    else
+                    {
+                        Bukkit.dispatchCommand( Bukkit.getConsoleSender(), command );
+                    }
                 }
             }
         }
