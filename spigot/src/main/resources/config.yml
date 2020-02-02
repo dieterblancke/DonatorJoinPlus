@@ -78,6 +78,9 @@ messages:
   group-not-found: '&eSlotGroup &b{group} &ewas not found!'
   group-set: '&b{player}''s &eslot group has been set to &b{group}&e!'
   error: '&cAn error occured, check the console for more info!'
+  changesound:
+    usage: '&ePlease use &b/djp changesound (sound) [player]&e!'
+    console-usage: '&ePlease use &b/djp changesound (sound) (player)&e!'
 
 firstjoin:
   enabled: true
