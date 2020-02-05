@@ -5,6 +5,8 @@ import com.dbsoftwares.djp.spigot.data.EventData;
 import com.dbsoftwares.djp.spigot.data.EventData.EventType;
 import com.dbsoftwares.djp.spigot.data.RankData;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
+import com.dbsoftwares.djp.spigot.utils.XSound;
+import com.dbsoftwares.djp.user.User;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -35,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class PlayerListener implements Listener
 {
 
-    private final Cache<UUID, CompletableFuture<Boolean>> loadingCache = CacheBuilder.newBuilder()
+    private final Cache<UUID, CompletableFuture<User>> loadingCache = CacheBuilder.newBuilder()
             .expireAfterWrite( 15, TimeUnit.SECONDS )
             .build();
 
@@ -49,13 +51,13 @@ public class PlayerListener implements Listener
             {
                 if ( DonatorJoinPlus.i().isDebugMode() )
                 {
-                    DonatorJoinPlus.i().getLog().debug( "Cleaning up loading cache ... [initialSize={}]", loadingCache.size() );
+                    DonatorJoinPlus.i().getLogger().info( String.format( "Cleaning up loading cache ... [initialSize=%s]", loadingCache.size() ) );
                 }
                 loadingCache.cleanUp();
 
                 if ( DonatorJoinPlus.i().isDebugMode() )
                 {
-                    DonatorJoinPlus.i().getLog().debug( "Successfully up loading cache ... [currentSize={}]", loadingCache.size() );
+                    DonatorJoinPlus.i().getLogger().info( String.format( "Successfully up loading cache ... [currentSize=%s]", loadingCache.size() ) );
                 }
             }
         }.runTaskTimerAsynchronously( DonatorJoinPlus.i(), 3600, 3600 );
@@ -86,7 +88,7 @@ public class PlayerListener implements Listener
 
         DonatorJoinPlus.i().debug( "Initializing loading of storage for player " + player.getName() + "." );
 
-        final CompletableFuture<Boolean> future = CompletableFuture.supplyAsync( () -> DonatorJoinPlus.i().getStorage().isToggled( player.getUniqueId() ) );
+        final CompletableFuture<User> future = CompletableFuture.supplyAsync( () -> DonatorJoinPlus.i().getStorage().getUser( player.getUniqueId() ) );
         loadingCache.put( player.getUniqueId(), future );
     }
 
@@ -95,22 +97,22 @@ public class PlayerListener implements Listener
     {
         final Player p = event.getPlayer();
 
-        final boolean toggled = getToggledStatus( p.getUniqueId() );
-        SpigotUtils.setMetaData( p, SpigotUtils.TOGGLE_KEY, toggled );
+        final User user = getUser( p.getUniqueId() );
+        SpigotUtils.setMetaData( p, SpigotUtils.USER_KEY, user );
 
         if ( !DonatorJoinPlus.i().isDisableJoinMessage() )
         {
             event.setJoinMessage( null );
         }
 
-        if ( SpigotUtils.isVanished( p ) || toggled )
+        if ( SpigotUtils.isVanished( p ) || user.isToggled() )
         {
             return;
         }
 
         DonatorJoinPlus.i().debug( "Executing login event for player " + p.getName() + "." );
 
-        executeEvent( true, null, p );
+        executeEvent( user, true, null, p );
     }
 
     @EventHandler
@@ -122,12 +124,14 @@ public class PlayerListener implements Listener
         }
 
         final Player p = event.getPlayer();
+        final User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+        final boolean toggled = user != null && user.isToggled();
 
-        if ( SpigotUtils.isVanished( p ) || (boolean) SpigotUtils.getMetaData( p, SpigotUtils.TOGGLE_KEY, false ) )
+        if ( SpigotUtils.isVanished( p ) || toggled )
         {
             return;
         }
-        executeEvent( false, null, p );
+        executeEvent( user, false, null, p );
         DonatorJoinPlus.i().debug( "Executing logout event for player " + p.getName() + "." );
     }
 
@@ -135,30 +139,32 @@ public class PlayerListener implements Listener
     public void onWorldChange( PlayerChangedWorldEvent event )
     {
         final Player p = event.getPlayer();
+        final User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+        final boolean toggled = user != null && user.isToggled();
 
-        if ( SpigotUtils.isVanished( p ) || (boolean) SpigotUtils.getMetaData( p, SpigotUtils.TOGGLE_KEY, false ) )
+        if ( SpigotUtils.isVanished( p ) || toggled )
         {
             return;
         }
-        executeEvent( false, event.getFrom(), p );
-        executeEvent( true, event.getPlayer().getWorld(), p );
+        executeEvent( user, false, event.getFrom(), p );
+        executeEvent( user, true, event.getPlayer().getWorld(), p );
     }
 
-    private boolean getToggledStatus( final UUID uuid )
+    private User getUser( final UUID uuid )
     {
         try
         {
-            final CompletableFuture<Boolean> future = loadingCache.getIfPresent( uuid );
+            final CompletableFuture<User> future = loadingCache.getIfPresent( uuid );
 
             return future.get();
         }
         catch ( InterruptedException | ExecutionException e )
         {
-            return DonatorJoinPlus.i().getStorage().isToggled( uuid );
+            return DonatorJoinPlus.i().getStorage().getUser( uuid );
         }
     }
 
-    private void executeEvent( final boolean join, final World world, final Player p )
+    private void executeEvent( final User user, final boolean join, final World world, final Player p )
     {
         final String[] groups = DonatorJoinPlus.i().getPermission().getPlayerGroups( p );
 
@@ -180,7 +186,7 @@ public class PlayerListener implements Listener
                 {
                     DonatorJoinPlus.i().debug( "Player " + p.getName() + " has the permission " + data.getPermission() + ", executing event ..." );
 
-                    executeEventData( p, eventData, world );
+                    executeEventData( user, p, eventData, world );
 
                     if ( DonatorJoinPlus.i().getConfiguration().getBoolean( "usepriorities" ) )
                     {
@@ -197,7 +203,7 @@ public class PlayerListener implements Listener
                 if ( SpigotUtils.contains( groups, data.getName() ) )
                 {
                     DonatorJoinPlus.i().debug( "Player " + p.getName() + " is in the group " + data.getName() + ", executing event ..." );
-                    executeEventData( p, eventData, world );
+                    executeEventData( user, p, eventData, world );
 
                     if ( DonatorJoinPlus.i().getConfiguration().getBoolean( "usepriorities" ) )
                     {
@@ -208,7 +214,7 @@ public class PlayerListener implements Listener
         }
     }
 
-    private void executeEventData( final Player p, final EventData eventData, final World world )
+    private void executeEventData( final User user, final Player p, final EventData eventData, final World world )
     {
         if ( eventData.isEnabled() )
         {
@@ -235,9 +241,22 @@ public class PlayerListener implements Listener
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() && eventData.getSound() != null )
+            if ( eventData.isSoundEnabled() )
             {
-                p.getWorld().playSound( p.getLocation(), eventData.getSound(), 20F, -20F );
+                final String soundName = eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound();
+
+                if ( soundName != null && XSound.contains( soundName ) )
+                {
+                    final XSound sound = XSound.matchXSound( soundName ).orElse( null );
+
+                    sound.playSound( p, 20F, -20F );
+                }
+                else if ( eventData.getSound() != null )
+                {
+                    final XSound sound = XSound.matchXSound( eventData.getSound() );
+
+                    sound.playSound( p, 20F, -20F );
+                }
             }
 
             if ( eventData.isCommandsEnabled() && eventData.getCommands() != null && !eventData.getCommands().isEmpty() )

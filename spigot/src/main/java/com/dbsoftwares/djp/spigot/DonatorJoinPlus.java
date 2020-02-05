@@ -10,36 +10,38 @@ import com.dbsoftwares.commandapi.CommandManager;
 import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
-import com.dbsoftwares.djp.spigot.data.RankData;
 import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.spigot.commands.DJCommand;
+import com.dbsoftwares.djp.spigot.data.RankData;
 import com.dbsoftwares.djp.spigot.listeners.PlayerListener;
 import com.dbsoftwares.djp.spigot.listeners.SlotListener;
 import com.dbsoftwares.djp.spigot.slots.SlotLimit;
 import com.dbsoftwares.djp.spigot.slots.SlotResizer;
+import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.storage.managers.FileStorageManager;
-import com.dbsoftwares.djp.utils.SimpleDjpLogger;
+import com.dbsoftwares.djp.user.User;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
 
 @Getter
 public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
 {
 
-    private final Logger log = new SimpleDjpLogger();
     private Permission permission;
     private List<RankData> rankData = Lists.newArrayList();
     private boolean disableJoinMessage;
@@ -54,10 +56,6 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
     public static DonatorJoinPlus i()
     {
         return getPlugin( DonatorJoinPlus.class );
-    }
-
-    public Logger getLog() {
-        return log;
     }
 
     @Override
@@ -122,13 +120,14 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
                     : type.getManager().getConstructor().newInstance();
             storage.initializeStorage();
 
-            if (storage instanceof FileStorageManager ) {
+            if ( storage instanceof FileStorageManager )
+            {
                 ((FileStorageManager) storage).convert();
             }
         }
         catch ( Exception e )
         {
-            log.error( "An error occured: ", e );
+            getLogger().log( Level.SEVERE, "An error occured", e );
         }
 
         new Metrics( this );
@@ -143,7 +142,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
         }
         catch ( SQLException e )
         {
-            log.error( "An error occured", e );
+            getLogger().log( Level.SEVERE, "An error occured", e );
         }
     }
 
@@ -155,7 +154,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
         }
         catch ( IOException e )
         {
-            log.error( "An error occured", e );
+            getLogger().log( Level.SEVERE, "An error occured", e );
             return;
         }
         rankData.clear();
@@ -196,7 +195,19 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
     {
         if ( isDebugMode() )
         {
-            log.debug( message );
+            getLogger().info( message );
         }
+    }
+
+    public User getUser( final UUID uuid )
+    {
+        final Player player = Bukkit.getPlayer( uuid );
+
+        if ( player == null )
+        {
+            return null;
+        }
+
+        return (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY );
     }
 }

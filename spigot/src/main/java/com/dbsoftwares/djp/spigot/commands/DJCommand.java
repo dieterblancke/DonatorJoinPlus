@@ -2,9 +2,7 @@ package com.dbsoftwares.djp.spigot.commands;
 
 import com.dbsoftwares.commandapi.command.MainSpigotCommand;
 import com.dbsoftwares.commandapi.utils.MessageConfig;
-import com.dbsoftwares.djp.spigot.commands.subcommands.ListSoundsSubCommand;
-import com.dbsoftwares.djp.spigot.commands.subcommands.ReloadSubCommand;
-import com.dbsoftwares.djp.spigot.commands.subcommands.SetSlotGroupSubCommand;
+import com.dbsoftwares.djp.spigot.commands.subcommands.*;
 import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.DisableSubCommand;
 import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.EnableSubCommand;
 import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.ToggleSubCommand;
@@ -24,6 +22,8 @@ public class DJCommand extends MainSpigotCommand
         subCommands.add( new ToggleSubCommand() );
         subCommands.add( new SetSlotGroupSubCommand() );
         subCommands.add( new ListSoundsSubCommand() );
+        subCommands.add( new JoinSoundSubCommand() );
+        subCommands.add( new LeaveSoundSubCommand() );
 
         loadMessageConfig();
     }

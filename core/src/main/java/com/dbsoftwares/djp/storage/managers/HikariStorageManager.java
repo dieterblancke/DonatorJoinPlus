@@ -21,16 +21,15 @@ package com.dbsoftwares.djp.storage.managers;
 import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
+import com.dbsoftwares.djp.user.User;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
+import java.util.logging.Level;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -84,6 +83,66 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         {
             dataSource = new HikariDataSource( config );
         }
+        try ( Connection connection = getConnection() )
+        {
+            final DatabaseMetaData metaData = connection.getMetaData();
+
+            initSlotGroupColumn( connection, metaData );
+            initJoinSoundColumn( connection, metaData );
+            initLeaveSoundColumn( connection, metaData );
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void initSlotGroupColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
+    {
+        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "slotgroup" ) )
+        {
+            if ( !rs.next() )
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement(
+                        "ALTER TABLE djp_data ADD slotgroup VARCHAR(128) NOT NULL DEFAULT 'none';" )
+                )
+                {
+                    pstmt.execute();
+                }
+            }
+        }
+    }
+
+    private void initJoinSoundColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
+    {
+        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "joinsound" ) )
+        {
+            if ( !rs.next() )
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement(
+                        "ALTER TABLE djp_data ADD joinsound VARCHAR(128) DEFAULT NULL;" )
+                )
+                {
+                    pstmt.execute();
+                }
+            }
+        }
+    }
+
+    private void initLeaveSoundColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
+    {
+        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "leavesound" ) )
+        {
+            if ( !rs.next() )
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement(
+                        "ALTER TABLE djp_data ADD leavesound VARCHAR(128) DEFAULT NULL;" )
+                )
+                {
+                    pstmt.execute();
+                }
+            }
+        }
     }
 
     protected abstract String getDataSourceClass();
@@ -110,7 +169,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         }
         catch ( SQLException e )
         {
-            DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
         }
         return exists;
     }
@@ -132,7 +191,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         }
         catch ( SQLException e )
         {
-            DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
         }
         return toggled;
     }
@@ -167,7 +226,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         }
         catch ( SQLException e )
         {
-            DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
         }
     }
 
@@ -190,7 +249,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         }
         catch ( SQLException e )
         {
-            DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
         }
         return slotGroup;
     }
@@ -225,7 +284,99 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         }
         catch ( SQLException e )
         {
-            DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
+        }
+    }
+
+    @Override
+    public void setJoinSound( final UUID uuid, final String sound )
+    {
+        try ( Connection connection = getConnection() )
+        {
+            try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET joinsound = ? WHERE uuid = ?;" ) )
+            {
+                pstmt.setString( 1, sound );
+                pstmt.setString( 2, uuid.toString() );
+                pstmt.executeUpdate();
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
+        }
+    }
+
+    @Override
+    public void setLeaveSound( final UUID uuid, final String sound )
+    {
+        try ( Connection connection = getConnection() )
+        {
+            try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET leavesound = ? WHERE uuid = ?;" ) )
+            {
+                pstmt.setString( 1, sound );
+                pstmt.setString( 2, uuid.toString() );
+                pstmt.executeUpdate();
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
+        }
+
+    }
+
+    @Override
+    public User getUser( final UUID uuid )
+    {
+        if ( !exists( uuid ) )
+        {
+            createUser( uuid );
+            return new User( uuid );
+        }
+        User user = null;
+
+        try ( Connection connection = getConnection() )
+        {
+            try ( PreparedStatement pstmt = connection.prepareStatement( "SELECT * FROM djp_data WHERE uuid = ?;" ) )
+            {
+                pstmt.setString( 1, uuid.toString() );
+
+                try ( ResultSet rs = pstmt.executeQuery() )
+                {
+                    if ( rs.next() )
+                    {
+                        user = new User(
+                                uuid,
+                                rs.getBoolean( "toggled" ),
+                                rs.getString( "slotgroup" ),
+                                rs.getString( "joinsound" ),
+                                rs.getString( "leavesound" )
+                        );
+                    }
+                }
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
+        }
+        return user == null ? new User( uuid ) : user;
+    }
+
+    private void createUser( final UUID uuid )
+    {
+        try ( Connection connection = getConnection() )
+        {
+            try ( PreparedStatement pstmt = connection.prepareStatement( "INSERT INTO djp_data(uuid) VALUES (?);" ) )
+            {
+                pstmt.setString( 1, uuid.toString() );
+
+                pstmt.executeUpdate();
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
         }
     }
 }

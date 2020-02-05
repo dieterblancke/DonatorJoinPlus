@@ -8,11 +8,11 @@ package com.dbsoftwares.djp.spigot.data;
 
 import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
+import com.dbsoftwares.djp.spigot.utils.XSound;
 import lombok.Data;
 import org.bukkit.Sound;
-import org.slf4j.Logger;
-
 import java.util.List;
+import java.util.logging.Logger;
 
 @Data
 public class EventData
@@ -43,18 +43,17 @@ public class EventData
         {
             try
             {
-                this.sound = Sound.valueOf( sound.getString( "sound" ).toUpperCase() );
+                this.sound = XSound.matchXSound( sound.getString( "sound" ).toUpperCase() )
+                        .orElseThrow( IllegalAccessError::new )
+                        .parseSound();
             }
             catch ( IllegalArgumentException e )
             {
-                final Logger logger = DonatorJoinCore.getInstance().getLog();
+                final Logger logger = DonatorJoinCore.getInstance().getLogger();
 
-                logger.warn( "The sound that was entered is invalid!" );
-                logger.warn( "Please use a sound of one of these pages:" );
-                logger.warn( "- Version < 1.9: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html" );
-                logger.warn( "- Version 1.9 - 1.12.2: http://bit.ly/2RuwTrj" );
-                logger.warn( "- Newest version: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html" );
-                logger.warn( "You could also use /djp listsounds to get a list of sounds available in your current version." );
+                logger.warning( "The sound that was entered is invalid!" );
+                logger.warning( "For all available sounds, please check out: https://github.com/dieterblancke/DonatorJoinPlus/blob/master/spigot/src/main/java/com/dbsoftwares/djp/spigot/utils/XSound.java#L70-L883" );
+                logger.warning( "You could also use /djp listsounds to get a list of sounds available in your current version." );
                 return;
             }
         }

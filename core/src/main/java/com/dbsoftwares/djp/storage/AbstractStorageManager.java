@@ -6,6 +6,7 @@ import com.dbsoftwares.djp.storage.managers.FileStorageManager;
 import com.dbsoftwares.djp.storage.managers.H2StorageManager;
 import com.dbsoftwares.djp.storage.managers.MySQLStorageManager;
 import com.dbsoftwares.djp.storage.managers.SQLiteStorageManager;
+import com.dbsoftwares.djp.user.User;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -86,6 +87,12 @@ public abstract class AbstractStorageManager
     public abstract String getSlotGroup( final UUID uuid );
 
     public abstract void setSlotGroup( final UUID uuid, final String slotGroup );
+
+    public abstract void setJoinSound( final UUID uuid, final String sound );
+
+    public abstract void setLeaveSound( final UUID uuid, final String sound );
+
+    public abstract User getUser( final UUID uuid );
 
     public abstract Connection getConnection() throws SQLException;
 

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class H2StorageManager extends HikariStorageManager
 {
@@ -42,7 +43,7 @@ public class H2StorageManager extends HikariStorageManager
         }
         catch ( IOException e )
         {
-            DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured: ", e );
         }
 
         config.addDataSourceProperty( "url", "jdbc:h2:./" + database.getPath() );

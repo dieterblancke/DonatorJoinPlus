@@ -2,7 +2,6 @@ package com.dbsoftwares.djp;
 
 import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.InputStream;
@@ -39,8 +38,6 @@ public interface DonatorJoinCore
     }
 
     AbstractStorageManager getStorage();
-
-    Logger getLog();
 
     java.util.logging.Logger getLogger();
 

@@ -5,12 +5,14 @@ import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
+import com.dbsoftwares.djp.user.User;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class FileStorageManager extends AbstractStorageManager
 {
@@ -44,7 +46,7 @@ public class FileStorageManager extends AbstractStorageManager
             }
             catch ( IOException e )
             {
-                DonatorJoinCore.getInstance().getLog().error( "An error occured: ", e );
+                DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured: ", e );
             }
         }
         this.storage = IConfiguration.loadConfiguration( storageType, storageFile );
@@ -60,7 +62,7 @@ public class FileStorageManager extends AbstractStorageManager
         if ( storage.exists( "toggled" ) )
         {
             // starting converter ...
-            DonatorJoinCore.getInstance().getLog().info( "========== STARTING DATA FILE CONVERSION ==========" );
+            DonatorJoinCore.getInstance().getLogger().info( "========== STARTING DATA FILE CONVERSION ==========" );
             final File file = new File(
                     DonatorJoinCore.getInstance().getDataFolder(),
                     "file-storage." + (storageType.equals( FileStorageType.JSON ) ? "json" : "yml")
@@ -95,7 +97,7 @@ public class FileStorageManager extends AbstractStorageManager
             newStorage.save();
             storage = newStorage;
 
-            DonatorJoinCore.getInstance().getLog().info( "========== FINISHED DATA FILE CONVERSION ==========" );
+            DonatorJoinCore.getInstance().getLogger().info( "========== FINISHED DATA FILE CONVERSION ==========" );
         }
     }
 
@@ -120,10 +122,7 @@ public class FileStorageManager extends AbstractStorageManager
 
         userSection.set( uuid.toString() + ".toggled", toggled );
 
-        if ( DonatorJoinCore.getInstance().getConfiguration().getBoolean( "storage.save-per-change" ) )
-        {
-            save();
-        }
+        checkToSave();
     }
 
     @Override
@@ -140,10 +139,54 @@ public class FileStorageManager extends AbstractStorageManager
         final ISection userSection = storage.getSection( "users" );
         userSection.set( uuid.toString() + ".slotgroup", slotGroup );
 
-        if ( DonatorJoinCore.getInstance().getConfiguration().getBoolean( "storage.save-per-change" ) )
+        checkToSave();
+    }
+
+    @Override
+    public void setJoinSound( final UUID uuid, final String sound )
+    {
+        final ISection userSection = storage.getSection( "users" );
+        userSection.set( uuid.toString() + ".joinsound", sound );
+
+        checkToSave();
+    }
+
+    @Override
+    public void setLeaveSound( final UUID uuid, final String sound )
+    {
+        final ISection userSection = storage.getSection( "users" );
+        userSection.set( uuid.toString() + ".leavesound", sound );
+
+        checkToSave();
+    }
+
+    @Override
+    public User getUser( final UUID uuid )
+    {
+        final ISection userSection = storage.getSection( "users" );
+
+        if ( !userSection.exists( uuid.toString() ) )
         {
-            save();
+            return new User( uuid );
         }
+        final ISection section = userSection.getSection( uuid.toString() );
+
+        return new User(
+                uuid,
+                getOrDefault( section, "toggled", false ),
+                getOrDefault( section, "slotgroup", "none" ),
+                getOrDefault( section, "joinsound", null ),
+                getOrDefault( section, "leavesound", null )
+        );
+    }
+
+    private <T> T getOrDefault( final ISection section, final String path, final T def )
+    {
+        if ( !section.exists( path ) )
+        {
+            return def;
+        }
+        return section.get( path );
     }
 
     @Override
@@ -167,6 +210,14 @@ public class FileStorageManager extends AbstractStorageManager
         catch ( IOException e )
         {
             e.printStackTrace();
+        }
+    }
+
+    private void checkToSave()
+    {
+        if ( DonatorJoinCore.getInstance().getConfiguration().getBoolean( "storage.save-per-change" ) )
+        {
+            save();
         }
     }
 }

@@ -21,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.logging.Level;
 
 public class ListSoundsSubCommand extends SubCommand
 {
@@ -99,13 +100,14 @@ public class ListSoundsSubCommand extends SubCommand
                         "&eSuccessfully created a dump at: &bhttps://paste.dbsoftwares.eu/"
                                 + jsonResponse.get( "key" ).getAsString() + ".dump"
                 ) );
-            } catch ( IOException e )
+            }
+            catch ( IOException e )
             {
                 sender.sendMessage(
                         Utils.prefixedMessage( "Could not create dump. Please check the console for errors." )
                 );
-                DonatorJoinPlus.i().getLog().warn( "Could not create dump request" );
-                DonatorJoinPlus.i().getLog().error( "An error occured: ", e );
+                DonatorJoinPlus.i().getLogger().warning( "Could not create dump request" );
+                DonatorJoinPlus.i().getLogger().log( Level.SEVERE, "An error occured: ", e );
             }
         } );
     }

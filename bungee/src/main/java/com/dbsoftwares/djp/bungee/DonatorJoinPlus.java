@@ -9,25 +9,23 @@ import com.dbsoftwares.djp.bungee.listeners.PlayerListener;
 import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
-import com.dbsoftwares.djp.utils.SimpleDjpLogger;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bungeecord.Metrics;
-import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 
 @Getter
 public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
 {
 
-    private final Logger log = new SimpleDjpLogger();
     private Permission permission;
     private List<RankData> rankData = Lists.newArrayList();
     private boolean usePriorities;
@@ -93,7 +91,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
         }
         catch ( Exception e )
         {
-            log.error( "An error occured: ", e );
+            getLogger().log( Level.SEVERE, "An error occured", e );
         }
 
         this.getProxy().getPluginManager().registerListener( this, new PlayerListener() );
@@ -111,7 +109,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
         }
         catch ( SQLException e )
         {
-            log.error( "An error occured", e );
+            getLogger().log( Level.SEVERE, "An error occured", e );
         }
     }
 
@@ -123,7 +121,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
         }
         catch ( IOException e )
         {
-            log.error( "An error occured", e );
+            getLogger().log( Level.SEVERE, "An error occured", e );
             return;
         }
         rankData.clear();
@@ -151,7 +149,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
     {
         if ( isDebugMode() )
         {
-            log.debug( message );
+            getLogger().info( message );
         }
     }
 

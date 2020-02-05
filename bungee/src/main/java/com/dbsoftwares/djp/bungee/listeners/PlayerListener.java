@@ -39,14 +39,14 @@ public class PlayerListener implements Listener
         {
             if ( DonatorJoinPlus.i().isDebugMode() )
             {
-                DonatorJoinPlus.i().getLog().debug( "Cleaning up loading cache ... [initialSize={}]", loadingCache.size() );
+                DonatorJoinPlus.i().getLogger().info( String.format( "Cleaning up loading cache ... [initialSize=%s]", loadingCache.size() ) );
             }
 
             loadingCache.cleanUp();
 
             if ( DonatorJoinPlus.i().isDebugMode() )
             {
-                DonatorJoinPlus.i().getLog().debug( "Successfully up loading cache ... [currentSize={}]", loadingCache.size() );
+                DonatorJoinPlus.i().getLogger().info( String.format( "Successfully up loading cache ... [currentSize=%s]", loadingCache.size() ) );
             }
         }, 3, 3, TimeUnit.MINUTES );
     }

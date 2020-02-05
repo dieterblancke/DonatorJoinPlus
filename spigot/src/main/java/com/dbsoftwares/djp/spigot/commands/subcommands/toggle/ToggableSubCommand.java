@@ -3,6 +3,7 @@ package com.dbsoftwares.djp.spigot.commands.subcommands.toggle;
 import com.dbsoftwares.commandapi.command.SubCommand;
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
+import com.dbsoftwares.djp.user.User;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
@@ -49,7 +50,13 @@ public class ToggableSubCommand extends SubCommand
         if ( args.length == 0 )
         {
             final UUID uuid = player.getUniqueId();
-            final boolean toggled = (boolean) SpigotUtils.getMetaData( player, SpigotUtils.TOGGLE_KEY, false );
+            final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+
+            if ( user == null )
+            {
+                return;
+            }
+            final boolean toggled = user.isToggled();
 
             if ( toggled )
             {
@@ -88,15 +95,16 @@ public class ToggableSubCommand extends SubCommand
                 return;
             }
             final Player target = Bukkit.getPlayer( uuid );
+            final User user = (User) SpigotUtils.getMetaData( target, SpigotUtils.USER_KEY, null );
 
             final boolean toggled;
-            if ( target == null )
+            if ( target == null || user == null )
             {
                 toggled = DonatorJoinPlus.i().getStorage().isToggled( uuid );
             }
             else
             {
-                toggled = (boolean) SpigotUtils.getMetaData( target, SpigotUtils.TOGGLE_KEY, false );
+                toggled = user.isToggled();
             }
 
             if ( toggled )
@@ -119,8 +127,14 @@ public class ToggableSubCommand extends SubCommand
 
             if ( player != null && player.isOnline() )
             {
-                player.sendMessage( Utils.getMessage( "enabled" ) );
-                SpigotUtils.setMetaData( player, SpigotUtils.TOGGLE_KEY, false );
+                final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+
+                if ( user != null )
+                {
+                    user.setToggled( false );
+
+                    player.sendMessage( Utils.getMessage( "enabled" ) );
+                }
             }
         } );
     }
@@ -134,8 +148,14 @@ public class ToggableSubCommand extends SubCommand
 
             if ( player != null && player.isOnline() )
             {
-                player.sendMessage( Utils.getMessage( "disabled" ) );
-                SpigotUtils.setMetaData( player, SpigotUtils.TOGGLE_KEY, true );
+                final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+
+                if ( user != null )
+                {
+                    user.setToggled( true );
+
+                    player.sendMessage( Utils.getMessage( "disabled" ) );
+                }
             }
         } );
     }

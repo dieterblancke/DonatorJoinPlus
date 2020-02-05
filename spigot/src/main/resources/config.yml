@@ -78,9 +78,19 @@ messages:
   group-not-found: '&eSlotGroup &b{group} &ewas not found!'
   group-set: '&b{player}''s &eslot group has been set to &b{group}&e!'
   error: '&cAn error occured, check the console for more info!'
-  changesound:
-    usage: '&ePlease use &b/djp changesound (sound) [player]&e!'
-    console-usage: '&ePlease use &b/djp changesound (sound) (player)&e!'
+  sound:
+    join:
+      usage: '&ePlease use &b/djp joinsound (sound) [player]&e!'
+      console-usage: '&ePlease use &b/djp joinsound (sound) (player)&e!'
+      invalid-sound: '&cIncorrect sound entered! &ePlease use the tab action on your command for the available sounds.'
+      changed: '&eYour join sound has been set to &b{sound}&e!'
+      changed-other: '&eYou have set {user}''s join sound has been set to &b{sound}&e!'
+    leave:
+      usage: '&ePlease use &b/djp leavesound (sound) [player]&e!'
+      console-usage: '&ePlease use &b/djp leavesound (sound) (player)&e!'
+      invalid-sound: '&cIncorrect sound entered! &ePlease use the tab action on your command for the available sounds.'
+      changed: '&eYour leave sound has been set to &b{sound}&e!'
+      changed-other: '&eYou have set {user}''s leave sound has been set to &b{sound}&e!'
 
 firstjoin:
   enabled: true
@@ -109,6 +119,17 @@ slotforcer:
     - name: 'staff'
       additional: 10
       permission: 'donatorjoin.limit.exceed.staff'
+
+# This is for the /djp joinsound & /djp leavesound commands.
+# Here you can whitelist or blacklist certain sounds from being used.
+sounds:
+  # blacklist mode = all sounds you add to this list will be FORBIDDEN
+  # whitelist mode = all sounds you add to this list will be ALLOWED
+  mode: WHITELIST
+  # Sounds that you can use can be found here:
+  # https://github.com/dieterblancke/DonatorJoinPlus/blob/master/spigot/src/main/java/com/dbsoftwares/djp/spigot/utils/XSound.java#L70-L883
+  list:
+    - 'BLOCK_NOTE_BLOCK_BELL'
 
 ranks:
   - name: 'vip'

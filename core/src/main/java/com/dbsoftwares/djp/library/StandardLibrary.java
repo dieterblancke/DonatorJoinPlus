@@ -26,20 +26,20 @@ public enum StandardLibrary
 
     SQLITE(
             "org.sqlite.JDBC",
-            "http://central.maven.org/maven2/org/xerial/sqlite-jdbc/{version}/sqlite-jdbc-{version}.jar",
-            "3.25.2",
+            "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/{version}/sqlite-jdbc-{version}.jar",
+            "3.30.1",
             checkType( "SQLITE" )
     ),
     H2(
             "org.h2.jdbcx.JdbcDataSource",
-            "http://central.maven.org/maven2/com/h2database/h2/{version}/h2-{version}.jar",
-            "1.4.197",
+            "https://repo1.maven.org/maven2/com/h2database/h2/{version}/h2-{version}.jar",
+            "1.4.200",
             checkType( "H2" )
     ),
     HIKARIDB(
             "com.zaxxer.hikari.HikariDataSource",
-            "http://central.maven.org/maven2/com/zaxxer/HikariCP/{version}/HikariCP-{version}.jar",
-            "3.2.0",
+            "https://repo1.maven.org/maven2/com/zaxxer/HikariCP/{version}/HikariCP-{version}.jar",
+            "3.4.2",
             checkType( "MYSQL", "SQLITE", "H2" )
     );
 

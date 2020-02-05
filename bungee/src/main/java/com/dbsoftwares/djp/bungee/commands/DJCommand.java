@@ -17,7 +17,7 @@ public class DJCommand extends Command
 
     public DJCommand()
     {
-        super( "donatorjoin", "", "dj", "djp", "donatorjoinplus" );
+        super( "bungeedonatorjoin", "", "bdj", "bdjp", "djpb", "djpbungee" );
     }
 
     @Override

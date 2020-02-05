@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 public class SpigotUtils
 {
 
-    public static final String TOGGLE_KEY = "DJP_TOGGLE";
+    public static final String USER_KEY = "DJP_USER";
 
     private SpigotUtils()
     {
@@ -43,6 +43,10 @@ public class SpigotUtils
 
     public static Object getMetaData( final Player player, final String key, Object defaultValue )
     {
+        if ( player == null )
+        {
+            return null;
+        }
         for ( MetadataValue meta : player.getMetadata( key ) )
         {
             if ( meta.getOwningPlugin().getName().equalsIgnoreCase( DonatorJoinPlus.i().getName() ) )
@@ -96,6 +100,7 @@ public class SpigotUtils
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     public static UUID getUuid( final String name )
     {
         final CompletableFuture<UUID> future = CompletableFuture.supplyAsync( () ->
