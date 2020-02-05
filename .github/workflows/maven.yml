@@ -15,17 +15,17 @@ jobs:
           java-version: 1.8
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - id: getfilename
+      - id: getspigotfilename
         run: echo "::set-output name=file::$(ls spigot/target/DonatorJoin+*.jar)"
       - name: Create artifact
         uses: actions/upload-artifact@v1
         with:
           name: DonatorJoin+ Spigot
-          path: ${{ steps.getfilename.outputs.file }}
-      - id: getfilename
+          path: ${{ steps.getspigotfilename.outputs.file }}
+      - id: getbungeefilename
         run: echo "::set-output name=file::$(ls bungee/target/DonatorJoin+*.jar)"
       - name: Create artifact
         uses: actions/upload-artifact@v1
         with:
           name: DonatorJoin+ BungeeCord
-          path: ${{ steps.getfilename.outputs.file }}
+          path: ${{ steps.getbungeefilename.outputs.file }}
