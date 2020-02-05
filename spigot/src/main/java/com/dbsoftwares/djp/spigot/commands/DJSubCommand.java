@@ -1,6 +1,7 @@
 package com.dbsoftwares.djp.spigot.commands;
 
 import com.dbsoftwares.commandapi.command.SubCommand;
+import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
 import com.dbsoftwares.djp.spigot.utils.XSound;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.Lists;
@@ -9,7 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class DJSubCommand extends SubCommand
 {
@@ -66,10 +69,41 @@ public abstract class DJSubCommand extends SubCommand
                 || !XSound.matchXSound( sound ).get().isSupported() )
         {
             sender.sendMessage(
-                    Utils.getMessage( "sound.join.invalid-sound" )
+                    Utils.getMessage( "sound.invalid-sound" )
+            );
+            return false;
+        }
+
+        if ( !isAllowedSound( sound ) )
+        {
+            sender.sendMessage(
+                    Utils.getMessage( "sound.unallowed-sound" )
             );
             return false;
         }
         return true;
+    }
+
+    protected List<String> getAllowedSounds()
+    {
+        return Arrays.stream( XSound.values() )
+                .filter( XSound::isSupported )
+                .map( XSound::name )
+                .filter( this::isAllowedSound )
+                .collect( Collectors.toList() );
+    }
+
+    private boolean isAllowedSound( final String sound )
+    {
+        final List<String> sounds = DonatorJoinPlus.i().getConfiguration().getStringList( "sounds.list" );
+
+        if ( DonatorJoinPlus.i().getConfiguration().getString( "sounds.mode" ).equalsIgnoreCase( "WHITELIST" ) )
+        {
+            return sounds.stream().anyMatch( s -> s.equalsIgnoreCase( sound ) );
+        }
+        else
+        {
+            return sounds.stream().noneMatch( s -> s.equalsIgnoreCase( sound ) );
+        }
     }
 }

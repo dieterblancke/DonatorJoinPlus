@@ -118,25 +118,18 @@ public class JoinSoundSubCommand extends DJSubCommand
     {
         if ( args.length == 1 )
         {
-            return Arrays.stream( XSound.values() )
-                    .filter( XSound::isSupported )
-                    .map( XSound::toString )
-                    .collect( Collectors.toList() );
+            return getAllowedSounds();
         }
         else if ( args.length == 2 )
         {
             final String lastWord = args[1];
             final List<String> list = Lists.newArrayList();
 
-            for ( XSound sound : XSound.values() )
+            for ( String sound : getAllowedSounds() )
             {
-                if ( !sound.isSupported() )
+                if ( sound.toLowerCase().startsWith( lastWord.toLowerCase() ) )
                 {
-                    continue;
-                }
-                if ( sound.name().toLowerCase().startsWith( lastWord.toLowerCase() ) )
-                {
-                    list.add( sound.name() );
+                    list.add( sound );
                 }
             }
 

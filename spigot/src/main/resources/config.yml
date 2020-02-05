@@ -79,16 +79,16 @@ messages:
   group-set: '&b{player}''s &eslot group has been set to &b{group}&e!'
   error: '&cAn error occured, check the console for more info!'
   sound:
+    unallowed-sound: '&cThis sound cannot be used! &ePlease try another sound.'
+    invalid-sound: '&cIncorrect sound entered! &ePlease use the tab action on your command for the available sounds.'
     join:
       usage: '&ePlease use &b/djp joinsound (sound) [player]&e!'
       console-usage: '&ePlease use &b/djp joinsound (sound) (player)&e!'
-      invalid-sound: '&cIncorrect sound entered! &ePlease use the tab action on your command for the available sounds.'
       changed: '&eYour join sound has been set to &b{sound}&e!'
       changed-other: '&eYou have set {user}''s join sound has been set to &b{sound}&e!'
     leave:
       usage: '&ePlease use &b/djp leavesound (sound) [player]&e!'
       console-usage: '&ePlease use &b/djp leavesound (sound) (player)&e!'
-      invalid-sound: '&cIncorrect sound entered! &ePlease use the tab action on your command for the available sounds.'
       changed: '&eYour leave sound has been set to &b{sound}&e!'
       changed-other: '&eYou have set {user}''s leave sound has been set to &b{sound}&e!'
 
