@@ -31,6 +31,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
     private boolean usePriorities;
     private AbstractStorageManager storage;
     private IConfiguration configuration;
+    private ISection messages;
 
     public static DonatorJoinPlus i()
     {
@@ -50,6 +51,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
         }
 
         configuration = IConfiguration.loadYamlConfiguration( configFile );
+        messages = configuration.getSection( "messages" );
 
         // Loading libraries for storage
         for ( StandardLibrary standardLibrary : StandardLibrary.values() )

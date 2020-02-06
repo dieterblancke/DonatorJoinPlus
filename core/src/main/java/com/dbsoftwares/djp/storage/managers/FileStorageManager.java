@@ -161,6 +161,40 @@ public class FileStorageManager extends AbstractStorageManager
     }
 
     @Override
+    public void toggleSound( UUID uuid, boolean toggled )
+    {
+        final ISection userSection = storage.getSection( "users" );
+        userSection.set( uuid.toString() + ".soundtoggled", toggled );
+
+        checkToSave();
+    }
+
+    @Override
+    public void toggleFirework( UUID uuid, boolean toggled )
+    {
+        final ISection userSection = storage.getSection( "users" );
+        userSection.set( uuid.toString() + ".fireworktoggled", toggled );
+
+        checkToSave();
+    }
+
+    @Override
+    public boolean isSoundToggled( UUID uuid )
+    {
+        final ISection userSection = storage.getSection( "users" );
+
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".soundtoggled" );
+    }
+
+    @Override
+    public boolean isFireworkToggled( UUID uuid )
+    {
+        final ISection userSection = storage.getSection( "users" );
+
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".fireworktoggled" );
+    }
+
+    @Override
     public User getUser( final UUID uuid )
     {
         final ISection userSection = storage.getSection( "users" );
@@ -176,7 +210,9 @@ public class FileStorageManager extends AbstractStorageManager
                 getOrDefault( section, "toggled", false ),
                 getOrDefault( section, "slotgroup", "none" ),
                 getOrDefault( section, "joinsound", null ),
-                getOrDefault( section, "leavesound", null )
+                getOrDefault( section, "leavesound", null ),
+                getOrDefault( section, "soundtoggled", false ),
+                getOrDefault( section, "fireworktoggled", false )
         );
     }
 

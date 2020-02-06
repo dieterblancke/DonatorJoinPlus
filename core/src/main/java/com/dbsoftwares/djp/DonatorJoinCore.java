@@ -1,6 +1,7 @@
 package com.dbsoftwares.djp;
 
 import com.dbsoftwares.configuration.api.IConfiguration;
+import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 
 import java.io.File;
@@ -46,4 +47,6 @@ public interface DonatorJoinCore
     InputStream getResource( String resource );
 
     File getDataFolder();
+
+    ISection getMessages();
 }

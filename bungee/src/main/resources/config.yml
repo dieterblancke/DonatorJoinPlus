@@ -63,10 +63,10 @@ messages:
   error: '&cAn error occured, check the console for more info!'
   help:
     - '&e&lDonatorJoin+ Command Help:'
-    - '&f- /djp reload &7- reloads the configuration'
-    - '&f- /djp toggle [player] &7- toggles the join / quit messages for a certain player'
-    - '&f- /djp enable [player] &7- enables the join / quit messages for a certain player'
-    - '&f- /djp disable [player] &7- disables the join / quit messages for a certain player'
+    - '&f- /bdjp reload &7- reloads the configuration'
+    - '&f- /bdjp toggle [player] &7- toggles the join / quit messages for a certain player'
+    - '&f- /bdjp enable [player] &7- enables the join / quit messages for a certain player'
+    - '&f- /bdjp disable [player] &7- disables the join / quit messages for a certain player'
 
 # Once a player joins for the first time, he'll get stored in the system.
 # So on installing the plugin, everyone will be a "first time" player when they join for the first

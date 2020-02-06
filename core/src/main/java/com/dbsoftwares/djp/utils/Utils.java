@@ -6,7 +6,7 @@ package com.dbsoftwares.djp.utils;
  * Project: DonatorJoinPlus
  */
 
-import com.dbsoftwares.configuration.api.IConfiguration;
+import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 
 public class Utils
@@ -24,16 +24,16 @@ public class Utils
 
     public static String getMessage( final String path )
     {
-        final IConfiguration config = DonatorJoinCore.getInstance().getConfiguration();
+        final ISection messages = DonatorJoinCore.getInstance().getMessages();
 
         final String message;
-        if ( config.isList( "messages." + path ) )
+        if ( messages.isList( path ) )
         {
-            message = String.join( "\n", config.getStringList( "messages." + path ) );
+            message = String.join( "\n", messages.getStringList( path ) );
         }
         else
         {
-            message = config.getString( "messages." + path );
+            message = messages.getString( path );
         }
 
         return c( getPrefix() + message );
@@ -46,6 +46,6 @@ public class Utils
 
     public static String getPrefix()
     {
-        return c( DonatorJoinCore.getInstance().getConfiguration().getString( "messages.prefix" ) );
+        return c( DonatorJoinCore.getInstance().getMessages().getString( "prefix" ) );
     }
 }

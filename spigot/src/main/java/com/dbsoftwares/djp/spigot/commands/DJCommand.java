@@ -1,13 +1,13 @@
 package com.dbsoftwares.djp.spigot.commands;
 
 import com.dbsoftwares.commandapi.command.MainSpigotCommand;
+import com.dbsoftwares.commandapi.command.SubCommand;
 import com.dbsoftwares.commandapi.utils.MessageConfig;
 import com.dbsoftwares.djp.spigot.commands.subcommands.*;
-import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.DisableSubCommand;
-import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.EnableSubCommand;
-import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.ToggleSubCommand;
+import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.*;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.Lists;
+import org.bukkit.command.CommandSender;
 
 public class DJCommand extends MainSpigotCommand
 {
@@ -24,6 +24,8 @@ public class DJCommand extends MainSpigotCommand
         subCommands.add( new ListSoundsSubCommand() );
         subCommands.add( new JoinSoundSubCommand() );
         subCommands.add( new LeaveSoundSubCommand() );
+        subCommands.add( new ToggleSoundSubCommand() );
+        subCommands.add( new ToggleFireworkSubCommand() );
 
         loadMessageConfig();
     }
@@ -36,5 +38,26 @@ public class DJCommand extends MainSpigotCommand
         messageConfig.setUsageMessage( Utils.getMessage( "usage" ) );
 
         setMessageConfig( messageConfig );
+    }
+
+    @Override
+    public void onExecute( CommandSender sender, String[] args )
+    {
+        if ( args.length == 0 )
+        {
+            sender.sendMessage( Utils.getMessage( "help" ) );
+        }
+        else
+        {
+            for ( SubCommand subCommand : subCommands )
+            {
+                if ( subCommand.execute( sender, args, getMessageConfig() ) )
+                {
+                    return;
+                }
+            }
+        }
+
+        sender.sendMessage( Utils.getMessage( "help" ) );
     }
 }

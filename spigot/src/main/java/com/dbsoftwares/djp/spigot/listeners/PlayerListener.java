@@ -236,12 +236,12 @@ public class PlayerListener implements Listener
                 }
             }
 
-            if ( eventData.isFirework() )
+            if ( eventData.isFirework() && !user.isFireworkToggled() )
             {
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() )
+            if ( eventData.isSoundEnabled() && !user.isSoundToggled() )
             {
                 final String soundName = eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound();
 

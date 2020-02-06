@@ -17,5 +17,7 @@ public class User
     private String slotGroup;
     private String joinSound;
     private String leaveSound;
+    private boolean soundToggled;
+    private boolean fireworkToggled;
 
 }

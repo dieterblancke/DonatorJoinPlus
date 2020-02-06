@@ -109,7 +109,7 @@ public class JoinSoundSubCommand extends DJSubCommand
             );
         }
         sender.sendMessage(
-                Utils.getMessage( "sound.join.changed" )
+                Utils.getMessage( "sound.join.changed-other" )
                         .replace( "{user}", target.getName() )
                         .replace( "{sound}", sound )
         );

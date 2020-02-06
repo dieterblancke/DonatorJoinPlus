@@ -52,6 +52,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
     private IConfiguration configuration;
     private SlotResizer slotResizer;
     private List<SlotLimit> slotLimits = Lists.newArrayList();
+    private IConfiguration messages;
 
     public static DonatorJoinPlus i()
     {
@@ -62,14 +63,9 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
     public void onEnable()
     {
         DonatorJoinCore.setInstance( this );
-        final File configFile = new File( getDataFolder(), "config.yml" );
 
-        if ( !configFile.exists() )
-        {
-            IConfiguration.createDefaultFile( getResource( "config.yml" ), configFile );
-        }
-
-        configuration = IConfiguration.loadYamlConfiguration( configFile );
+        loadConfig();
+        loadMessages();
 
         // Loading libraries for storage
         for ( StandardLibrary standardLibrary : StandardLibrary.values() )
@@ -148,14 +144,28 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
 
     public void loadConfig()
     {
-        try
+        if ( configuration == null )
         {
-            configuration.reload();
+            final File configFile = new File( getDataFolder(), "config.yml" );
+
+            if ( !configFile.exists() )
+            {
+                IConfiguration.createDefaultFile( getResource( "config.yml" ), configFile );
+            }
+
+            configuration = IConfiguration.loadYamlConfiguration( configFile );
         }
-        catch ( IOException e )
+        else
         {
-            getLogger().log( Level.SEVERE, "An error occured", e );
-            return;
+            try
+            {
+                configuration.reload();
+            }
+            catch ( IOException e )
+            {
+                getLogger().log( Level.SEVERE, "An error occured", e );
+                return;
+            }
         }
         rankData.clear();
         slotLimits.clear();
@@ -184,6 +194,51 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
         disableQuitMessage = configuration.getBoolean( "quitmessage" );
         usePriorities = configuration.getBoolean( "usepriorities" );
         usePermissions = configuration.getBoolean( "usepermissions" );
+    }
+
+    private void loadMessages()
+    {
+        if ( messages == null )
+        {
+
+            final File messagesFile = new File( getDataFolder(), "messages.yml" );
+
+            if ( !messagesFile.exists() )
+            {
+                IConfiguration.createDefaultFile( getResource( "messages.yml" ), messagesFile );
+
+                messages = IConfiguration.loadYamlConfiguration( messagesFile );
+            }
+            else
+            {
+                messages = IConfiguration.loadYamlConfiguration( messagesFile );
+
+                // If new messages are added in the plugin, this should automatically load them into the messages file.
+                final IConfiguration defaultMessages = IConfiguration.loadYamlConfiguration(
+                        getResource( "messages.yml" )
+                );
+
+                try
+                {
+                    messages.copyDefaults( defaultMessages );
+                }
+                catch ( IOException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                messages.reload();
+            }
+            catch ( IOException e )
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean isDebugMode()

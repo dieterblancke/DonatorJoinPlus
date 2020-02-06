@@ -109,7 +109,7 @@ public class LeaveSoundSubCommand extends DJSubCommand
             );
         }
         sender.sendMessage(
-                Utils.getMessage( "sound.leave.changed" )
+                Utils.getMessage( "sound.leave.changed-other" )
                         .replace( "{user}", target.getName() )
                         .replace( "{sound}", sound )
         );

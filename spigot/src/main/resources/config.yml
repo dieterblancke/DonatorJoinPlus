@@ -64,34 +64,6 @@ usepriorities: true
 # or all if usepriorities is set to false.
 usepermissions: true
 
-messages:
-  prefix: '&e&lDonatorJoin&b&l+ &7» '
-  never-joined: '&cThat player didn''t join before!'
-  no-perm: '&cYou are not allowed to do this!'
-  reloaded: '&aThe plugin has been reloaded successfully!'
-  enabled: '&aJoin & quit messages are now enabled!'
-  enabled-other: '&aJoin & quit messages are now enabled for &b{player}!'
-  disabled: '&cJoin & quit messages are now disabled!'
-  disabled-other: '&aJoin & quit messages are now enabled for &b{player}!'
-  not-for-console: '&cThe console cannot use this!'
-  usage: '&ePlease use &b{usage}&e!'
-  group-not-found: '&eSlotGroup &b{group} &ewas not found!'
-  group-set: '&b{player}''s &eslot group has been set to &b{group}&e!'
-  error: '&cAn error occured, check the console for more info!'
-  sound:
-    unallowed-sound: '&cThis sound cannot be used! &ePlease try another sound.'
-    invalid-sound: '&cIncorrect sound entered! &ePlease use the tab action on your command for the available sounds.'
-    join:
-      usage: '&ePlease use &b/djp joinsound (sound) [player]&e!'
-      console-usage: '&ePlease use &b/djp joinsound (sound) (player)&e!'
-      changed: '&eYour join sound has been set to &b{sound}&e!'
-      changed-other: '&eYou have set {user}''s join sound has been set to &b{sound}&e!'
-    leave:
-      usage: '&ePlease use &b/djp leavesound (sound) [player]&e!'
-      console-usage: '&ePlease use &b/djp leavesound (sound) (player)&e!'
-      changed: '&eYour leave sound has been set to &b{sound}&e!'
-      changed-other: '&eYou have set {user}''s leave sound has been set to &b{sound}&e!'
-
 firstjoin:
   enabled: true
   message:

@@ -92,6 +92,14 @@ public abstract class AbstractStorageManager
 
     public abstract void setLeaveSound( final UUID uuid, final String sound );
 
+    public abstract void toggleSound( final UUID uuid, final boolean toggled );
+
+    public abstract void toggleFirework( final UUID uuid, final boolean toggled );
+
+    public abstract boolean isSoundToggled( final UUID uuid );
+
+    public abstract boolean isFireworkToggled( final UUID uuid );
+
     public abstract User getUser( final UUID uuid );
 
     public abstract Connection getConnection() throws SQLException;
