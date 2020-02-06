@@ -3,7 +3,6 @@ package com.dbsoftwares.djp.spigot.commands.subcommands;
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
 import com.dbsoftwares.djp.spigot.commands.DJSubCommand;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
-import com.dbsoftwares.djp.spigot.utils.XSound;
 import com.dbsoftwares.djp.user.User;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.Lists;
@@ -11,10 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class LeaveSoundSubCommand extends DJSubCommand
 {
@@ -74,6 +71,11 @@ public class LeaveSoundSubCommand extends DJSubCommand
         if ( args.length != 2 )
         {
             sender.sendMessage( Utils.getMessage( "sound.leave.console-usage" ) );
+            return;
+        }
+        if ( !sender.hasPermission( "donatorjoinplus.changesound.join.other" ) )
+        {
+            sender.sendMessage( Utils.getMessage( "sound.no-perm" ) );
             return;
         }
         final String sound = args[0];
