@@ -75,7 +75,7 @@ public class JoinSoundSubCommand extends DJSubCommand
         }
         if ( !sender.hasPermission( "donatorjoinplus.changesound.join.other" ) )
         {
-            sender.sendMessage( Utils.getMessage( "sound.no-perm" ) );
+            sender.sendMessage( Utils.getMessage( "no-perm" ) );
             return;
         }
         final String sound = args[0];
