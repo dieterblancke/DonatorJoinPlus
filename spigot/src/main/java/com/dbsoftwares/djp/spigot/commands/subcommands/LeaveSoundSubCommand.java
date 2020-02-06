@@ -73,7 +73,7 @@ public class LeaveSoundSubCommand extends DJSubCommand
             sender.sendMessage( Utils.getMessage( "sound.leave.console-usage" ) );
             return;
         }
-        if ( !sender.hasPermission( "donatorjoinplus.changesound.join.other" ) )
+        if ( !sender.hasPermission( "donatorjoinplus.changesound.leave.other" ) )
         {
             sender.sendMessage( Utils.getMessage( "sound.no-perm" ) );
             return;
