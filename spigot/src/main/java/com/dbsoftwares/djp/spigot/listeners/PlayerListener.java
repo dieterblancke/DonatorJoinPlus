@@ -220,19 +220,22 @@ public class PlayerListener implements Listener
         {
             final String message = formatString( p, eventData.getMessage() );
 
-            for ( String msg : message.split( "<nl>" ) )
+            if ( !message.isEmpty() )
             {
-                if ( world != null )
+                for ( String msg : message.split( "<nl>" ) )
                 {
-                    for ( Player player : world.getPlayers() )
+                    if ( world != null )
                     {
-                        player.sendMessage( msg );
+                        for ( Player player : world.getPlayers() )
+                        {
+                            player.sendMessage( msg );
+                        }
+                        Bukkit.getConsoleSender().sendMessage( msg );
                     }
-                    Bukkit.getConsoleSender().sendMessage( msg );
-                }
-                else
-                {
-                    Bukkit.broadcastMessage( msg );
+                    else
+                    {
+                        Bukkit.broadcastMessage( msg );
+                    }
                 }
             }
 
@@ -282,6 +285,10 @@ public class PlayerListener implements Listener
 
     private String formatString( final Player p, String str )
     {
+        if ( str == null || str.isEmpty() )
+        {
+            return "";
+        }
         str = str.replace( "%player%", p.getName() );
         str = str.replace( "{player}", p.getName() );
         str = Utils.c( str );
