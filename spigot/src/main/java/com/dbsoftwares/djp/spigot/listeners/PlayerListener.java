@@ -156,6 +156,10 @@ public class PlayerListener implements Listener
         {
             final CompletableFuture<User> future = loadingCache.getIfPresent( uuid );
 
+            if ( future == null )
+            {
+                return DonatorJoinPlus.i().getStorage().getUser( uuid );
+            }
             return future.get();
         }
         catch ( InterruptedException | ExecutionException e )

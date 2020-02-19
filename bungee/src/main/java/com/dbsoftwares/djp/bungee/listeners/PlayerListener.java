@@ -95,7 +95,7 @@ public class PlayerListener implements Listener
 
             CompletableFuture.runAsync( () -> DonatorJoinCore.getInstance().getStorage().toggle( player.getUniqueId(), false ) );
         }
-        catch ( InterruptedException | ExecutionException e )
+        catch ( NullPointerException | InterruptedException | ExecutionException e )
         {
             e.printStackTrace();
         }
