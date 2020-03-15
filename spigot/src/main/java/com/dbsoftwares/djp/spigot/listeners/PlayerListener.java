@@ -124,7 +124,13 @@ public class PlayerListener implements Listener
         }
 
         final Player p = event.getPlayer();
-        final User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+        User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+
+        if ( user == null )
+        {
+            user = DonatorJoinPlus.i().getStorage().getUser( p.getUniqueId() );
+        }
+
         final boolean toggled = user != null && user.isToggled();
 
         if ( SpigotUtils.isVanished( p ) || toggled )
@@ -139,7 +145,13 @@ public class PlayerListener implements Listener
     public void onWorldChange( PlayerChangedWorldEvent event )
     {
         final Player p = event.getPlayer();
-        final User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+        User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+        if ( user == null )
+        {
+            user = DonatorJoinPlus.i().getStorage().getUser( p.getUniqueId() );
+            SpigotUtils.setMetaData( p, SpigotUtils.USER_KEY, user );
+        }
+
         final boolean toggled = user != null && user.isToggled();
 
         if ( SpigotUtils.isVanished( p ) || toggled )
@@ -248,9 +260,9 @@ public class PlayerListener implements Listener
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() && !user.isSoundToggled() )
+            if ( eventData.isSoundEnabled() && (user == null || !user.isSoundToggled()) )
             {
-                final String soundName = eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound();
+                final String soundName = user == null ? null : (eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound());
 
                 if ( soundName != null && XSound.contains( soundName ) )
                 {
