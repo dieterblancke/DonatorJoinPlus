@@ -9,6 +9,7 @@ package com.dbsoftwares.djp.spigot;
 import com.dbsoftwares.commandapi.CommandManager;
 import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.configuration.api.ISection;
+import com.dbsoftwares.djp.DonatorJoinBase;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
@@ -39,7 +40,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @Getter
-public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinCore
+public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
 {
 
     private Permission permission;

@@ -2,6 +2,7 @@ package com.dbsoftwares.djp.bungee;
 
 import com.dbsoftwares.configuration.api.IConfiguration;
 import com.dbsoftwares.configuration.api.ISection;
+import com.dbsoftwares.djp.DonatorJoinBase;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.bungee.commands.DJCommand;
 import com.dbsoftwares.djp.bungee.data.RankData;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 @Getter
-public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
+public class DonatorJoinPlus extends Plugin implements DonatorJoinBase
 {
 
     private Permission permission;
@@ -35,7 +36,7 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinCore
 
     public static DonatorJoinPlus i()
     {
-        return (DonatorJoinPlus) instance;
+        return (DonatorJoinPlus) DonatorJoinCore.getInstance();
     }
 
     @Override
