@@ -1,4 +1,4 @@
-package com.dbsoftwares.djp.data;
+package com.dbsoftwares.djp.spigot.data;
 
 /*
  * Created by DBSoftwares on 13 mei 2018
