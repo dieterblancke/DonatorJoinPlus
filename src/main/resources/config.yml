@@ -151,6 +151,13 @@ ranks:
           # TitleManager example
           - 'tm bc &a&lVIP &b%player% %nl% &ehas left the game!'
     world:
+      worlds:
+        # Whitelist or blacklist, if whitelist, only the entered worlds will be used
+        # If blacklist, only worlds that aren't entered below will be used
+        mode: whitelist
+        list:
+          - world
+          - world2
       join:
         enabled: false
         message: '&8(&cServer&8) &7(&aVIP&7) &b%player% &ehas joined the world!'

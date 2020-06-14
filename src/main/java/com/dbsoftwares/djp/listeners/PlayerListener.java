@@ -4,6 +4,7 @@ import com.dbsoftwares.djp.DonatorJoinPlus;
 import com.dbsoftwares.djp.data.EventData;
 import com.dbsoftwares.djp.data.EventData.EventType;
 import com.dbsoftwares.djp.data.RankData;
+import com.dbsoftwares.djp.data.WorldEventData;
 import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -159,7 +160,8 @@ public class PlayerListener implements Listener
             final CompletableFuture<Boolean> future = loadingCache.get( uuid );
 
             return future.get();
-        } catch ( InterruptedException | ExecutionException e )
+        }
+        catch ( InterruptedException | ExecutionException e )
         {
             return DonatorJoinPlus.i().getStorage().isToggled( uuid );
         }
@@ -193,11 +195,13 @@ public class PlayerListener implements Listener
                     {
                         break;
                     }
-                } else
+                }
+                else
                 {
                     DonatorJoinPlus.i().debug( "Player " + p.getName() + " does not have the permission " + data.getPermission() + "." );
                 }
-            } else
+            }
+            else
             {
                 if ( Utils.contains( groups, data.getName() ) )
                 {
@@ -215,6 +219,10 @@ public class PlayerListener implements Listener
 
     private void executeEventData( final Player p, final EventData eventData, final World world )
     {
+        if ( eventData instanceof WorldEventData && world != null && ( (WorldEventData) eventData ).ckeckWorld( world.getName() ) )
+        {
+            return;
+        }
         if ( eventData.isEnabled() )
         {
             final String message = formatString( p, eventData.getMessage() );
@@ -228,7 +236,8 @@ public class PlayerListener implements Listener
                         player.sendMessage( msg );
                     }
                     Bukkit.getConsoleSender().sendMessage( msg );
-                } else
+                }
+                else
                 {
                     Bukkit.broadcastMessage( msg );
                 }
