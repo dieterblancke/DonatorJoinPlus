@@ -1,0 +1,136 @@
+################################################################################################
+#    ____                            _                        _           _                    #
+#   |  _ \    ___    _ __     __ _  | |_    ___    _ __      | |   ___   (_)  _ __      _      #
+#   | | | |  / _ \  | '_ \   / _` | | __|  / _ \  | '__|  _  | |  / _ \  | | | '_ \   _| |_    #
+#   | |_| | | (_) | | | | | | (_| | | |_  | (_) | | |    | |_| | | (_) | | | | | | | |_   _|   #
+#   |____/   \___/  |_| |_|  \__,_|  \__|  \___/  |_|     \___/   \___/  |_| |_| |_|   |_|     #
+#                                                                                              #
+################################################################################################
+
+# Debugging mode, this will help you give extra information if something is not working.
+debug: false
+
+storage:
+  # Possible storage types: FILE:JSON, FILE:YAML, MYSQL, SQLITE, H2. If using H2 or SQLITE, make sure to set max-pool-size to 1!
+  type: 'FILE:JSON'
+
+  # FILE only: when set to true, the data will be written to disk every time a toggle happens.
+  # THIS CAN BE VERY INEFFICIENT, especially on larger servers.
+  # When on false, file only gets saved when server shuts down (data can get lost with f.e. crashes)
+  save-per-change: false
+
+  # The hostname (IP) to connect to
+  hostname: '127.0.0.1'
+  # Port to be used
+  port: 3306
+  # The database / scheme name
+  database: 'database'
+  # The username, should at least have write & read access to the database above!
+  username: 'username'
+  # The password corresponding to the username above
+  password: 'password'
+  # Should DonatorJoinPlus try to establish a SSL connection? (only for SQL)
+  useSSL: true
+
+  pool:
+    # How many connections are allowed to be made?
+    # Find more information at:
+    # https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+    # Pool sizing SHOULD BE SET TO 1 WHEN USING H2 OR SQLITE
+    max-pool-size: 5
+    # How many idle connections should be maintained?
+    # It is recommended to set this to the same value as the max-pool-size
+    min-idle: 5
+    # Maximum lifetime of a connection. Time in seconds.
+    max-lifetime: 1500
+    # How long should DonatorJoinPlus wait before timing out a connection?
+    connection-timeout: 8
+
+# If true, only the highest priority rank will be broadcasted!
+# If false, a broadcast for any found rank will be sent.
+usepriorities: true
+
+messages:
+  prefix: '&e&lDonatorJoin&b&l+ &7» '
+  not-online: '&cThat player is not online!'
+  no-perm: '&cYou are not allowed to do this!'
+  reloaded: '&aThe plugin has been reloaded successfully!'
+  enabled: '&aJoin / quit messages are now enabled!'
+  enabled-other: '&aJoin / quit messages are now enabled for &b{player}!'
+  disabled: '&cJoin / quit messages are now disabled!'
+  disabled-other: '&aJoin / quit messages are now enabled for &b{player}!'
+  not-for-console: '&cThe console cannot use this!'
+  error: '&cAn error occured, check the console for more info!'
+  help:
+    - '&e&lDonatorJoin+ Command Help:'
+    - '&f- /bdjp reload &7- reloads the configuration'
+    - '&f- /bdjp toggle [player] &7- toggles the join / quit messages for a certain player'
+    - '&f- /bdjp enable [player] &7- enables the join / quit messages for a certain player'
+    - '&f- /bdjp disable [player] &7- disables the join / quit messages for a certain player'
+
+# Once a player joins for the first time, he'll get stored in the system.
+# So on installing the plugin, everyone will be a "first time" player when they join for the first
+# time after installing the plugin.
+firstjoin:
+  enabled: false
+  message:
+    - '&eWelcome &b{player} &eto the network! &7&oGood luck and have fun!'
+
+ranks:
+  - name: 'vip'
+    permission: 'djp.vip'
+    priority: 10
+    join:
+      enabled: true
+      message: '&6[&3VIP&6] &b{player} &ehas joined the network!'
+      commands:
+        enabled: false
+        commands:
+          # BungeeUtilisalsX example
+          - 'announce ba &a&lVIP &b{player} &ehas left the network!'
+  - name: 'elite'
+    permission: 'djp.elite'
+    priority: 20
+    join:
+      enabled: true
+      message: '&8[&5Elite&8] &b{player} &ehas joined the network!'
+      commands:
+        enabled: false
+        commands:
+          # BungeeUtilisalsX example
+          - 'announce ba &5&lELITE &b{player} &ehas joined the network!'
+    quit:
+      enabled: true
+      message: '&8[&5Elite&8] &b{player} &ehas left the network'
+      commands:
+        enabled: false
+        commands:
+          # BungeeUtilisalsX example
+          - 'announce ba &5&l&lELITE &b{player} &ehas left the network!'
+  - name: 'MVP'
+    permission: 'djp.mvp'
+    priority: 20
+    join:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ehas joined the network!'
+      commands:
+        enabled: false
+        commands:
+          # BungeeUtilisalsX example
+          - 'announce ba &9&lMVP &b{player} &ehas joined the network!'
+    quit:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ehas left the network!'
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'announce ba &9&lMVP &b{player} &ehas left the network!'
+    switch:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ewent to &b{server}!'
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'announce ba &9&lMVP &b{player} &ewent to &b{server}!'

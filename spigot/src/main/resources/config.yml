@@ -1,0 +1,232 @@
+################################################################################################
+#    ____                            _                        _           _                    #
+#   |  _ \    ___    _ __     __ _  | |_    ___    _ __      | |   ___   (_)  _ __      _      #
+#   | | | |  / _ \  | '_ \   / _` | | __|  / _ \  | '__|  _  | |  / _ \  | | | '_ \   _| |_    #
+#   | |_| | | (_) | | | | | | (_| | | |_  | (_) | | |    | |_| | | (_) | | | | | | | |_   _|   #
+#   |____/   \___/  |_| |_|  \__,_|  \__|  \___/  |_|     \___/   \___/  |_| |_| |_|   |_|     #
+#                                                                                              #
+################################################################################################
+
+# Debugging mode, this will help you give extra information if something is not working.
+debug: false
+
+storage:
+  # Possible storage types: FILE:JSON, FILE:YAML, MYSQL, SQLITE, H2. If using H2 or SQLITE, make sure to set max-pool-size to 1!
+  type: 'FILE:JSON'
+
+  # FILE only: when set to true, the data will be written to disk every time a toggle happens.
+  # THIS CAN BE VERY INEFFICIENT, especially on larger servers.
+  # When on false, file only gets saved when server shuts down (data can get lost with f.e. crashes)
+  save-per-change: false
+
+  # The hostname (IP) to connect to
+  hostname: '127.0.0.1'
+  # Port to be used
+  port: 3306
+  # The database / scheme name
+  database: 'database'
+  # The username, should at least have write & read access to the database above!
+  username: 'username'
+  # The password corresponding to the username above
+  password: 'password'
+  # Should DonatorJoinPlus try to establish a SSL connection? (only for SQL)
+  useSSL: true
+
+  pool:
+    # How many connections are allowed to be made?
+    # Find more information at:
+    # https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+    # Pool sizing SHOULD BE SET TO 1 WHEN USING H2 OR SQLITE
+    max-pool-size: 5
+    # How many idle connections should be maintained?
+    # It is recommended to set this to the same value as the max-pool-size
+    min-idle: 5
+    # Maximum lifetime of a connection. Time in seconds.
+    max-lifetime: 1500
+    # How long should DonatorJoinPlus wait before timing out a connection?
+    connection-timeout: 8
+
+# Set to false to disable default MC join message.
+joinmessage: false
+
+# Set to false to disable default MC quit message.
+quitmessage: false
+
+# If true, only the highest priority rank will be broadcasted!
+# If false, a broadcast for any found rank will be sent.
+usepriorities: true
+
+# If false, DonatorJoinPlus will use the 'name' you set in the ranks below as group identifiers.
+# People with a group with the same name as the rank will get the join message.
+#
+# If true, DonatorJoinPlus will use the 'permission' you set in the ranks below as identifier.
+# If the user has the permission it will send the highest priority join message,
+# or all if usepriorities is set to false.
+usepermissions: true
+
+firstjoin:
+  enabled: true
+  message:
+    - '&eWelcome &b{player} &eto the network! &7&oGood luck and have fun!'
+
+# Some permission plugins do not load permissions quicky enough for this to work.
+# If your permission plugin seems to be one of them, please use: /djp setslotgroup (player) (groupname / none) instead
+# DO NOTE THAT THIS FEATURE IS EXPERIMENTAL, NOT MUCH TESTING HAS BEEN DONE
+slotforcer:
+  enabled: false
+
+  # This in total would allow the maxplayers on a server to go up with 23 slots.
+  # If your hosting service RESTRICTS the max players, then YOU SHOULD NOT USE THIS (as your server can be suspended)
+  limits:
+    # Make sure the name is UNIQUE (this is CASE INSENSITIVE)
+    - name: 'vip'
+      # These are ADDITIONAL slots that can be allocated.
+      # For example with maxplayers set to 20, then 5 extra people with a permission can join.
+      additional: 5
+      # The permission to identify the limit with
+      permission: 'donatorjoin.limit.exceed.vip'
+    - name: 'mvp'
+      additional: 8
+      permission: 'donatorjoin.limit.exceed.mvp'
+    - name: 'staff'
+      additional: 10
+      permission: 'donatorjoin.limit.exceed.staff'
+
+# This is for the /djp joinsound & /djp leavesound commands.
+# Here you can whitelist or blacklist certain sounds from being used.
+sounds:
+  # blacklist mode = all sounds you add to this list will be FORBIDDEN
+  # whitelist mode = all sounds you add to this list will be ALLOWED
+  mode: WHITELIST
+  # Sounds that you can use can be found here:
+  # https://github.com/dieterblancke/DonatorJoinPlus/blob/master/spigot/src/main/java/com/dbsoftwares/djp/spigot/utils/XSound.java#L70-L883
+  list:
+    - 'BLOCK_NOTE_BLOCK_BELL'
+
+ranks:
+  - name: 'vip'
+    permission: 'djp.vip'
+    priority: 10
+    join:
+      enabled: true
+      message: '&6[&3VIP&6] &b{player} &ehas joined the game!'
+      sound:
+        enabled: true
+        sound: ENTITY_IRONGOLEM_DEATH
+      firework: true
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &a&lVIP &b{player} %nl% &ehas joined the game!'
+  - name: 'elite'
+    permission: 'djp.elite'
+    priority: 20
+    join:
+      enabled: true
+      message: '&6[&aElite&6] &b{player} &ehas joined the game!'
+      sound:
+        enabled: true
+        sound: ENTITY_IRONGOLEM_DEATH
+      firework: true
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &a&lElite &b{player} %nl% &ehas joined the game!'
+    quit:
+      enabled: true
+      message: '&e{player} has left the game'
+      sound:
+        enabled: true
+        sound: ENTITY_IRONGOLEM_DEATH
+      firework: false
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &a&lVIP &b{player} %nl% &ehas left the game!'
+    world:
+      worlds:
+        # Whitelist or blacklist, if whitelist, only the entered worlds will be used
+        # If blacklist, only worlds that aren't entered below will be used
+        mode: whitelist
+        list:
+          - world
+          - world2
+      join:
+        enabled: false
+        message: '&8(&cServer&8) &7(&aVIP&7) &b{player} &ehas joined the world!'
+        sound:
+          enabled: true
+          sound: ENTITY_IRONGOLEM_DEATH
+        firework: true
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &a&lVIP &b{player} %nl% &ehas joined the world!'
+      quit:
+        enabled: false
+        message: '&8(&cServer&8) &7(&aVIP&7) &b{player} &ehas left the world!'
+        sound:
+          enabled: true
+          sound: ENTITY_IRONGOLEM_DEATH
+        firework: false
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &a&lVIP &b{player} %nl% &ehas left the world!'
+  - name: 'MVP'
+    permission: 'djp.mvp'
+    priority: 20
+    join:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ehas joined the game!'
+      sound:
+        enabled: true
+        sound: BLOCK_PORTAL_TRAVEL
+      firework: true
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &9&lMVP &b{player} %nl% &ehas joined the game!'
+    quit:
+      enabled: true
+      message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ehas left the game!'
+      sound:
+        enabled: true
+        sound: BLOCK_PORTAL_TRAVEL
+      firework: false
+      commands:
+        enabled: false
+        commands:
+          # TitleManager example
+          - 'tm bc &9&lMVP &b{player} %nl% &ehas left the game!'
+    world:
+      join:
+        enabled: false
+        message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ehas joined the world!'
+        sound:
+          enabled: true
+          sound: BLOCK_PORTAL_TRAVEL
+        firework: true
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &9&lMVP &b{player} %nl% &ehas joined the world!'
+      quit:
+        enabled: false
+        message: '&8(&cServer&8) &7(&9MVP&7) &b{player} &ehas left the world!'
+        sound:
+          enabled: true
+          sound: BLOCK_PORTAL_TRAVEL
+        firework: false
+        commands:
+          enabled: false
+          commands:
+            # TitleManager example
+            - 'tm bc &9&lMVP &b{player} %nl% &ehas left the world!'
