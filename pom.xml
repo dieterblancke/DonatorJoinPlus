@@ -7,7 +7,7 @@
     <groupId>com.dbsoftwares.donatorjoin</groupId>
     <artifactId>DonatorJoinPlus</artifactId>
     <packaging>pom</packaging>
-    <version>2.3.5</version>
+    <version>2.3.6</version>
     <modules>
         <module>core</module>
         <module>spigot</module>
