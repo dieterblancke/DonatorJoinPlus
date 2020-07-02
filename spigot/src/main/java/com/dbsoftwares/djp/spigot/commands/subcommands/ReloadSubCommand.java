@@ -41,6 +41,7 @@ public class ReloadSubCommand extends SubCommand
         final DonatorJoinPlus plugin = DonatorJoinPlus.i();
 
         plugin.loadConfig();
+        plugin.reloadConfig();
 
         sender.sendMessage( Utils.getMessage( "reloaded" ) );
     }

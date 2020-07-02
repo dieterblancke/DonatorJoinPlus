@@ -197,7 +197,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         usePermissions = configuration.getBoolean( "usepermissions" );
     }
 
-    private void loadMessages()
+    public void loadMessages()
     {
         if ( messages == null )
         {
