@@ -4,6 +4,7 @@ import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
 import com.dbsoftwares.djp.spigot.data.EventData;
 import com.dbsoftwares.djp.spigot.data.EventData.EventType;
 import com.dbsoftwares.djp.spigot.data.RankData;
+import com.dbsoftwares.djp.spigot.data.WorldEventData;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
 import com.dbsoftwares.djp.spigot.utils.XSound;
 import com.dbsoftwares.djp.user.User;
@@ -189,7 +190,7 @@ public class PlayerListener implements Listener
         for ( RankData data : DonatorJoinPlus.i().getRankData() )
         {
             final EventType type = join ? EventType.JOIN : EventType.QUIT;
-            final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).getOrDefault( type, null );
+            final EventData eventData = ( world != null ? data.getWorldEvents() : data.getEvents() ).getOrDefault( type, null );
 
             if ( eventData == null )
             {
@@ -232,6 +233,10 @@ public class PlayerListener implements Listener
 
     private void executeEventData( final User user, final Player p, final EventData eventData, final World world )
     {
+        if ( eventData instanceof WorldEventData && world != null && ( (WorldEventData) eventData ).ckeckWorld( world.getName() ) )
+        {
+            return;
+        }
         if ( eventData.isEnabled() )
         {
             final String message = formatString( p, eventData.getMessage() );
@@ -260,9 +265,9 @@ public class PlayerListener implements Listener
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() && (user == null || !user.isSoundToggled()) )
+            if ( eventData.isSoundEnabled() && ( user == null || !user.isSoundToggled() ) )
             {
-                final String soundName = user == null ? null : (eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound());
+                final String soundName = user == null ? null : ( eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
 
                 if ( soundName != null && XSound.contains( soundName ) )
                 {

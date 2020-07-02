@@ -33,7 +33,7 @@ public class RankData
 
         for ( EventType type : EventType.values() )
         {
-            final EventData eventData = getData( type, section );
+            final EventData eventData = getData( type, section, false );
 
             if ( eventData != null )
             {
@@ -42,7 +42,7 @@ public class RankData
 
             if ( worldSection != null )
             {
-                final EventData worldEventData = getData( type, worldSection );
+                final EventData worldEventData = getData( type, worldSection, true );
 
                 if ( worldEventData != null )
                 {
@@ -52,18 +52,29 @@ public class RankData
         }
     }
 
-    private EventData getData( EventType type, ISection section )
+    private EventData getData( final EventType type, final ISection section, final boolean world )
     {
         final String path = type.toString().toLowerCase();
-        section = section.exists( path ) ? section.getSection( path ) : null;
+        final ISection typeSection = section.exists( path ) ? section.getSection( path ) : null;
 
-        if ( section == null )
+        if ( typeSection == null )
         {
             return null;
         }
 
-        final EventData data = new EventData( type );
-        data.fromSection( section );
-        return data;
+        if ( world )
+        {
+            final WorldEventData worldEventData = new WorldEventData( type );
+
+            worldEventData.fromSection( section, typeSection );
+            return worldEventData;
+        }
+        else
+        {
+            final EventData eventData = new EventData( type );
+
+            eventData.fromSection( typeSection );
+            return eventData;
+        }
     }
 }
