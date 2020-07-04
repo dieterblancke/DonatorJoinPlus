@@ -26,6 +26,7 @@ public class DJCommand extends MainSpigotCommand
         subCommands.add( new LeaveSoundSubCommand() );
         subCommands.add( new ToggleSoundSubCommand() );
         subCommands.add( new ToggleFireworkSubCommand() );
+        subCommands.add( new ToggleMessageSubCommand() );
 
         loadMessageConfig();
     }
@@ -43,11 +44,7 @@ public class DJCommand extends MainSpigotCommand
     @Override
     public void onExecute( CommandSender sender, String[] args )
     {
-        if ( args.length == 0 )
-        {
-            sender.sendMessage( Utils.getMessage( "help" ) );
-        }
-        else
+        if ( args.length != 0 )
         {
             for ( SubCommand subCommand : subCommands )
             {

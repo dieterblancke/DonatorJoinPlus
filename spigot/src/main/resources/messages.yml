@@ -37,6 +37,9 @@ firework:
     disabled: '&eJoin and quit firework is now &cdisabled&e!'
     enabled-other: '&eJoin and quit firework is now &aenabled &efor &b{player}&e!'
     disabled-other: '&eJoin and quit firework is now &cdisabled &efor &b{player}&e!'
+messages:
+  muted: '&cAll join & quit messages are now muted.'
+  unmuted: '&aAll join & quit messages are now unmuted.'
 help:
   - '&e&lDonatorJoin+ Command Help:'
   - '&f- /djp reload &7- reloads the configuration'
@@ -49,3 +52,4 @@ help:
   - '&f- /djp leavesound (sound) [player] &7- changes the leave sound for you or another player'
   - '&f- /djp togglesound [player] &7- toggles the join / quit sounds for you or another player'
   - '&f- /djp togglefirework [player] &7- toggles the join / quit firework for you or another player'
+  - '&f- /djp togglemessages &7- toggles the join / quit messages for all players (you will not see their join / quit messages anymore)'

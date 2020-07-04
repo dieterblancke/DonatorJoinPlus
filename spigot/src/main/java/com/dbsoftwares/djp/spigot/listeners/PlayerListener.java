@@ -77,7 +77,7 @@ public class PlayerListener implements Listener
         {
             for ( String message : DonatorJoinPlus.i().getConfiguration().getStringList( "firstjoin.message" ) )
             {
-                Bukkit.broadcastMessage( Utils.c( message.replace( "{player}", player.getName() ) ) );
+                broadcast( Utils.c( message.replace( "{player}", player.getName() ) ) );
             }
         }
     }
@@ -258,7 +258,7 @@ public class PlayerListener implements Listener
                     }
                     else
                     {
-                        Bukkit.broadcastMessage( msg );
+                        broadcast( msg );
                     }
                 }
             }
@@ -322,5 +322,18 @@ public class PlayerListener implements Listener
             str = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders( (OfflinePlayer) p, str );
         }
         return str;
+    }
+
+    private void broadcast( final String msg )
+    {
+        for ( Player player : Bukkit.getOnlinePlayers() )
+        {
+            final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+
+            if ( user == null || !user.isMessagesMuted() )
+            {
+                player.sendMessage( msg );
+            }
+        }
     }
 }

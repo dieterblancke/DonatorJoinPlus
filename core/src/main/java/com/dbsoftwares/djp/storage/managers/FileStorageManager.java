@@ -179,6 +179,15 @@ public class FileStorageManager extends AbstractStorageManager
     }
 
     @Override
+    public void toggleMessagesMuted( UUID uuid, boolean toggled )
+    {
+        final ISection userSection = storage.getSection( "users" );
+        userSection.set( uuid.toString() + ".messagesmuted", toggled );
+
+        checkToSave();
+    }
+
+    @Override
     public boolean isSoundToggled( UUID uuid )
     {
         final ISection userSection = storage.getSection( "users" );
@@ -192,6 +201,14 @@ public class FileStorageManager extends AbstractStorageManager
         final ISection userSection = storage.getSection( "users" );
 
         return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".fireworktoggled" );
+    }
+
+    @Override
+    public boolean isMessagesMuted( UUID uuid )
+    {
+        final ISection userSection = storage.getSection( "users" );
+
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".messagesmuted" );
     }
 
     @Override
@@ -212,7 +229,8 @@ public class FileStorageManager extends AbstractStorageManager
                 getOrDefault( section, "joinsound", null ),
                 getOrDefault( section, "leavesound", null ),
                 getOrDefault( section, "soundtoggled", false ),
-                getOrDefault( section, "fireworktoggled", false )
+                getOrDefault( section, "fireworktoggled", false ),
+                getOrDefault( section, "messagesmtued", false )
         );
     }
 

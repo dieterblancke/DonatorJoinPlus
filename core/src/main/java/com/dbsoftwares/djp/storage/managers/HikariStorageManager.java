@@ -92,6 +92,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             initLeaveSoundColumn( connection, metaData );
             initSoundToggledColumn( connection, metaData );
             initFireworkToggledColumn( connection, metaData );
+            initMessagessMutedColumn( connection, metaData );
         }
         catch ( SQLException e )
         {
@@ -106,7 +107,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             if ( !rs.next() )
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD slotgroup VARCHAR(128) NOT NULL DEFAULT 'none';" )
+                        "ALTER TABLE djp_data ADD slotgroup VARCHAR(1) NOT NULL DEFAULT 'none';" )
                 )
                 {
                     pstmt.execute();
@@ -122,7 +123,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             if ( !rs.next() )
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD joinsound VARCHAR(128) DEFAULT NULL;" )
+                        "ALTER TABLE djp_data ADD joinsound VARCHAR(1) DEFAULT NULL;" )
                 )
                 {
                     pstmt.execute();
@@ -138,7 +139,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             if ( !rs.next() )
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD leavesound VARCHAR(128) DEFAULT NULL;" )
+                        "ALTER TABLE djp_data ADD leavesound VARCHAR(1) DEFAULT NULL;" )
                 )
                 {
                     pstmt.execute();
@@ -154,7 +155,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             if ( !rs.next() )
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD soundtoggled TINYINT(128) NOT NULL DEFAULT 0;" )
+                        "ALTER TABLE djp_data ADD soundtoggled TINYINT(1) NOT NULL DEFAULT 0;" )
                 )
                 {
                     pstmt.execute();
@@ -170,7 +171,23 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             if ( !rs.next() )
             {
                 try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD fireworktoggled TINYINT(128) NOT NULL DEFAULT 0;" )
+                        "ALTER TABLE djp_data ADD fireworktoggled TINYINT(1) NOT NULL DEFAULT 0;" )
+                )
+                {
+                    pstmt.execute();
+                }
+            }
+        }
+    }
+
+    private void initMessagessMutedColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
+    {
+        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "messagesmuted" ) )
+        {
+            if ( !rs.next() )
+            {
+                try ( PreparedStatement pstmt = connection.prepareStatement(
+                        "ALTER TABLE djp_data ADD messagesmuted TINYINT(1) NOT NULL DEFAULT 0;" )
                 )
                 {
                     pstmt.execute();
@@ -382,6 +399,25 @@ public abstract class HikariStorageManager extends AbstractStorageManager
     }
 
     @Override
+    public void toggleMessagesMuted( UUID uuid, boolean toggled )
+    {
+        try ( Connection connection = getConnection() )
+        {
+            try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET messagesmuted = ? WHERE uuid = ?;" ) )
+            {
+                pstmt.setBoolean( 1, toggled );
+                pstmt.setString( 2, uuid.toString() );
+
+                pstmt.executeUpdate();
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
+        }
+    }
+
+    @Override
     public boolean isSoundToggled( final UUID uuid )
     {
         boolean toggled = false;
@@ -426,6 +462,28 @@ public abstract class HikariStorageManager extends AbstractStorageManager
     }
 
     @Override
+    public boolean isMessagesMuted( final UUID uuid )
+    {
+        boolean toggled = false;
+        try ( Connection connection = getConnection();
+              PreparedStatement pstmt = connection.prepareStatement( "SELECT messagesmuted FROM djp_data WHERE uuid = ? AND messagesmuted = ?;" ) )
+        {
+            pstmt.setString( 1, uuid.toString() );
+            pstmt.setBoolean( 2, true );
+
+            try ( ResultSet rs = pstmt.executeQuery() )
+            {
+                toggled = rs.next();
+            }
+        }
+        catch ( SQLException e )
+        {
+            DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
+        }
+        return toggled;
+    }
+
+    @Override
     public User getUser( final UUID uuid )
     {
         if ( !exists( uuid ) )
@@ -452,7 +510,8 @@ public abstract class HikariStorageManager extends AbstractStorageManager
                                 rs.getString( "joinsound" ),
                                 rs.getString( "leavesound" ),
                                 rs.getBoolean( "soundtoggled" ),
-                                rs.getBoolean( "fireworktoggled" )
+                                rs.getBoolean( "fireworktoggled" ),
+                                rs.getBoolean( "messagesmuted" )
                         );
                     }
                 }

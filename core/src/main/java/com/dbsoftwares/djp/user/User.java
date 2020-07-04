@@ -19,5 +19,6 @@ public class User
     private String leaveSound;
     private boolean soundToggled;
     private boolean fireworkToggled;
+    private boolean messagesMuted;
 
 }
