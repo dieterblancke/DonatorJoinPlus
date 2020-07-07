@@ -41,7 +41,7 @@ messages:
   muted: '&cAll join & quit messages are now muted.'
   unmuted: '&aAll join & quit messages are now unmuted.'
 help:
-  - '&e&lDonatorJoin+ Command Help:'
+  - '&e&lCommand Help:'
   - '&f- /djp reload &7- reloads the configuration'
   - '&f- /djp toggle [player] &7- toggles the join / quit messages for you or another player'
   - '&f- /djp enable [player] &7- enables the join / quit messages for you or another player'
