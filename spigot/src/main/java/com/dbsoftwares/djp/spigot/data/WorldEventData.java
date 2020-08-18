@@ -42,7 +42,7 @@ public class WorldEventData extends EventData
 
     public boolean ckeckWorld( final String world )
     {
-        if ( shouldFilterWorlds )
+        if ( !shouldFilterWorlds )
         {
             return false;
         }
