@@ -16,12 +16,6 @@ public class Utils
     {
     }
 
-    public static String c( String message )
-    {
-        // not recommended, but doing it anyways :D
-        return message.replace( "&", "§" );
-    }
-
     public static String getMessage( final String path )
     {
         final ISection messages = DonatorJoinCore.getInstance().getMessages();
@@ -36,16 +30,16 @@ public class Utils
             message = messages.getString( path );
         }
 
-        return c( getPrefix() + message );
+        return DonatorJoinCore.getInstance().color( getPrefix() + message );
     }
 
     public static String prefixedMessage( final String message )
     {
-        return c( getPrefix() + message );
+        return DonatorJoinCore.getInstance().color( getPrefix() + message );
     }
 
     public static String getPrefix()
     {
-        return c( DonatorJoinCore.getInstance().getMessages().getString( "prefix" ) );
+        return DonatorJoinCore.getInstance().color( DonatorJoinCore.getInstance().getMessages().getString( "prefix" ) );
     }
 }

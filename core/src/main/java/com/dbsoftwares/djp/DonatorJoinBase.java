@@ -22,4 +22,6 @@ public interface DonatorJoinBase
     File getDataFolder();
 
     ISection getMessages();
+
+    String color( String s );
 }

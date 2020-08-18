@@ -216,7 +216,7 @@ public class PlayerListener implements Listener
             str = str.replace( "%server%", p.getServer().getInfo().getName() );
             str = str.replace( "{server}", p.getServer().getInfo().getName() );
         }
-        str = Utils.c( str );
+        str = BungeeUtils.c( str );
 
         if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )
         {

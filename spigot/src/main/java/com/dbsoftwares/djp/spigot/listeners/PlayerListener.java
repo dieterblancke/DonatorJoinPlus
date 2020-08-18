@@ -77,7 +77,7 @@ public class PlayerListener implements Listener
         {
             for ( String message : DonatorJoinPlus.i().getConfiguration().getStringList( "firstjoin.message" ) )
             {
-                broadcast( Utils.c( message.replace( "{player}", player.getName() ) ) );
+                broadcast( SpigotUtils.c( message.replace( "{player}", player.getName() ) ) );
             }
         }
     }
@@ -315,7 +315,7 @@ public class PlayerListener implements Listener
         }
         str = str.replace( "%player%", p.getName() );
         str = str.replace( "{player}", p.getName() );
-        str = Utils.c( str );
+        str = SpigotUtils.c( str );
 
         if ( Bukkit.getPluginManager().isPluginEnabled( "PlaceholderAPI" ) )
         {
