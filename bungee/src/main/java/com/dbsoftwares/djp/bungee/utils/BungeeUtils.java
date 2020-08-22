@@ -21,7 +21,7 @@ public class BungeeUtils
 
     public static PlayerStorageData get( final ProxiedPlayer player )
     {
-        return STORAGE_DATA_MAP.get( player.getUniqueId().toString() );
+        return STORAGE_DATA_MAP.getOrDefault( player.getUniqueId().toString(), new PlayerStorageData( player.getUniqueId() ) );
     }
 
     public static PlayerStorageData remove( final ProxiedPlayer player )
