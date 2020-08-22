@@ -7,7 +7,6 @@ import com.dbsoftwares.djp.bungee.data.RankData;
 import com.dbsoftwares.djp.bungee.utils.BungeeUtils;
 import com.dbsoftwares.djp.bungee.utils.PlayerStorageData;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
-import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.md_5.bungee.api.ProxyServer;
@@ -173,9 +172,12 @@ public class PlayerListener implements Listener
         {
             final String message = formatString( p, eventData.getMessage() );
 
-            for ( String msg : message.split( "<nl>" ) )
+            if ( !message.isEmpty() )
             {
-                ProxyServer.getInstance().broadcast( TextComponent.fromLegacyText( msg ) );
+                for ( String msg : message.split( "<nl>" ) )
+                {
+                    ProxyServer.getInstance().broadcast( TextComponent.fromLegacyText( msg ) );
+                }
             }
 
             if ( eventData.isCommandsEnabled() && eventData.getCommands() != null && !eventData.getCommands().isEmpty() )
