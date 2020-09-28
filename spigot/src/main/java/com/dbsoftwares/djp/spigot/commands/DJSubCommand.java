@@ -64,8 +64,7 @@ public abstract class DJSubCommand extends SubCommand
 
     protected boolean validateSound( final String sound, final CommandSender sender )
     {
-        if ( !XSound.contains( sound )
-                || !XSound.matchXSound( sound ).isPresent()
+        if ( !XSound.matchXSound( sound ).isPresent()
                 || !XSound.matchXSound( sound ).get().isSupported() )
         {
             sender.sendMessage(
