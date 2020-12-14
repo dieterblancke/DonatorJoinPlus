@@ -1,6 +1,5 @@
 package com.dbsoftwares.djp.spigot.utils;
 
-import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -21,7 +20,8 @@ public class ReflectionUtils
         try
         {
             return clazz.getMethod( "getHandle" ).invoke( o );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             return null;
         }
@@ -32,7 +32,8 @@ public class ReflectionUtils
         try
         {
             return getMethod( "getHandle", o.getClass() ).invoke( o );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             return null;
         }
@@ -43,7 +44,8 @@ public class ReflectionUtils
         try
         {
             return getField( handle.getClass(), "playerConnection" ).get( handle );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             return null;
         }
@@ -54,7 +56,8 @@ public class ReflectionUtils
         try
         {
             return Class.forName( name );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -68,7 +71,8 @@ public class ReflectionUtils
         try
         {
             clazz = Class.forName( cname );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -82,7 +86,8 @@ public class ReflectionUtils
         try
         {
             clazz = Class.forName( cname );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -107,7 +112,7 @@ public class ReflectionUtils
     {
         for ( Method m : clazz.getMethods() )
         {
-            if ( m.getName().equals( name ) && ( args.length == 0 || classList( args, m.getParameterTypes() ) ) )
+            if ( m.getName().equals( name ) && (args.length == 0 || classList( args, m.getParameterTypes() )) )
             {
                 m.setAccessible( true );
                 return m;
@@ -128,7 +133,8 @@ public class ReflectionUtils
             Field field = clazz.getDeclaredField( name );
             field.setAccessible( true );
             return field;
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
@@ -177,7 +183,8 @@ public class ReflectionUtils
             Constructor<?> constructor = clazz.getConstructor( parameterTypes );
             constructor.setAccessible( true );
             return constructor;
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             return null;
         }
@@ -204,7 +211,7 @@ public class ReflectionUtils
         Class<?>[] types = new Class<?>[a];
         for ( int i = 0; i < a; i++ )
         {
-            types[i] =getPrimitiveType( classes[i] );
+            types[i] = getPrimitiveType( classes[i] );
         }
         return types;
     }
@@ -243,9 +250,9 @@ public class ReflectionUtils
         return equal;
     }
 
-    public static String getServerVersion()
+    public static int getNumericVersion()
     {
-        return Bukkit.getServer().getClass().getPackage().getName().substring( 23 );
+        return Integer.parseInt( getVersionName().replaceAll( "[^0-9]", "" ) );
     }
 
     public static void sendPacket( Player player, Object packet )
@@ -257,7 +264,8 @@ public class ReflectionUtils
             Method sendPacket = getMethod( connection.getClass(), "sendPacket" );
 
             sendPacket.invoke( connection, packet );
-        } catch ( IllegalAccessException | InvocationTargetException e )
+        }
+        catch ( IllegalAccessException | InvocationTargetException e )
         {
             e.printStackTrace();
         }
@@ -265,8 +273,8 @@ public class ReflectionUtils
 
     public enum PackageType
     {
-        MINECRAFT_SERVER( "net.minecraft.server." + getServerVersion() ),
-        CRAFTBUKKIT( "org.bukkit.craftbukkit." + getServerVersion() ),
+        MINECRAFT_SERVER( "net.minecraft.server." + getVersionName() ),
+        CRAFTBUKKIT( "org.bukkit.craftbukkit." + getVersionName() ),
         CRAFTBUKKIT_BLOCK( CRAFTBUKKIT, "block" ),
         CRAFTBUKKIT_CHUNKIO( CRAFTBUKKIT, "chunkio" ),
         CRAFTBUKKIT_COMMAND( CRAFTBUKKIT, "command" ),
@@ -308,7 +316,8 @@ public class ReflectionUtils
             try
             {
                 return Class.forName( this + "." + className );
-            } catch ( ClassNotFoundException e )
+            }
+            catch ( ClassNotFoundException e )
             {
                 return null;
             }

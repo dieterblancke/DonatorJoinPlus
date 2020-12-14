@@ -266,4 +266,10 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
 
         return (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY );
     }
+
+    @Override
+    public String color( String s )
+    {
+        return SpigotUtils.c( s );
+    }
 }

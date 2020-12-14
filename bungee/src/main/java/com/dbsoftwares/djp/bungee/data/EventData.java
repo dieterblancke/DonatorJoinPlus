@@ -10,10 +10,13 @@ import com.dbsoftwares.configuration.api.ISection;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Random;
 
 @Data
 public class EventData
 {
+
+    private static final Random RANDOM = new Random();
 
     private EventType type;
     private boolean enabled;
@@ -48,6 +51,18 @@ public class EventData
 
             this.commandsEnabled = commands.getBoolean( "enabled" );
             this.commands = commands.getStringList( "commands" );
+        }
+    }
+
+    public Object getMessage()
+    {
+        if ( message instanceof List )
+        {
+            return ( (List<?>) message ).get( RANDOM.nextInt( ( (List<?>) message ).size() ) );
+        }
+        else
+        {
+            return message;
         }
     }
 

@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -266,21 +267,22 @@ public class PlayerListener implements Listener
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() && ( user == null || !user.isSoundToggled() ) )
+            if ( eventData.isSoundEnabled() && (user == null || !user.isSoundToggled()) )
             {
-                final String soundName = user == null ? null : ( eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
+                final String soundName = user == null ? null : (eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound());
+                final Optional<XSound> optionalXSound = XSound.matchXSound(soundName);
 
-                if ( soundName != null && XSound.contains( soundName ) )
+                if ( soundName != null && optionalXSound.isPresent() )
                 {
-                    final XSound sound = XSound.matchXSound( soundName ).orElse( null );
+                    final XSound sound = optionalXSound.get();
 
-                    sound.playSound( p, 20F, -20F );
+                    sound.play( p, 20F, -20F );
                 }
                 else if ( eventData.getSound() != null )
                 {
                     final XSound sound = XSound.matchXSound( eventData.getSound() );
 
-                    sound.playSound( p, 20F, -20F );
+                    sound.play( p, 20F, -20F );
                 }
             }
 

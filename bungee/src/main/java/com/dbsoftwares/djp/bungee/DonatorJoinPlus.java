@@ -7,6 +7,7 @@ import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.bungee.commands.DJCommand;
 import com.dbsoftwares.djp.bungee.data.RankData;
 import com.dbsoftwares.djp.bungee.listeners.PlayerListener;
+import com.dbsoftwares.djp.bungee.utils.BungeeUtils;
 import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
@@ -160,5 +161,11 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinBase
     public InputStream getResource( String resource )
     {
         return getResourceAsStream( resource );
+    }
+
+    @Override
+    public String color( String s )
+    {
+        return BungeeUtils.c( s );
     }
 }

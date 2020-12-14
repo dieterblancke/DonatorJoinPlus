@@ -7,6 +7,7 @@ package com.dbsoftwares.djp.spigot.utils;
  */
 
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
+import net.md_5.bungee.api.ChatColor;
 import com.dbsoftwares.djp.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,12 +23,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpigotUtils
 {
 
     public static final String USER_KEY = "DJP_USER";
+    private static final Pattern HEX_PATTERN = Pattern.compile( "<#([A-Fa-f0-9]){6}>" );
 
     private SpigotUtils()
     {
@@ -129,6 +133,30 @@ public class SpigotUtils
         {
             return null;
         }
+    }
+
+    public static String c( final String s )
+    {
+        if ( ReflectionUtils.getNumericVersion() > 160 )
+        {
+            return applyColor( s );
+        }
+        return ChatColor.translateAlternateColorCodes( '&', s );
+    }
+
+    private static String applyColor( String message )
+    {
+        Matcher matcher = HEX_PATTERN.matcher( message );
+        while ( matcher.find() )
+        {
+            final ChatColor hexColor = ChatColor.of( matcher.group().substring( 1, matcher.group().length() - 1 ) );
+            final String before = message.substring( 0, matcher.start() );
+            final String after = message.substring( matcher.end() );
+
+            message = before + hexColor + after;
+            matcher = HEX_PATTERN.matcher( message );
+        }
+        return ChatColor.translateAlternateColorCodes( '&', message );
     }
 
     public static String formatString( final Player p, String str )
