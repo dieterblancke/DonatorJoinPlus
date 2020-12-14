@@ -11,6 +11,7 @@ import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.spigot.utils.XSound;
 import lombok.Data;
 import org.bukkit.Sound;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ public class EventData
 
     private EventType type;
     private boolean enabled;
-    private String message;
+    private Object message;
     private boolean soundEnabled;
     private Sound sound;
     private boolean firework;
@@ -35,7 +36,19 @@ public class EventData
     public void fromSection( final ISection section )
     {
         this.enabled = section.getBoolean( "enabled" );
-        this.message = section.getString( "message" );
+
+        if ( section.isList( "message" ) )
+        {
+            message = section.getList( "message" );
+        }
+        else if ( section.isSection( "message" ) )
+        {
+            message = section.getSection( "message" );
+        }
+        else
+        {
+            message = section.getString( "message" );
+        }
 
         final ISection sound = section.getSection( "sound" );
         this.soundEnabled = sound.getBoolean( "enabled" );

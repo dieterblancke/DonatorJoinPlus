@@ -27,8 +27,8 @@ import java.util.logging.Level;
 public class DonatorJoinPlus extends Plugin implements DonatorJoinBase
 {
 
+    private final List<RankData> rankData = Lists.newArrayList();
     private Permission permission;
-    private List<RankData> rankData = Lists.newArrayList();
     private boolean usePriorities;
     private AbstractStorageManager storage;
     private IConfiguration configuration;

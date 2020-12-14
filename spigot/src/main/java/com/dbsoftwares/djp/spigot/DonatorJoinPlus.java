@@ -43,8 +43,9 @@ import java.util.logging.Level;
 public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
 {
 
+    private final List<RankData> rankData = Lists.newArrayList();
+    private final List<SlotLimit> slotLimits = Lists.newArrayList();
     private Permission permission;
-    private List<RankData> rankData = Lists.newArrayList();
     private boolean disableJoinMessage;
     private boolean disableQuitMessage;
     private boolean usePriorities;
@@ -52,7 +53,6 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
     private AbstractStorageManager storage;
     private IConfiguration configuration;
     private SlotResizer slotResizer;
-    private List<SlotLimit> slotLimits = Lists.newArrayList();
     private IConfiguration messages;
 
     public static DonatorJoinPlus i()
@@ -119,7 +119,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
 
             if ( storage instanceof FileStorageManager )
             {
-                ((FileStorageManager) storage).convert();
+                ( (FileStorageManager) storage ).convert();
             }
         }
         catch ( Exception e )

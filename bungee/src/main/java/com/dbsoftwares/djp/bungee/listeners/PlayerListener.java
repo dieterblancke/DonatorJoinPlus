@@ -5,9 +5,9 @@ import com.dbsoftwares.djp.bungee.DonatorJoinPlus;
 import com.dbsoftwares.djp.bungee.data.EventData;
 import com.dbsoftwares.djp.bungee.data.RankData;
 import com.dbsoftwares.djp.bungee.utils.BungeeUtils;
+import com.dbsoftwares.djp.bungee.utils.MessageBuilder;
 import com.dbsoftwares.djp.bungee.utils.PlayerStorageData;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
-import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.md_5.bungee.api.ProxyServer;
@@ -138,7 +138,7 @@ public class PlayerListener implements Listener
         }
         for ( String message : DonatorJoinPlus.i().getConfiguration().getStringList( "firstjoin.message" ) )
         {
-            ProxyServer.getInstance().broadcast( TextComponent.fromLegacyText( formatString( player, message ) ) );
+            ProxyServer.getInstance().broadcast( TextComponent.fromLegacyText( BungeeUtils.formatString( player, message ) ) );
         }
     }
 
@@ -171,21 +171,17 @@ public class PlayerListener implements Listener
     {
         if ( eventData != null && eventData.isEnabled() )
         {
-            final String message = formatString( p, eventData.getMessage() );
+            final TextComponent textComponent = MessageBuilder.buildMessage( p, eventData.getMessage() );
 
-            for ( String msg : message.split( "<nl>" ) )
-            {
-                ProxyServer.getInstance().broadcast( TextComponent.fromLegacyText( msg ) );
-            }
+            ProxyServer.getInstance().broadcast( textComponent );
 
             if ( eventData.isCommandsEnabled() && eventData.getCommands() != null && !eventData.getCommands().isEmpty() )
             {
                 for ( String command : eventData.getCommands() )
                 {
-                    command = formatString( p, command );
+                    command = BungeeUtils.formatString( p, command );
 
                     DonatorJoinPlus.i().debug( "Executing command " + command + " for player " + p.getName() + "." );
-
 
                     if ( command.startsWith( "player:" ) )
                     {
@@ -204,28 +200,5 @@ public class PlayerListener implements Listener
                 }
             }
         }
-    }
-
-    private String formatString( final ProxiedPlayer p, String str )
-    {
-        str = str.replace( "%player%", p.getName() );
-        str = str.replace( "{player}", p.getName() );
-
-        if ( p.getServer() != null && p.getServer().getInfo() != null )
-        {
-            str = str.replace( "%server%", p.getServer().getInfo().getName() );
-            str = str.replace( "{server}", p.getServer().getInfo().getName() );
-        }
-        str = Utils.c( str );
-
-        if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )
-        {
-            // formatting message with BungeeUtilisalsX placeholders :^)
-            str = com.dbsoftwares.bungeeutilisals.api.placeholder.PlaceHolderAPI.formatMessage(
-                    com.dbsoftwares.bungeeutilisals.api.BUCore.getApi().getUser( p ).orElse( null ),
-                    str
-            );
-        }
-        return str;
     }
 }

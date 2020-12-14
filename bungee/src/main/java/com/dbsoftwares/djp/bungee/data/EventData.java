@@ -17,7 +17,7 @@ public class EventData
 
     private EventType type;
     private boolean enabled;
-    private String message;
+    private Object message;
     private boolean commandsEnabled;
     private List<String> commands;
 
@@ -29,7 +29,18 @@ public class EventData
     public void fromSection( final ISection section )
     {
         this.enabled = section.getBoolean( "enabled" );
-        this.message = section.getString( "message" );
+        if ( section.isList( "message" ) )
+        {
+            message = section.getList( "message" );
+        }
+        else if ( section.isSection( "message" ) )
+        {
+            message = section.getSection( "message" );
+        }
+        else
+        {
+            message = section.getString( "message" );
+        }
 
         if ( section.exists( "commands" ) )
         {

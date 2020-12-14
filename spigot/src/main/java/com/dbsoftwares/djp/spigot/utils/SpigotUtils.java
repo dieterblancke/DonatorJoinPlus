@@ -7,6 +7,9 @@ package com.dbsoftwares.djp.spigot.utils;
  */
 
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
+import com.dbsoftwares.djp.utils.Utils;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -14,9 +17,12 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpigotUtils
 {
@@ -123,5 +129,40 @@ public class SpigotUtils
         {
             return null;
         }
+    }
+
+    public static String formatString( final Player p, String str )
+    {
+        if ( str == null || str.isEmpty() )
+        {
+            return "";
+        }
+        str = str.replace( "%player%", p.getName() );
+        str = str.replace( "{player}", p.getName() );
+        str = Utils.c( str );
+
+        if ( Bukkit.getPluginManager().isPluginEnabled( "PlaceholderAPI" ) )
+        {
+            str = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders( (OfflinePlayer) p, str );
+        }
+        return str;
+    }
+
+    public static BaseComponent[] format( final Player player, final List<String> messages )
+    {
+        final AtomicInteger count = new AtomicInteger();
+        return messages
+                .stream()
+                .map( message ->
+                {
+                    if ( count.incrementAndGet() >= messages.size() )
+                    {
+                        return Utils.c( formatString( player, message ) );
+                    }
+                    return Utils.c( formatString( player, message + "\n" ) );
+                } )
+                .map( message -> new BaseComponent[]{ new TextComponent( message ) } )
+                .flatMap( Arrays::stream )
+                .toArray( BaseComponent[]::new );
     }
 }

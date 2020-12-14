@@ -5,14 +5,14 @@ import com.dbsoftwares.djp.spigot.data.EventData;
 import com.dbsoftwares.djp.spigot.data.EventData.EventType;
 import com.dbsoftwares.djp.spigot.data.RankData;
 import com.dbsoftwares.djp.spigot.data.WorldEventData;
+import com.dbsoftwares.djp.spigot.utils.MessageBuilder;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
 import com.dbsoftwares.djp.spigot.utils.XSound;
 import com.dbsoftwares.djp.user.User;
-import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -77,7 +77,7 @@ public class PlayerListener implements Listener
         {
             for ( String message : DonatorJoinPlus.i().getConfiguration().getStringList( "firstjoin.message" ) )
             {
-                broadcast( Utils.c( message.replace( "{player}", player.getName() ) ) );
+                broadcast( MessageBuilder.buildMessage( player, message.replace( "{player}", player.getName() ) ) );
             }
         }
     }
@@ -193,7 +193,7 @@ public class PlayerListener implements Listener
         for ( RankData data : DonatorJoinPlus.i().getRankData() )
         {
             final EventType type = join ? EventType.JOIN : EventType.QUIT;
-            final EventData eventData = (world != null ? data.getWorldEvents() : data.getEvents()).getOrDefault( type, null );
+            final EventData eventData = ( world != null ? data.getWorldEvents() : data.getEvents() ).getOrDefault( type, null );
 
             if ( eventData == null )
             {
@@ -236,30 +236,28 @@ public class PlayerListener implements Listener
 
     private void executeEventData( final User user, final Player p, final EventData eventData, final World world )
     {
-        if ( eventData instanceof WorldEventData && world != null && ((WorldEventData) eventData).ckeckWorld( world.getName() ) )
+        if ( eventData instanceof WorldEventData && world != null && ( (WorldEventData) eventData ).ckeckWorld( world.getName() ) )
         {
             return;
         }
+
         if ( eventData.isEnabled() )
         {
-            final String message = formatString( p, eventData.getMessage() );
+            final TextComponent textComponent = MessageBuilder.buildMessage( p, eventData.getMessage() );
 
-            if ( !message.isEmpty() )
+            if ( textComponent != null )
             {
-                for ( String msg : message.split( "<nl>" ) )
+                if ( world != null )
                 {
-                    if ( world != null )
+                    for ( Player player : world.getPlayers() )
                     {
-                        for ( Player player : world.getPlayers() )
-                        {
-                            player.sendMessage( msg );
-                        }
-                        Bukkit.getConsoleSender().sendMessage( msg );
+                        player.spigot().sendMessage( textComponent );
                     }
-                    else
-                    {
-                        broadcast( msg );
-                    }
+                    Bukkit.getConsoleSender().spigot().sendMessage( textComponent );
+                }
+                else
+                {
+                    broadcast( textComponent );
                 }
             }
 
@@ -268,9 +266,9 @@ public class PlayerListener implements Listener
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() && (user == null || !user.isSoundToggled()) )
+            if ( eventData.isSoundEnabled() && ( user == null || !user.isSoundToggled() ) )
             {
-                final String soundName = user == null ? null : (eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound());
+                final String soundName = user == null ? null : ( eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
 
                 if ( soundName != null && XSound.contains( soundName ) )
                 {
@@ -290,7 +288,7 @@ public class PlayerListener implements Listener
             {
                 for ( String command : eventData.getCommands() )
                 {
-                    command = formatString( p, command );
+                    command = SpigotUtils.formatString( p, command );
 
                     DonatorJoinPlus.i().debug( "Executing command " + command + " for player " + p.getName() + "." );
 
@@ -307,24 +305,7 @@ public class PlayerListener implements Listener
         }
     }
 
-    private String formatString( final Player p, String str )
-    {
-        if ( str == null || str.isEmpty() )
-        {
-            return "";
-        }
-        str = str.replace( "%player%", p.getName() );
-        str = str.replace( "{player}", p.getName() );
-        str = Utils.c( str );
-
-        if ( Bukkit.getPluginManager().isPluginEnabled( "PlaceholderAPI" ) )
-        {
-            str = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders( (OfflinePlayer) p, str );
-        }
-        return str;
-    }
-
-    private void broadcast( final String msg )
+    private void broadcast( final TextComponent component )
     {
         for ( Player player : Bukkit.getOnlinePlayers() )
         {
@@ -332,7 +313,7 @@ public class PlayerListener implements Listener
 
             if ( user == null || !user.isMessagesMuted() )
             {
-                player.sendMessage( msg );
+                player.spigot().sendMessage( component );
             }
         }
     }
