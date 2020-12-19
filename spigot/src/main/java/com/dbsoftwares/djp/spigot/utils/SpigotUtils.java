@@ -167,7 +167,7 @@ public class SpigotUtils
         }
         str = str.replace( "%player%", p.getName() );
         str = str.replace( "{player}", p.getName() );
-        str = Utils.c( str );
+        str = c( str );
 
         if ( Bukkit.getPluginManager().isPluginEnabled( "PlaceholderAPI" ) )
         {
@@ -185,9 +185,9 @@ public class SpigotUtils
                 {
                     if ( count.incrementAndGet() >= messages.size() )
                     {
-                        return Utils.c( formatString( player, message ) );
+                        return c( formatString( player, message ) );
                     }
-                    return Utils.c( formatString( player, message + "\n" ) );
+                    return c( formatString( player, message + "\n" ) );
                 } )
                 .map( message -> new BaseComponent[]{ new TextComponent( message ) } )
                 .flatMap( Arrays::stream )

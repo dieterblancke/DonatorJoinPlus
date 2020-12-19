@@ -105,7 +105,7 @@ public class MessageBuilder
         {
             component.setClickEvent( new ClickEvent(
                     ClickEvent.Action.valueOf( section.getString( "click.type" ) ),
-                    BungeeUtils.formatString( player, Utils.c( format(
+                    BungeeUtils.formatString( player, BungeeUtils.c( format(
                             section.getString( "click.action" ),
                             placeholders
                     ) ) )

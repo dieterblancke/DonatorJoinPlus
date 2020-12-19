@@ -61,7 +61,7 @@ public class BungeeUtils
             str = str.replace( "%server%", p.getServer().getInfo().getName() );
             str = str.replace( "{server}", p.getServer().getInfo().getName() );
         }
-        str = Utils.c( str );
+        str = c( str );
 
         if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )
         {
@@ -83,9 +83,9 @@ public class BungeeUtils
                 {
                     if ( count.incrementAndGet() >= messages.size() )
                     {
-                        return Utils.c( formatString( player, message ) );
+                        return c( formatString( player, message ) );
                     }
-                    return Utils.c( formatString( player, message + "\n" ) );
+                    return c( formatString( player, message + "\n" ) );
                 } )
                 .map( message -> new BaseComponent[]{ new TextComponent( message ) } )
                 .flatMap( Arrays::stream )

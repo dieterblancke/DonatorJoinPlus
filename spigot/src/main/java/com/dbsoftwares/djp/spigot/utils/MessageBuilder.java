@@ -105,7 +105,7 @@ public class MessageBuilder
         {
             component.setClickEvent( new ClickEvent(
                     ClickEvent.Action.valueOf( section.getString( "click.type" ) ),
-                    SpigotUtils.formatString( player, Utils.c( format(
+                    SpigotUtils.formatString( player, SpigotUtils.c( format(
                             section.getString( "click.action" ),
                             placeholders
                     ) ) )
