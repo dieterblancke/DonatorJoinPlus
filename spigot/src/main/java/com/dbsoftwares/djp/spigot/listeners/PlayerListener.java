@@ -207,7 +207,7 @@ public class PlayerListener implements Listener
                 {
                     DonatorJoinPlus.i().debug( "Player " + p.getName() + " has the permission " + data.getPermission() + ", executing event ..." );
 
-                    executeEventData( user, p, eventData, world );
+                    executeEventData( user, p, eventData, world, eventData.getDelay() );
 
                     if ( DonatorJoinPlus.i().getConfiguration().getBoolean( "usepriorities" ) )
                     {
@@ -224,7 +224,8 @@ public class PlayerListener implements Listener
                 if ( SpigotUtils.contains( groups, data.getName() ) )
                 {
                     DonatorJoinPlus.i().debug( "Player " + p.getName() + " is in the group " + data.getName() + ", executing event ..." );
-                    executeEventData( user, p, eventData, world );
+
+                    executeEventData( user, p, eventData, world, eventData.getDelay() );
 
                     if ( DonatorJoinPlus.i().getConfiguration().getBoolean( "usepriorities" ) )
                     {
@@ -232,6 +233,18 @@ public class PlayerListener implements Listener
                     }
                 }
             }
+        }
+    }
+
+    private void executeEventData( final User user, final Player p, final EventData eventData, final World world, final long delay )
+    {
+        if ( delay > 0 )
+        {
+            Bukkit.getScheduler().runTaskLater( DonatorJoinPlus.i(), () -> executeEventData( user, p, eventData, world ), delay );
+        }
+        else
+        {
+            executeEventData( user, p, eventData, world );
         }
     }
 
@@ -267,22 +280,22 @@ public class PlayerListener implements Listener
                 SpigotUtils.spawnFirework( p.getLocation() );
             }
 
-            if ( eventData.isSoundEnabled() && (user == null || !user.isSoundToggled()) )
+            if ( eventData.isSoundEnabled() && ( user == null || !user.isSoundToggled() ) )
             {
-                final String soundName = user == null ? null : (eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound());
-                final Optional<XSound> optionalXSound = XSound.matchXSound(soundName);
+                final String soundName = user == null ? null : ( eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
+                final Optional<XSound> optionalXSound = XSound.matchXSound( soundName );
 
                 if ( soundName != null && optionalXSound.isPresent() )
                 {
                     final XSound sound = optionalXSound.get();
 
-                    sound.play( p, 20F, -20F );
+                    sound.play( p.getLocation(), 20F, -20F );
                 }
                 else if ( eventData.getSound() != null )
                 {
                     final XSound sound = XSound.matchXSound( eventData.getSound() );
 
-                    sound.play( p, 20F, -20F );
+                    sound.play( p.getLocation(), 20F, -20F );
                 }
             }
 

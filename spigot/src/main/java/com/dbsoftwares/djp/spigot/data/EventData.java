@@ -29,6 +29,7 @@ public class EventData
     private Sound sound;
     private boolean firework;
     private boolean commandsEnabled;
+    private long delay;
     private List<String> commands;
 
     public EventData( final EventType type )
@@ -52,6 +53,8 @@ public class EventData
         {
             message = section.getString( "message" );
         }
+
+        this.delay = section.exists( "delay" ) ? section.getLong( "delay" ) : 0;
 
         final ISection sound = section.getSection( "sound" );
         this.soundEnabled = sound.getBoolean( "enabled" );
