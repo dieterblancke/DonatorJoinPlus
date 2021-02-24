@@ -171,16 +171,19 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         rankData.clear();
         slotLimits.clear();
 
-        final List<ISection> ranks = configuration.getSectionList( "ranks" );
-
-        ranks.forEach( section ->
+        if ( configuration.exists( "ranks" ) )
         {
-            final RankData data = new RankData();
-            data.fromSection( section );
+            final List<ISection> ranks = configuration.getSectionList( "ranks" );
 
-            rankData.add( data );
-        } );
-        rankData.sort( ( o1, o2 ) -> Integer.compare( o2.getPriority(), o1.getPriority() ) );
+            ranks.forEach( section ->
+            {
+                final RankData data = new RankData();
+                data.fromSection( section );
+
+                rankData.add( data );
+            } );
+            rankData.sort( ( o1, o2 ) -> Integer.compare( o2.getPriority(), o1.getPriority() ) );
+        }
 
         if ( configuration.getBoolean( "slotforcer.enabled" ) )
         {
