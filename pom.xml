@@ -16,8 +16,8 @@
 
     <repositories>
         <repository>
-            <id>centrixpvp</id>
-            <url>http://nexus.diviwork.nl/repository/centrix-releases/</url>
+            <id>dieterblancke</id>
+            <url>https://repo.dieterblancke.xyz/artifactory/dieterblancke-public/</url>
         </repository>
         <repository>
             <id>vault-repo</id>
@@ -26,10 +26,6 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>dbsoftwares</id>
-            <url>http://nexus.diviwork.nl/repository/dbsoftwares/</url>
         </repository>
         <repository>
             <id>CodeMC</id>
@@ -45,7 +41,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -87,7 +83,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.29</version>
+            <version>1.7.32</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

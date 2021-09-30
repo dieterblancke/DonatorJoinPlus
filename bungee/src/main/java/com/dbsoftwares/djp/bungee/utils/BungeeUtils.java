@@ -66,8 +66,8 @@ public class BungeeUtils
         if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )
         {
             // formatting message with BungeeUtilisalsX placeholders :^)
-            str = com.dbsoftwares.bungeeutilisals.api.placeholder.PlaceHolderAPI.formatMessage(
-                    com.dbsoftwares.bungeeutilisals.api.BUCore.getApi().getUser( p ).orElse( null ),
+            str = be.dieterblancke.bungeeutilisalsx.common.api.placeholder.PlaceHolderAPI.formatMessage(
+                    be.dieterblancke.bungeeutilisalsx.common.BuX.getApi().getUser( p.getUniqueId() ).orElse( null ),
                     str
             );
         }
