@@ -17,9 +17,9 @@ import java.util.logging.Level;
 public class FileStorageManager extends AbstractStorageManager
 {
 
+    private final File storageFile;
     private IConfiguration storage;
     private FileStorageType storageType;
-    private File storageFile;
 
     public FileStorageManager( final String type )
     {
@@ -36,7 +36,7 @@ public class FileStorageManager extends AbstractStorageManager
         }
         storageFile = new File(
                 DonatorJoinCore.getInstance().getDataFolder(),
-                "file-storage." + (storageType.equals( FileStorageType.JSON ) ? "json" : "yml")
+                "file-storage." + ( storageType.equals( FileStorageType.JSON ) ? "json" : "yml" )
         );
         if ( !storageFile.exists() )
         {
@@ -65,11 +65,11 @@ public class FileStorageManager extends AbstractStorageManager
             DonatorJoinCore.getInstance().getLogger().info( "========== STARTING DATA FILE CONVERSION ==========" );
             final File file = new File(
                     DonatorJoinCore.getInstance().getDataFolder(),
-                    "file-storage." + (storageType.equals( FileStorageType.JSON ) ? "json" : "yml")
+                    "file-storage." + ( storageType.equals( FileStorageType.JSON ) ? "json" : "yml" )
             );
             final File dest = new File(
                     DonatorJoinCore.getInstance().getDataFolder(),
-                    "file-storage." + (storageType.equals( FileStorageType.JSON ) ? "json" : "yml") + "-old"
+                    "file-storage." + ( storageType.equals( FileStorageType.JSON ) ? "json" : "yml" ) + "-old"
             );
 
             storageFile.renameTo( dest );
@@ -112,7 +112,7 @@ public class FileStorageManager extends AbstractStorageManager
     {
         final ISection userSection = storage.getSection( "users" );
 
-        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".toggled" );
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid + ".toggled" );
     }
 
     @Override
@@ -130,7 +130,7 @@ public class FileStorageManager extends AbstractStorageManager
     {
         final ISection userSection = storage.getSection( "users" );
 
-        return userSection.exists( uuid.toString() ) ? userSection.getString( uuid.toString() + ".slotgroup" ) : "none";
+        return userSection.exists( uuid.toString() ) ? userSection.getString( uuid + ".slotgroup" ) : "none";
     }
 
     @Override
@@ -192,7 +192,7 @@ public class FileStorageManager extends AbstractStorageManager
     {
         final ISection userSection = storage.getSection( "users" );
 
-        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".soundtoggled" );
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid + ".soundtoggled" );
     }
 
     @Override
@@ -200,7 +200,7 @@ public class FileStorageManager extends AbstractStorageManager
     {
         final ISection userSection = storage.getSection( "users" );
 
-        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".fireworktoggled" );
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid + ".fireworktoggled" );
     }
 
     @Override
@@ -208,7 +208,7 @@ public class FileStorageManager extends AbstractStorageManager
     {
         final ISection userSection = storage.getSection( "users" );
 
-        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid.toString() + ".messagesmuted" );
+        return userSection.exists( uuid.toString() ) && userSection.getBoolean( uuid + ".messagesmuted" );
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.dbsoftwares.djp.bungee.utils;
 
 import net.md_5.bungee.api.ChatColor;
-import com.dbsoftwares.djp.utils.Utils;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,9 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class BungeeUtils
 {
@@ -66,8 +65,8 @@ public class BungeeUtils
         if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )
         {
             // formatting message with BungeeUtilisalsX placeholders :^)
-            str = com.dbsoftwares.bungeeutilisals.api.placeholder.PlaceHolderAPI.formatMessage(
-                    com.dbsoftwares.bungeeutilisals.api.BUCore.getApi().getUser( p ).orElse( null ),
+            str = be.dieterblancke.bungeeutilisalsx.common.api.placeholder.PlaceHolderAPI.formatMessage(
+                    be.dieterblancke.bungeeutilisalsx.common.BuX.getApi().getUser( p.getUniqueId() ).orElse( null ),
                     str
             );
         }
@@ -90,5 +89,14 @@ public class BungeeUtils
                 .map( message -> new BaseComponent[]{ new TextComponent( message ) } )
                 .flatMap( Arrays::stream )
                 .toArray( BaseComponent[]::new );
+    }
+
+    public static boolean isVanished( final ProxiedPlayer player )
+    {
+        if ( ProxyServer.getInstance().getPluginManager().getPlugin( "PremiumVanish" ) != null )
+        {
+            return de.myzelyam.api.vanish.BungeeVanishAPI.isInvisible( player );
+        }
+        return false;
     }
 }

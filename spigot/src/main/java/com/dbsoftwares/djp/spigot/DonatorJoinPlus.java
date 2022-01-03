@@ -23,6 +23,7 @@ import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.storage.managers.FileStorageManager;
 import com.dbsoftwares.djp.user.User;
+import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
@@ -69,13 +70,16 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         loadMessages();
 
         // Loading libraries for storage
-        for ( StandardLibrary standardLibrary : StandardLibrary.values() )
+        if ( Utils.getJavaVersion() < 16 )
         {
-            final Library library = standardLibrary.getLibrary();
-
-            if ( library.isToLoad() )
+            for ( StandardLibrary standardLibrary : StandardLibrary.values() )
             {
-                library.load();
+                final Library library = standardLibrary.getLibrary();
+
+                if ( library.isToLoad() )
+                {
+                    library.load();
+                }
             }
         }
 

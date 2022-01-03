@@ -86,7 +86,7 @@ public class PlayerListener implements Listener
             {
                 handleFirstJoin( player );
             }
-            if ( !storageData.isToggled() )
+            if ( !BungeeUtils.isVanished( player ) && !storageData.isToggled() )
             {
                 execute( player, EventData.EventType.JOIN );
             }
@@ -107,7 +107,7 @@ public class PlayerListener implements Listener
         final ProxiedPlayer player = event.getPlayer();
         final PlayerStorageData storageData = BungeeUtils.remove( player );
 
-        if ( !storageData.isToggled() )
+        if ( !BungeeUtils.isVanished( player ) && !storageData.isToggled() )
         {
             execute( player, EventData.EventType.QUIT );
         }
@@ -124,7 +124,7 @@ public class PlayerListener implements Listener
             storageData.setNetworkJoin( false );
             return;
         }
-        if ( !storageData.isToggled() )
+        if ( !BungeeUtils.isVanished( player ) && !storageData.isToggled() )
         {
             execute( player, EventData.EventType.SWITCH );
         }

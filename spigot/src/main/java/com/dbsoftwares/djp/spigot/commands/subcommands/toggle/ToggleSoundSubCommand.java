@@ -50,7 +50,7 @@ public class ToggleSoundSubCommand extends DJSubCommand
 
         user.setSoundToggled( toggled );
         DonatorJoinPlus.i().getStorage().toggleSound( player.getUniqueId(), toggled );
-        player.sendMessage( Utils.getMessage( "sound.toggle." + (toggled ? "disabled" : "enabled") ) );
+        player.sendMessage( Utils.getMessage( "sound.toggle." + ( toggled ? "disabled" : "enabled" ) ) );
     }
 
     @Override
@@ -93,12 +93,12 @@ public class ToggleSoundSubCommand extends DJSubCommand
             {
                 toggled = !DonatorJoinPlus.i().getStorage().isSoundToggled( uuid );
             }
-            target.sendMessage( Utils.getMessage( "sound.toggle." + (toggled ? "disabled" : "enabled") ) );
+            target.sendMessage( Utils.getMessage( "sound.toggle." + ( toggled ? "disabled" : "enabled" ) ) );
         }
         DonatorJoinPlus.i().getStorage().toggleSound( uuid, toggled );
 
         sender.sendMessage(
-                Utils.getMessage( "sound.toggle." + (toggled ? "disabled" : "enabled") + "-other" )
+                Utils.getMessage( "sound.toggle." + ( toggled ? "disabled" : "enabled" ) + "-other" )
                         .replace( "{player}", args[0] )
         );
     }

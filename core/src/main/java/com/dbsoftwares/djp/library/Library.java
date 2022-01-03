@@ -89,7 +89,7 @@ public class Library
         // Download libary if not present
         if ( !path.exists() )
         {
-            System.out.println( "Downloading libary for " + toString() );
+            System.out.println( "Downloading libary for " + this );
 
             try ( final InputStream input = new URL( downloadURL ).openStream();
                   final ReadableByteChannel channel = Channels.newChannel( input );
@@ -97,11 +97,11 @@ public class Library
             {
 
                 output.getChannel().transferFrom( channel, 0, Long.MAX_VALUE );
-                System.out.println( "Successfully downloaded libary for " + toString() );
+                System.out.println( "Successfully downloaded libary for " + this );
 
-                System.out.println( "Removing older versions of " + toString() );
+                System.out.println( "Removing older versions of " + this );
                 getOutdatedFiles( folder ).forEach( File::delete );
-                System.out.println( "Successfully removed older versions of " + toString() );
+                System.out.println( "Successfully removed older versions of " + this );
             }
             catch ( IOException e )
             {

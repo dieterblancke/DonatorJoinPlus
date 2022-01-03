@@ -25,7 +25,7 @@ public abstract class AbstractStorageManager
     private static AbstractStorageManager manager;
 
     @Getter
-    private StorageType type;
+    private final StorageType type;
 
     public AbstractStorageManager( final StorageType type )
     {
@@ -49,7 +49,7 @@ public abstract class AbstractStorageManager
         {
             if ( is == null )
             {
-                throw new Exception( "Could not find schema for " + type.toString() + ": " + type.getSchema() + "!" );
+                throw new Exception( "Could not find schema for " + type + ": " + type.getSchema() + "!" );
             }
             try ( BufferedReader reader = new BufferedReader( new InputStreamReader( is, StandardCharsets.UTF_8 ) );
                   Connection connection = getConnection(); Statement st = connection.createStatement() )
@@ -57,7 +57,7 @@ public abstract class AbstractStorageManager
 
                 StringBuilder builder = new StringBuilder();
                 String line;
-                while ( (line = reader.readLine()) != null )
+                while ( ( line = reader.readLine() ) != null )
                 {
                     builder.append( line );
 
@@ -119,9 +119,9 @@ public abstract class AbstractStorageManager
         H2( H2StorageManager.class, "H2", "schemas/h2.sql" ),
         FILE( FileStorageManager.class, "PLAIN", null );
 
-        private Class<? extends AbstractStorageManager> manager;
-        private String name;
-        private String schema;
+        private final Class<? extends AbstractStorageManager> manager;
+        private final String name;
+        private final String schema;
 
         StorageType( final Class<? extends AbstractStorageManager> manager, final String name, final String schema )
         {

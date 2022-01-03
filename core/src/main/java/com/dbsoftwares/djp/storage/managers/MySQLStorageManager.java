@@ -18,7 +18,9 @@
 
 package com.dbsoftwares.djp.storage.managers;
 
+import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
+import com.zaxxer.hikari.HikariConfig;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,15 +30,45 @@ public class MySQLStorageManager extends HikariStorageManager
 
     public MySQLStorageManager()
     {
-        super( StorageType.MYSQL, DonatorJoinCore.getInstance().getConfiguration().getSection( "storage" ) );
+        super(
+                StorageType.MYSQL,
+                DonatorJoinCore.getInstance().getConfiguration().getSection( "storage" ),
+                getDefaultHikariConfig()
+        );
 
         setupDataSource();
+    }
+
+    private static HikariConfig getDefaultHikariConfig()
+    {
+        final HikariConfig config = new HikariConfig();
+        final ISection section = DonatorJoinCore.getInstance().getConfiguration().getSection( "storage" );
+
+        final String hostname = section.getString( "hostname" );
+        final int port = section.getInteger( "port" );
+        final String database = section.getString( "database" );
+
+        config.setDriverClassName( "com.mysql.cj.jdbc.Driver" );
+        config.setJdbcUrl( "jdbc:mysql://" + hostname + ":" + port + "/" + database );
+        config.addDataSourceProperty( "user", section.getString( "username" ) );
+        config.addDataSourceProperty( "password", section.getString( "password" ) );
+        config.addDataSourceProperty( "cacheServerConfiguration", "true" );
+        config.addDataSourceProperty( "elideSetAutoCommits", "true" );
+        config.addDataSourceProperty( "useServerPrepStmts", "true" );
+        config.addDataSourceProperty( "cacheCallableStmts", "true" );
+        config.addDataSourceProperty( "cachePrepStmts", "true" );
+        config.addDataSourceProperty( "alwaysSendSetIsolation", "false" );
+        config.addDataSourceProperty( "prepStmtCacheSize", "250" );
+        config.addDataSourceProperty( "prepStmtCacheSqlLimit", "2048" );
+        config.addDataSourceProperty( "useLocalSessionState", "true" );
+
+        return config;
     }
 
     @Override
     protected String getDataSourceClass()
     {
-        return "com.mysql.jdbc.jdbc2.optional.MysqlDataSource";
+        return null;
     }
 
     @Override

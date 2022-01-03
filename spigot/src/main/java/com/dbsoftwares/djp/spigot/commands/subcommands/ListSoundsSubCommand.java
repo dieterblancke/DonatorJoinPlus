@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -77,7 +77,7 @@ public class ListSoundsSubCommand extends SubCommand
                 }
 
                 final OutputStream out = con.getOutputStream();
-                out.write( builder.toString().getBytes( Charset.forName( "UTF-8" ) ) );
+                out.write( builder.toString().getBytes( StandardCharsets.UTF_8 ) );
                 out.close();
 
                 if ( con.getResponseCode() == 429 )

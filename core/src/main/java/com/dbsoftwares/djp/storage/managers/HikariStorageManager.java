@@ -26,13 +26,15 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
 public abstract class HikariStorageManager extends AbstractStorageManager
 {
 
@@ -41,29 +43,17 @@ public abstract class HikariStorageManager extends AbstractStorageManager
 
     public HikariStorageManager( final StorageType type, final ISection section )
     {
+        this( type, section, new HikariConfig() );
+    }
+
+    public HikariStorageManager( final StorageType type, final ISection section, final HikariConfig config )
+    {
         super( type );
-        config = new HikariConfig();
-        config.setDataSourceClassName( getDataSourceClass() );
 
-        // Mysql-only properties
-        if ( type == StorageType.MYSQL )
+        this.config = config;
+        if ( getDataSourceClass() != null )
         {
-            config.addDataSourceProperty( "serverName", section.getString( "hostname" ) );
-            config.addDataSourceProperty( "port", section.getInteger( "port" ) );
-            config.addDataSourceProperty( "databaseName", section.getString( "database" ) );
-            config.addDataSourceProperty( "user", section.getString( "username" ) );
-            config.addDataSourceProperty( "password", section.getString( "password" ) );
-            config.addDataSourceProperty( "useSSL", section.getBoolean( "useSSL" ) );
-
-            config.addDataSourceProperty( "cacheServerConfiguration", "true" );
-            config.addDataSourceProperty( "elideSetAutoCommits", "true" );
-            config.addDataSourceProperty( "useServerPrepStmts", "true" );
-            config.addDataSourceProperty( "cacheCallableStmts", "true" );
-            config.addDataSourceProperty( "cachePrepStmts", "true" );
-            config.addDataSourceProperty( "alwaysSendSetIsolation", "false" );
-            config.addDataSourceProperty( "prepStmtCacheSize", "250" );
-            config.addDataSourceProperty( "prepStmtCacheSqlLimit", "2048" );
-            config.addDataSourceProperty( "useLocalSessionState", "true" );
+            config.setDataSourceClassName( getDataSourceClass() );
         }
 
         config.setMaximumPoolSize( section.getInteger( "pool.max-pool-size" ) );
@@ -75,6 +65,28 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         config.setLeakDetectionThreshold( 10000 );
         config.setConnectionTestQuery( "/* DonatorJoinPlus ping */ SELECT 1;" );
         config.setInitializationFailTimeout( -1 );
+
+        final ISection propertySection = section.getSection( "properties" );
+        for ( String key : propertySection.getKeys() )
+        {
+            if ( config.getDataSourceClassName() == null )
+            {
+                continue;
+            }
+            try
+            {
+                final Class<?> clazz = Class.forName( config.getDataSourceClassName() );
+
+                if ( this.hasProperty( clazz, key ) )
+                {
+                    config.addDataSourceProperty( key, propertySection.get( key ) );
+                }
+            }
+            catch ( ClassNotFoundException e )
+            {
+                // continue
+            }
+        }
     }
 
     protected void setupDataSource()
@@ -83,6 +95,13 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         {
             dataSource = new HikariDataSource( config );
         }
+    }
+
+    @Override
+    public void initializeStorage() throws Exception
+    {
+        super.initializeStorage();
+
         try ( Connection connection = getConnection() )
         {
             final DatabaseMetaData metaData = connection.getMetaData();
@@ -92,7 +111,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
             initLeaveSoundColumn( connection, metaData );
             initSoundToggledColumn( connection, metaData );
             initFireworkToggledColumn( connection, metaData );
-            initMessagessMutedColumn( connection, metaData );
+            initMessagesMutedColumn( connection, metaData );
         }
         catch ( SQLException e )
         {
@@ -102,98 +121,100 @@ public abstract class HikariStorageManager extends AbstractStorageManager
 
     private void initSlotGroupColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
     {
-        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "slotgroup" ) )
+        if ( checkIfColumnDoesNotExist( connection, metaData, "slotgroup" ) )
         {
-            if ( !rs.next() )
+            try ( PreparedStatement pstmt = connection.prepareStatement(
+                    "ALTER TABLE djp_data ADD slotgroup VARCHAR(1) NOT NULL DEFAULT 'none';" )
+            )
             {
-                try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD slotgroup VARCHAR(1) NOT NULL DEFAULT 'none';" )
-                )
-                {
-                    pstmt.execute();
-                }
+                pstmt.execute();
             }
         }
     }
 
     private void initJoinSoundColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
     {
-        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "joinsound" ) )
+        if ( checkIfColumnDoesNotExist( connection, metaData, "joinsound" ) )
         {
-            if ( !rs.next() )
+            try ( PreparedStatement pstmt = connection.prepareStatement(
+                    "ALTER TABLE djp_data ADD joinsound VARCHAR(1) DEFAULT NULL;" )
+            )
             {
-                try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD joinsound VARCHAR(1) DEFAULT NULL;" )
-                )
-                {
-                    pstmt.execute();
-                }
+                pstmt.execute();
             }
         }
     }
 
     private void initLeaveSoundColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
     {
-        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "leavesound" ) )
+        if ( checkIfColumnDoesNotExist( connection, metaData, "leavesound" ) )
         {
-            if ( !rs.next() )
+            try ( PreparedStatement pstmt = connection.prepareStatement(
+                    "ALTER TABLE djp_data ADD leavesound VARCHAR(1) DEFAULT NULL;" )
+            )
             {
-                try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD leavesound VARCHAR(1) DEFAULT NULL;" )
-                )
-                {
-                    pstmt.execute();
-                }
+                pstmt.execute();
             }
         }
     }
 
     private void initSoundToggledColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
     {
-        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "soundtoggled" ) )
+        if ( checkIfColumnDoesNotExist( connection, metaData, "soundtoggled" ) )
         {
-            if ( !rs.next() )
+            try ( PreparedStatement pstmt = connection.prepareStatement(
+                    "ALTER TABLE djp_data ADD soundtoggled TINYINT(1) NOT NULL DEFAULT 0;" )
+            )
             {
-                try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD soundtoggled TINYINT(1) NOT NULL DEFAULT 0;" )
-                )
-                {
-                    pstmt.execute();
-                }
+                pstmt.execute();
             }
         }
+
     }
 
     private void initFireworkToggledColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
     {
-        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "fireworktoggled" ) )
+        if ( checkIfColumnDoesNotExist( connection, metaData, "fireworktoggled" ) )
         {
-            if ( !rs.next() )
+            try ( PreparedStatement pstmt = connection.prepareStatement(
+                    "ALTER TABLE djp_data ADD fireworktoggled TINYINT(1) NOT NULL DEFAULT 0;" )
+            )
             {
-                try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD fireworktoggled TINYINT(1) NOT NULL DEFAULT 0;" )
-                )
-                {
-                    pstmt.execute();
-                }
+                pstmt.execute();
             }
         }
     }
 
-    private void initMessagessMutedColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
+    private void initMessagesMutedColumn( final Connection connection, final DatabaseMetaData metaData ) throws SQLException
     {
-        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", "messagesmuted" ) )
+        if ( checkIfColumnDoesNotExist( connection, metaData, "messagesmuted" ) )
         {
-            if ( !rs.next() )
+            try ( PreparedStatement pstmt = connection.prepareStatement(
+                    "ALTER TABLE djp_data ADD messagesmuted TINYINT(1) NOT NULL DEFAULT 0;" )
+            )
             {
-                try ( PreparedStatement pstmt = connection.prepareStatement(
-                        "ALTER TABLE djp_data ADD messagesmuted TINYINT(1) NOT NULL DEFAULT 0;" )
-                )
+                pstmt.execute();
+            }
+        }
+    }
+
+    private boolean checkIfColumnDoesNotExist( final Connection connection,
+                                               final DatabaseMetaData metaData,
+                                               final String column ) throws SQLException
+    {
+        try ( ResultSet rs = metaData.getColumns( null, null, "djp_data", null ) )
+        {
+            while ( rs.next() )
+            {
+                final String columnName = rs.getString( "COLUMN_NAME" );
+
+                if ( columnName.equalsIgnoreCase( column ) )
                 {
-                    pstmt.execute();
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     protected abstract String getDataSourceClass();
@@ -539,5 +560,13 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         {
             DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured", e );
         }
+    }
+
+    private boolean hasProperty( final Class<?> clazz, final String key )
+    {
+        final String methodName = "set" + key.substring( 0, 1 ).toUpperCase( Locale.ENGLISH ) + key.substring( 1 );
+
+        return Arrays.stream( clazz.getDeclaredMethods() )
+                .anyMatch( method -> method.getName().equalsIgnoreCase( methodName ) );
     }
 }

@@ -29,8 +29,12 @@ storage:
   username: 'username'
   # The password corresponding to the username above
   password: 'password'
-  # Should DonatorJoinPlus try to establish a SSL connection? (only for SQL)
-  useSSL: true
+
+  # Custom properties to be added to the connection uri
+  properties:
+    serverTimezone: 'Europe/Brussels'
+    characterEncoding: utf8
+    useSSL: true
 
   pool:
     # How many connections are allowed to be made?

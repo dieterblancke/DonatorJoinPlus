@@ -50,7 +50,7 @@ public class ToggleFireworkSubCommand extends DJSubCommand
 
         user.setFireworkToggled( toggled );
         DonatorJoinPlus.i().getStorage().toggleFirework( player.getUniqueId(), toggled );
-        player.sendMessage( Utils.getMessage( "firework.toggle." + (toggled ? "disabled" : "enabled") ) );
+        player.sendMessage( Utils.getMessage( "firework.toggle." + ( toggled ? "disabled" : "enabled" ) ) );
     }
 
     @Override
@@ -93,12 +93,12 @@ public class ToggleFireworkSubCommand extends DJSubCommand
             {
                 toggled = !DonatorJoinPlus.i().getStorage().isFireworkToggled( uuid );
             }
-            target.sendMessage( Utils.getMessage( "firework.toggle." + (toggled ? "disabled" : "enabled") ) );
+            target.sendMessage( Utils.getMessage( "firework.toggle." + ( toggled ? "disabled" : "enabled" ) ) );
         }
         DonatorJoinPlus.i().getStorage().toggleFirework( uuid, toggled );
 
         sender.sendMessage(
-                Utils.getMessage( "firework.toggle." + (toggled ? "disabled" : "enabled") + "-other" )
+                Utils.getMessage( "firework.toggle." + ( toggled ? "disabled" : "enabled" ) + "-other" )
                         .replace( "{player}", args[0] )
         );
     }

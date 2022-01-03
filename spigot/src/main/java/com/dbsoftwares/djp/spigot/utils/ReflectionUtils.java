@@ -112,7 +112,7 @@ public class ReflectionUtils
     {
         for ( Method m : clazz.getMethods() )
         {
-            if ( m.getName().equals( name ) && (args.length == 0 || classList( args, m.getParameterTypes() )) )
+            if ( m.getName().equals( name ) && ( args.length == 0 || classList( args, m.getParameterTypes() ) ) )
             {
                 m.setAccessible( true );
                 return m;

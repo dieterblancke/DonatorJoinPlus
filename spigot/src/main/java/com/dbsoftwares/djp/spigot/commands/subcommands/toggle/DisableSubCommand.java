@@ -29,7 +29,8 @@ public class DisableSubCommand extends ToggableSubCommand
             final UUID uuid = player.getUniqueId();
 
             disable( uuid );
-        } else
+        }
+        else
         {
             onExecute( (CommandSender) player, args );
         }
@@ -41,7 +42,8 @@ public class DisableSubCommand extends ToggableSubCommand
         if ( args.length == 0 )
         {
             sender.sendMessage( Utils.getMessage( "not-for-console" ) );
-        } else
+        }
+        else
         {
             if ( !sender.hasPermission( getPermission() + ".others" ) )
             {

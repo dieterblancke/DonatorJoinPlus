@@ -46,7 +46,7 @@ public class DJCommand extends Command
                     sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "no-perm" ) ) );
                     return;
                 }
-                if ( !(sender instanceof ProxiedPlayer) )
+                if ( !( sender instanceof ProxiedPlayer ) )
                 {
                     sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "not-for-console" ) ) );
                     return;
@@ -69,12 +69,12 @@ public class DJCommand extends Command
                     sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "no-perm" ) ) );
                     return;
                 }
-                if ( !(sender instanceof ProxiedPlayer) )
+                if ( !( sender instanceof ProxiedPlayer ) )
                 {
                     sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "not-for-console" ) ) );
                     return;
                 }
-                enable( ((ProxiedPlayer) sender).getUniqueId() );
+                enable( ( (ProxiedPlayer) sender ).getUniqueId() );
                 return;
             }
             else if ( args[0].equalsIgnoreCase( "disable" ) )
@@ -84,13 +84,13 @@ public class DJCommand extends Command
                     sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "no-perm" ) ) );
                     return;
                 }
-                if ( !(sender instanceof ProxiedPlayer) )
+                if ( !( sender instanceof ProxiedPlayer ) )
                 {
                     sender.sendMessage( TextComponent.fromLegacyText( Utils.getMessage( "not-for-console" ) ) );
                     return;
                 }
 
-                disable( ((ProxiedPlayer) sender).getUniqueId() );
+                disable( ( (ProxiedPlayer) sender ).getUniqueId() );
                 return;
             }
         }

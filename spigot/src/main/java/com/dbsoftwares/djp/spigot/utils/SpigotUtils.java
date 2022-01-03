@@ -8,7 +8,6 @@ package com.dbsoftwares.djp.spigot.utils;
 
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
 import net.md_5.bungee.api.ChatColor;
-import com.dbsoftwares.djp.utils.Utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -23,9 +22,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpigotUtils
 {
@@ -110,7 +109,7 @@ public class SpigotUtils
         return false;
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings( "deprecation" )
     public static UUID getUuid( final String name )
     {
         final CompletableFuture<UUID> future = CompletableFuture.supplyAsync( () ->

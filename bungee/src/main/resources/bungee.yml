@@ -2,3 +2,7 @@ name: DonatorJoinPlus
 main: com.dbsoftwares.djp.bungee.DonatorJoinPlus
 version: ${project.version}
 author: didjee2
+libraries:
+  - 'com.zaxxer:HikariCP:5.0.0'
+  - 'org.xerial:sqlite-jdbc:3.36.0.3'
+  - 'com.h2database:h2:1.4.200'

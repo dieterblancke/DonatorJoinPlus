@@ -46,7 +46,7 @@ public class H2StorageManager extends HikariStorageManager
             DonatorJoinCore.getInstance().getLogger().log( Level.SEVERE, "An error occured: ", e );
         }
 
-        config.addDataSourceProperty( "url", "jdbc:h2:./" + database.getPath() );
+        config.addDataSourceProperty( "url", "jdbc:h2:./" + database.getPath() + ";mode=MySQL" );
         setupDataSource();
     }
 

@@ -59,7 +59,8 @@ public class SetSlotGroupSubCommand extends SubCommand
         {
             DonatorJoinPlus.i().getStorage().setSlotGroup( uuid, groupName );
             sender.sendMessage( Utils.getMessage( "group-set" ).replace( "{player}", playerName ).replace( "{group}", groupName ) );
-        } catch ( Exception e )
+        }
+        catch ( Exception e )
         {
             e.printStackTrace();
             sender.sendMessage( Utils.getMessage( "error" ) );

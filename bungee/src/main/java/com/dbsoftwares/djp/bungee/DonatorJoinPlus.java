@@ -8,8 +8,6 @@ import com.dbsoftwares.djp.bungee.commands.DJCommand;
 import com.dbsoftwares.djp.bungee.data.RankData;
 import com.dbsoftwares.djp.bungee.listeners.PlayerListener;
 import com.dbsoftwares.djp.bungee.utils.BungeeUtils;
-import com.dbsoftwares.djp.library.Library;
-import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.google.common.collect.Lists;
 import lombok.Getter;
@@ -54,17 +52,6 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinBase
 
         configuration = IConfiguration.loadYamlConfiguration( configFile );
         messages = configuration.getSection( "messages" );
-
-        // Loading libraries for storage
-        for ( StandardLibrary standardLibrary : StandardLibrary.values() )
-        {
-            final Library library = standardLibrary.getLibrary();
-
-            if ( library.isToLoad() )
-            {
-                library.load();
-            }
-        }
 
         loadConfig();
 

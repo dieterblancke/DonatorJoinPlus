@@ -19,7 +19,6 @@
 package com.dbsoftwares.djp.spigot.utils;
 
 import com.dbsoftwares.configuration.api.ISection;
-import com.dbsoftwares.djp.utils.Utils;
 import com.google.common.collect.Lists;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -49,7 +48,7 @@ public class MessageBuilder
         }
         else if ( message instanceof List )
         {
-            return new TextComponent(SpigotUtils.format( player, (List<String>) message ));
+            return new TextComponent( SpigotUtils.format( player, (List<String>) message ) );
         }
         else
         {
