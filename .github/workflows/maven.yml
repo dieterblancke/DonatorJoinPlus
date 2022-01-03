@@ -8,10 +8,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 16
-        uses: actions/setup-java@v1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
         with:
-          java-version: 16
+          distribution: adopt
+          java-version: 17
+          cache: 'maven'
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - id: getspigotfilename
@@ -25,7 +27,7 @@ jobs:
       - id: getbungeefilename
         run: echo "::set-output name=file::$(ls bungee/target/DonatorJoin+*.jar)"
       - name: Create artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: DonatorJoin+ BungeeCord
           path: ${{ steps.getbungeefilename.outputs.file }}
