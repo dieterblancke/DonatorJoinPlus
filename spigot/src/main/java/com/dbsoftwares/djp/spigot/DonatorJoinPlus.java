@@ -17,6 +17,7 @@ import com.dbsoftwares.djp.spigot.commands.DJCommand;
 import com.dbsoftwares.djp.spigot.data.RankData;
 import com.dbsoftwares.djp.spigot.listeners.PlayerListener;
 import com.dbsoftwares.djp.spigot.listeners.SlotListener;
+import com.dbsoftwares.djp.spigot.listeners.VanishListener;
 import com.dbsoftwares.djp.spigot.slots.SlotLimit;
 import com.dbsoftwares.djp.spigot.slots.SlotResizer;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
@@ -95,6 +96,12 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         getServer().getPluginManager().registerEvents( new PlayerListener(), this );
         getServer().getPluginManager().registerEvents( new SlotListener(), this );
         CommandManager.getInstance().registerCommand( new DJCommand() );
+
+        if ( getServer().getPluginManager().isPluginEnabled( "SuperVanish" )
+                || getServer().getPluginManager().isPluginEnabled( "PremiumVanish" ) )
+        {
+            getServer().getPluginManager().registerEvents( new VanishListener(), this );
+        }
 
         AbstractStorageManager.StorageType type;
         final String typeString = configuration.getString( "storage.type" ).toUpperCase();

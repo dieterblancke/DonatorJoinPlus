@@ -4,6 +4,9 @@ version: ${project.version}
 depend: [ Vault ]
 author: didjee2
 api-version: '1.13'
+softdepend:
+  - PremiumVanish
+  - SuperVanish
 libraries:
   - 'com.zaxxer:HikariCP:5.0.0'
   - 'org.xerial:sqlite-jdbc:3.36.0.3'

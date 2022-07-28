@@ -7,10 +7,12 @@ import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.bungee.commands.DJCommand;
 import com.dbsoftwares.djp.bungee.data.RankData;
 import com.dbsoftwares.djp.bungee.listeners.PlayerListener;
+import com.dbsoftwares.djp.bungee.listeners.VanishListener;
 import com.dbsoftwares.djp.bungee.utils.BungeeUtils;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bungeecord.Metrics;
@@ -86,6 +88,12 @@ public class DonatorJoinPlus extends Plugin implements DonatorJoinBase
         }
 
         this.getProxy().getPluginManager().registerListener( this, new PlayerListener() );
+
+        if ( ProxyServer.getInstance().getPluginManager().getPlugin( "PremiumVanish" ) != null )
+        {
+            this.getProxy().getPluginManager().registerListener( this, new VanishListener() );
+        }
+
         this.getProxy().getPluginManager().registerCommand( this, new DJCommand() );
 
         new Metrics( this );

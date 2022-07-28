@@ -45,12 +45,12 @@ public class SpigotUtils
         player.setMetadata( key, new FixedMetadataValue( DonatorJoinPlus.i(), value ) );
     }
 
-    public static Object getMetaData( final Player player, final String key )
+    public static <T> T getMetaData( final Player player, final String key )
     {
-        return getMetaData( player, key, null );
+        return (T) getMetaData( player, key, null );
     }
 
-    public static Object getMetaData( final Player player, final String key, Object defaultValue )
+    public static <T> T getMetaData( final Player player, final String key, T defaultValue )
     {
         if ( player == null )
         {
@@ -60,7 +60,7 @@ public class SpigotUtils
         {
             if ( meta.getOwningPlugin().getName().equalsIgnoreCase( DonatorJoinPlus.i().getName() ) )
             {
-                return meta.value();
+                return (T) meta.value();
             }
         }
         return defaultValue;
