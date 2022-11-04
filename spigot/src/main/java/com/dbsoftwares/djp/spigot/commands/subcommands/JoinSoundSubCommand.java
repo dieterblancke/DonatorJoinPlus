@@ -36,17 +36,19 @@ public class JoinSoundSubCommand extends DJSubCommand
     @Override
     public void onExecute( Player player, String[] args )
     {
-        if ( args.length > 2 )
+        if ( args.length > 4 )
         {
             player.sendMessage( Utils.getMessage( "sound.join.usage" ) );
             return;
         }
-        if ( args.length == 2 )
+        if ( args.length == 4 )
         {
             onExecute( (CommandSender) player, args );
             return;
         }
-        final String sound = args[0];
+        final String sound = Utils.getFromArrayOrDefault( args, 0, "" );
+        final float volume = Utils.getFromArrayOrDefault( args, 1, 20F, Float::parseFloat );
+        final float pitch = Utils.getFromArrayOrDefault( args, 2, -20F, Float::parseFloat );
         final User user = DonatorJoinPlus.i().getUser( player.getUniqueId() );
 
         if ( !validateSound( sound, player ) )
@@ -54,14 +56,16 @@ public class JoinSoundSubCommand extends DJSubCommand
             return;
         }
 
-        DonatorJoinPlus.i().getStorage().setJoinSound( player.getUniqueId(), sound );
+        DonatorJoinPlus.i().getStorage().setJoinSound( player.getUniqueId(), sound, volume, pitch );
         if ( user != null )
         {
-            user.setJoinSound( sound );
+            user.setJoinSound( sound, volume, pitch );
         }
         player.sendMessage(
                 Utils.getMessage( "sound.join.changed" )
                         .replace( "{sound}", sound )
+                        .replace( "{volume}", String.valueOf( volume ) )
+                        .replace( "{volume}", String.valueOf( pitch ) )
         );
     }
 
@@ -78,8 +82,10 @@ public class JoinSoundSubCommand extends DJSubCommand
             sender.sendMessage( Utils.getMessage( "no-perm" ) );
             return;
         }
-        final String sound = args[0];
-        final String playerName = args[1];
+        final String sound = Utils.getFromArrayOrDefault( args, 0, "" );
+        final float volume = Utils.getFromArrayOrDefault( args, 1, 20F, Float::parseFloat );
+        final float pitch = Utils.getFromArrayOrDefault( args, 2, -20F, Float::parseFloat );
+        final String playerName = Utils.getFromArrayOrDefault( args, 3, null );
 
         if ( !validateSound( sound, sender ) )
         {
@@ -94,24 +100,28 @@ public class JoinSoundSubCommand extends DJSubCommand
         }
         final Player target = Bukkit.getPlayer( uuid );
 
-        DonatorJoinPlus.i().getStorage().setJoinSound( uuid, sound );
+        DonatorJoinPlus.i().getStorage().setJoinSound( uuid, sound, volume, pitch );
         if ( target != null )
         {
             final User user = DonatorJoinPlus.i().getUser( uuid );
 
             if ( user != null )
             {
-                user.setJoinSound( sound );
+                user.setJoinSound( sound, volume, pitch );
             }
             target.sendMessage(
                     Utils.getMessage( "sound.join.changed" )
                             .replace( "{sound}", sound )
+                            .replace( "{volume}", String.valueOf( volume ) )
+                            .replace( "{volume}", String.valueOf( pitch ) )
             );
         }
         sender.sendMessage(
                 Utils.getMessage( "sound.join.changed-other" )
                         .replace( "{user}", target.getName() )
                         .replace( "{sound}", sound )
+                        .replace( "{volume}", String.valueOf( volume ) )
+                        .replace( "{volume}", String.valueOf( pitch ) )
         );
     }
 

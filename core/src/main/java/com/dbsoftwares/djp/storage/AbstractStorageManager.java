@@ -78,33 +78,33 @@ public abstract class AbstractStorageManager
         }
     }
 
-    public abstract boolean exists( final UUID uuid );
+    public abstract boolean exists( UUID uuid );
 
-    public abstract boolean isToggled( final UUID uuid );
+    public abstract boolean isToggled( UUID uuid );
 
-    public abstract void toggle( final UUID uuid, final boolean toggled );
+    public abstract void toggle( UUID uuid, boolean toggled );
 
-    public abstract String getSlotGroup( final UUID uuid );
+    public abstract String getSlotGroup( UUID uuid );
 
-    public abstract void setSlotGroup( final UUID uuid, final String slotGroup );
+    public abstract void setSlotGroup( UUID uuid, String slotGroup );
 
-    public abstract void setJoinSound( final UUID uuid, final String sound );
+    public abstract void setJoinSound( UUID uuid, String sound, float volume, float pitch );
 
-    public abstract void setLeaveSound( final UUID uuid, final String sound );
+    public abstract void setLeaveSound( UUID uuid, String sound, float volume, float pitch );
 
-    public abstract void toggleSound( final UUID uuid, final boolean toggled );
+    public abstract void toggleSound( UUID uuid, boolean toggled );
 
-    public abstract void toggleFirework( final UUID uuid, final boolean toggled );
+    public abstract void toggleFirework( UUID uuid, boolean toggled );
 
-    public abstract void toggleMessagesMuted( final UUID uuid, final boolean toggled );
+    public abstract void toggleMessagesMuted( UUID uuid, boolean toggled );
 
-    public abstract boolean isSoundToggled( final UUID uuid );
+    public abstract boolean isSoundToggled( UUID uuid );
 
-    public abstract boolean isFireworkToggled( final UUID uuid );
+    public abstract boolean isFireworkToggled( UUID uuid );
 
-    public abstract boolean isMessagesMuted( final UUID uuid );
+    public abstract boolean isMessagesMuted( UUID uuid );
 
-    public abstract User getUser( final UUID uuid );
+    public abstract User getUser( UUID uuid );
 
     public abstract Connection getConnection() throws SQLException;
 

@@ -145,6 +145,8 @@ ranks:
       sound:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH
+        volume: 20
+        pitch: -20
       firework: false
       commands:
         enabled: false

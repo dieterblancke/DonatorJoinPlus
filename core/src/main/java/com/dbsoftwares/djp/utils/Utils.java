@@ -9,6 +9,8 @@ package com.dbsoftwares.djp.utils;
 import com.dbsoftwares.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 
+import java.util.function.Function;
+
 public class Utils
 {
 
@@ -60,5 +62,23 @@ public class Utils
             }
         }
         return Integer.parseInt( version );
+    }
+
+    public static <T> T getFromArrayOrDefault( T[] array, int index, T def )
+    {
+        if ( index >= array.length )
+        {
+            return def;
+        }
+        return array[index];
+    }
+
+    public static <T, V> V getFromArrayOrDefault( T[] array, int index, V def, Function<T, V> mapper )
+    {
+        if ( index >= array.length )
+        {
+            return def;
+        }
+        return mapper.apply( array[index] );
     }
 }

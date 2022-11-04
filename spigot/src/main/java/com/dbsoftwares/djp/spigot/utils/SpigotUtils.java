@@ -112,6 +112,10 @@ public class SpigotUtils
     @SuppressWarnings( "deprecation" )
     public static UUID getUuid( final String name )
     {
+        if ( name == null )
+        {
+            return null;
+        }
         final CompletableFuture<UUID> future = CompletableFuture.supplyAsync( () ->
         {
             OfflinePlayer player = Bukkit.getPlayer( name );
@@ -166,12 +170,13 @@ public class SpigotUtils
         }
         str = str.replace( "%player%", p.getName() );
         str = str.replace( "{player}", p.getName() );
-        str = c( str );
 
         if ( Bukkit.getPluginManager().isPluginEnabled( "PlaceholderAPI" ) )
         {
             str = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders( (OfflinePlayer) p, str );
         }
+        str = c( str );
+
         return str;
     }
 

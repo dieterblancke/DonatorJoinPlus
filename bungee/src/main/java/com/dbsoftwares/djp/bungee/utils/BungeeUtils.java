@@ -60,7 +60,6 @@ public class BungeeUtils
             str = str.replace( "%server%", p.getServer().getInfo().getName() );
             str = str.replace( "{server}", p.getServer().getInfo().getName() );
         }
-        str = c( str );
 
         if ( ProxyServer.getInstance().getPluginManager().getPlugin( "BungeeUtilisalsX" ) != null )
         {
@@ -70,6 +69,8 @@ public class BungeeUtils
                     str
             );
         }
+        str = c( str );
+
         return str;
     }
 

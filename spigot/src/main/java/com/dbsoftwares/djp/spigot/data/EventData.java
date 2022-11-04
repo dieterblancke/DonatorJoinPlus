@@ -27,6 +27,8 @@ public class EventData
     private Object message;
     private boolean soundEnabled;
     private Sound sound;
+    private float soundPitch = -20F;
+    private float soundVolume = 20F;
     private boolean firework;
     private boolean commandsEnabled;
     private long delay;
@@ -74,6 +76,15 @@ public class EventData
                 logger.warning( "For all available sounds, please check out: https://github.com/dieterblancke/DonatorJoinPlus/blob/master/spigot/src/main/java/com/dbsoftwares/djp/spigot/utils/XSound.java#L70-L883" );
                 logger.warning( "You could also use /djp listsounds to get a list of sounds available in your current version." );
                 return;
+            }
+
+            if ( sound.exists( "pitch" ) )
+            {
+                this.soundPitch = sound.getFloat( "pitch" );
+            }
+            if ( sound.exists( "volume" ) )
+            {
+                this.soundVolume = sound.getFloat( "volume" );
             }
         }
         this.firework = section.getBoolean( "firework" );
