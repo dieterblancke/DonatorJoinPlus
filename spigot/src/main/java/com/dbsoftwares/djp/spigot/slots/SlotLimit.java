@@ -1,6 +1,6 @@
 package com.dbsoftwares.djp.spigot.slots;
 
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.ISection;
 import lombok.Data;
 
 @Data

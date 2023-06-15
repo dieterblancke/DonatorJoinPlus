@@ -1,7 +1,7 @@
 package com.dbsoftwares.djp;
 
-import com.dbsoftwares.configuration.api.IConfiguration;
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.IConfiguration;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 
 import java.io.File;

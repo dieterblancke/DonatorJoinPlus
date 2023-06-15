@@ -6,7 +6,7 @@ package com.dbsoftwares.djp.spigot.data;
  * Project: DonatorJoinPlus
  */
 
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.spigot.utils.XSound;
 import lombok.Data;

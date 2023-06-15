@@ -1,8 +1,8 @@
 package com.dbsoftwares.djp.storage.managers;
 
-import com.dbsoftwares.configuration.api.FileStorageType;
-import com.dbsoftwares.configuration.api.IConfiguration;
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.FileStorageType;
+import be.dieterblancke.configuration.api.IConfiguration;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.user.User;

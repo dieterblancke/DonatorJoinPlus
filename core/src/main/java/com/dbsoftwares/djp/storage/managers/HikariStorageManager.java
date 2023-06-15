@@ -18,7 +18,7 @@
 
 package com.dbsoftwares.djp.storage.managers;
 
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.storage.AbstractStorageManager;
 import com.dbsoftwares.djp.user.User;
@@ -245,7 +245,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         }
     }
 
-    private boolean checkIfColumnDoesNotExist( final Connection connection,
+    private boolean checkIfColumnDoesNotExist(final Connection connection,
                                                final DatabaseMetaData metaData,
                                                final String column ) throws SQLException
     {

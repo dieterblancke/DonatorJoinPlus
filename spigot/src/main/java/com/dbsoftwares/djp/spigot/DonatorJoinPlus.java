@@ -7,8 +7,8 @@ package com.dbsoftwares.djp.spigot;
  */
 
 import com.dbsoftwares.commandapi.CommandManager;
-import com.dbsoftwares.configuration.api.IConfiguration;
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.IConfiguration;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinBase;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.library.Library;

@@ -18,7 +18,7 @@
 
 package com.dbsoftwares.djp.storage.managers;
 
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.zaxxer.hikari.HikariConfig;
 

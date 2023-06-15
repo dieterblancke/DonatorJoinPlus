@@ -1,6 +1,6 @@
 package com.dbsoftwares.djp.spigot.listeners;
 
-import com.dbsoftwares.configuration.api.IConfiguration;
+import be.dieterblancke.configuration.api.IConfiguration;
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
 import com.dbsoftwares.djp.spigot.slots.SlotLimit;
 import com.dbsoftwares.djp.spigot.slots.SlotResizer;

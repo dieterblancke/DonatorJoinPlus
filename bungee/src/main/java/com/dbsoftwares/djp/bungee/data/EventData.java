@@ -6,7 +6,7 @@ package com.dbsoftwares.djp.bungee.data;
  * Project: DonatorJoinPlus
  */
 
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.ISection;
 import lombok.Data;
 
 import java.util.List;

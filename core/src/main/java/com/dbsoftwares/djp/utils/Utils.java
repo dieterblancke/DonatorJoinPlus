@@ -6,7 +6,7 @@ package com.dbsoftwares.djp.utils;
  * Project: DonatorJoinPlus
  */
 
-import com.dbsoftwares.configuration.api.ISection;
+import be.dieterblancke.configuration.api.ISection;
 import com.dbsoftwares.djp.DonatorJoinCore;
 
 import java.util.function.Function;
