@@ -1,11 +1,13 @@
 package com.dbsoftwares.djp.spigot.listeners;
 
 import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
+import com.dbsoftwares.djp.spigot.utils.DonatorJoinEventHelper;
 import com.dbsoftwares.djp.spigot.utils.MessageBuilder;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
 import com.dbsoftwares.djp.user.User;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +22,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class PlayerListener extends DJPListener implements Listener
+@Slf4j
+public class PlayerListener implements Listener
 {
 
     private final Cache<UUID, CompletableFuture<User>> loadingCache = CacheBuilder.newBuilder()
@@ -62,28 +65,27 @@ public class PlayerListener extends DJPListener implements Listener
         {
             for ( String message : DonatorJoinPlus.i().getConfiguration().getStringList( "firstjoin.message" ) )
             {
-                broadcast( MessageBuilder.buildMessage( player, message.replace( "{player}", player.getName() ) ) );
+                DonatorJoinEventHelper.broadcast( MessageBuilder.buildMessage( player, message.replace( "{player}", player.getName() ) ) );
             }
         }
     }
 
     @EventHandler
-    public void onLoad( final PlayerLoginEvent event )
+    public void onLoad( PlayerLoginEvent event )
     {
-        final Player player = event.getPlayer();
+        Player player = event.getPlayer();
 
         DonatorJoinPlus.i().debug( "Initializing loading of storage for player " + player.getName() + "." );
 
-        final CompletableFuture<User> future = CompletableFuture.supplyAsync( () -> DonatorJoinPlus.i().getStorage().getUser( player.getUniqueId() ) );
-        loadingCache.put( player.getUniqueId(), future );
+        loadingCache.put( player.getUniqueId(), CompletableFuture.supplyAsync( () -> DonatorJoinPlus.i().getStorage().getUser( player.getUniqueId() ) ) );
     }
 
     @EventHandler
-    public void onJoin( final PlayerJoinEvent event )
+    public void onJoin( PlayerJoinEvent event )
     {
-        final Player p = event.getPlayer();
+        Player p = event.getPlayer();
+        User user = getUser( p.getUniqueId() );
 
-        final User user = getUser( p.getUniqueId() );
         SpigotUtils.setMetaData( p, SpigotUtils.USER_KEY, user );
 
         DonatorJoinPlus.i().debug( "User loaded for " + p.getName() + ": " + user.toString() );
@@ -93,14 +95,13 @@ public class PlayerListener extends DJPListener implements Listener
             event.setJoinMessage( null );
         }
 
-        if ( SpigotUtils.isVanished( p ) || user.isToggled() )
+        if ( DonatorJoinPlus.i().getVanishIntegration().isVanished( p ) || user.isToggled() )
         {
             return;
         }
 
         DonatorJoinPlus.i().debug( "Executing login event for player " + p.getName() + "." );
-
-        executeEvent( user, true, null, p );
+        DonatorJoinEventHelper.executeEvent( user, true, null, p );
     }
 
     @EventHandler
@@ -125,15 +126,15 @@ public class PlayerListener extends DJPListener implements Listener
         {
             return;
         }
-        executeEvent( user, false, null, p );
         DonatorJoinPlus.i().debug( "Executing logout event for player " + p.getName() + "." );
+        DonatorJoinEventHelper.executeEvent( user, false, null, p );
     }
 
     @EventHandler
     public void onWorldChange( PlayerChangedWorldEvent event )
     {
         final Player p = event.getPlayer();
-        User user = (User) SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
+        User user = SpigotUtils.getMetaData( p, SpigotUtils.USER_KEY, null );
         if ( user == null )
         {
             user = DonatorJoinPlus.i().getStorage().getUser( p.getUniqueId() );
@@ -146,8 +147,8 @@ public class PlayerListener extends DJPListener implements Listener
         {
             return;
         }
-        executeEvent( user, false, event.getFrom(), p );
-        executeEvent( user, true, event.getPlayer().getWorld(), p );
+        DonatorJoinEventHelper.executeEvent( user, false, event.getFrom(), p );
+        DonatorJoinEventHelper.executeEvent( user, true, event.getPlayer().getWorld(), p );
     }
 
     private User getUser( final UUID uuid )
@@ -164,7 +165,7 @@ public class PlayerListener extends DJPListener implements Listener
         }
         catch ( InterruptedException | ExecutionException e )
         {
-            e.printStackTrace();
+            log.error( "An error occured while loading a user with uuid " + uuid + ":", e );
             return DonatorJoinPlus.i().getStorage().getUser( uuid );
         }
     }

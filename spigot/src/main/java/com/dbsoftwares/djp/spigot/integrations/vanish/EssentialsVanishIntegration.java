@@ -1,15 +1,31 @@
-package com.dbsoftwares.djp.spigot.listeners;
+package com.dbsoftwares.djp.spigot.integrations.vanish;
 
+import com.dbsoftwares.djp.spigot.DonatorJoinPlus;
+import com.dbsoftwares.djp.spigot.utils.DonatorJoinEventHelper;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
 import com.dbsoftwares.djp.user.User;
 import de.myzelyam.api.vanish.PlayerHideEvent;
 import de.myzelyam.api.vanish.PlayerShowEvent;
+import de.myzelyam.api.vanish.VanishAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class VanishListener extends DJPListener implements Listener
+public class EssentialsVanishIntegration implements VanishIntegration, Listener
 {
+
+    @Override
+    public void register()
+    {
+        Bukkit.getPluginManager().registerEvents( this, DonatorJoinPlus.i() );
+    }
+
+    @Override
+    public boolean isVanished( Player player )
+    {
+        return VanishAPI.isInvisible( player );
+    }
 
     @EventHandler
     public void onPlayerShow( PlayerShowEvent event )
@@ -22,7 +38,7 @@ public class VanishListener extends DJPListener implements Listener
             return;
         }
 
-        executeEvent( user, true, null, player );
+        DonatorJoinEventHelper.executeEvent( user, true, null, player );
     }
 
     @EventHandler
@@ -36,6 +52,6 @@ public class VanishListener extends DJPListener implements Listener
             return;
         }
 
-        executeEvent( user, false, null, player );
+        DonatorJoinEventHelper.executeEvent( user, false, null, player );
     }
 }

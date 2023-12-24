@@ -72,9 +72,11 @@ public class SpigotUtils
         {
             if ( meta.asBoolean() )
             {
+                DonatorJoinPlus.i().debug( player.getName() + " is currently vanished according to " + meta.getOwningPlugin().getName() + ", stopping ..." );
                 return true;
             }
         }
+        DonatorJoinPlus.i().debug( player.getName() + " is currently not vanished, continuing ..." );
         return false;
     }
 

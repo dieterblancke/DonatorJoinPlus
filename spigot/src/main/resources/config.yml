@@ -69,6 +69,14 @@ usepriorities: true
 # or all if usepriorities is set to false.
 usepermissions: true
 
+# Should vanish plugins be supported?
+# If set to true, DonatorJoinPlus will not send join/leave messages for vanished users anymore, but will still send them for non-vanished users.
+# Supported plugins: PremiumVanish, SuperVanish, VelocityVanish, Essentials
+#
+# A caviat with VelocityVanish (due to implementation on my side) is that it can still show a message
+# if a vanished user joins an empty server. (however this is deemed a non-issue as the server is empty anyway)
+vanish-support: true
+
 firstjoin:
   enabled: true
   message:

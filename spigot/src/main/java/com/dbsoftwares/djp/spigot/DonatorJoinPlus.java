@@ -6,18 +6,18 @@ package com.dbsoftwares.djp.spigot;
  * Project: DonatorJoinPlus
  */
 
-import com.dbsoftwares.commandapi.CommandManager;
 import be.dieterblancke.configuration.api.IConfiguration;
 import be.dieterblancke.configuration.api.ISection;
+import com.dbsoftwares.commandapi.CommandManager;
 import com.dbsoftwares.djp.DonatorJoinBase;
 import com.dbsoftwares.djp.DonatorJoinCore;
 import com.dbsoftwares.djp.library.Library;
 import com.dbsoftwares.djp.library.StandardLibrary;
 import com.dbsoftwares.djp.spigot.commands.DJCommand;
 import com.dbsoftwares.djp.spigot.data.RankData;
+import com.dbsoftwares.djp.spigot.integrations.vanish.*;
 import com.dbsoftwares.djp.spigot.listeners.PlayerListener;
 import com.dbsoftwares.djp.spigot.listeners.SlotListener;
-import com.dbsoftwares.djp.spigot.listeners.VanishListener;
 import com.dbsoftwares.djp.spigot.slots.SlotLimit;
 import com.dbsoftwares.djp.spigot.slots.SlotResizer;
 import com.dbsoftwares.djp.spigot.utils.SpigotUtils;
@@ -56,6 +56,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
     private IConfiguration configuration;
     private SlotResizer slotResizer;
     private IConfiguration messages;
+    private VanishIntegration vanishIntegration;
 
     public static DonatorJoinPlus i()
     {
@@ -84,8 +85,9 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
             }
         }
 
-        slotResizer = new SlotResizer();
-        loadConfig();
+        this.slotResizer = new SlotResizer();
+        this.vanishIntegration = this.detectVanishIntegration();
+        this.vanishIntegration.register();
 
         RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServicesManager().getRegistration( Permission.class );
         if ( permissionProvider != null )
@@ -96,12 +98,6 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         getServer().getPluginManager().registerEvents( new PlayerListener(), this );
         getServer().getPluginManager().registerEvents( new SlotListener(), this );
         CommandManager.getInstance().registerCommand( new DJCommand() );
-
-        if ( getServer().getPluginManager().isPluginEnabled( "SuperVanish" )
-                || getServer().getPluginManager().isPluginEnabled( "PremiumVanish" ) )
-        {
-            getServer().getPluginManager().registerEvents( new VanishListener(), this );
-        }
 
         AbstractStorageManager.StorageType type;
         final String typeString = configuration.getString( "storage.type" ).toUpperCase();
@@ -139,6 +135,28 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         }
 
         new Metrics( this );
+    }
+
+    private VanishIntegration detectVanishIntegration()
+    {
+        if ( configuration.exists( "vanish-support" ) && configuration.getBoolean( "vanish-support" ) )
+        {
+            if ( getServer().getPluginManager().isPluginEnabled( "SuperVanish" )
+                    || getServer().getPluginManager().isPluginEnabled( "PremiumVanish" ) )
+            {
+                return new SuperAndPremiumVanishIntegration();
+            }
+            else if ( getServer().getPluginManager().isPluginEnabled( "VelocityVanish" ) )
+            {
+                return new VelocityVanishIntegration();
+            }
+            else if ( getServer().getPluginManager().isPluginEnabled( "Essentials" ) )
+            {
+                return new EssentialsVanishIntegration();
+            }
+        }
+
+        return new NoOpVanishIntegration();
     }
 
     @Override
