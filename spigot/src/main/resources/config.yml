@@ -149,7 +149,7 @@ ranks:
           - 'tm bc &a&lElite &b{player} %nl% &ehas joined the game!'
     quit:
       enabled: true
-      message: '&e{player} has left the game'
+      message: '&6[&aElite&6] &b{player} &ehas left the game!'
       sound:
         enabled: true
         sound: ENTITY_IRONGOLEM_DEATH

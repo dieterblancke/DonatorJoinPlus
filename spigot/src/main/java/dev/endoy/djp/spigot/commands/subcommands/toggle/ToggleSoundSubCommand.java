@@ -45,8 +45,8 @@ public class ToggleSoundSubCommand extends DJSubCommand
             onExecute( (CommandSender) player, args );
             return;
         }
-        final User user = DonatorJoinPlus.i().getUser( player.getUniqueId() );
-        final boolean toggled = !user.isSoundToggled();
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
+        boolean toggled = !user.isSoundToggled();
 
         user.setSoundToggled( toggled );
         DonatorJoinPlus.i().getStorage().toggleSound( player.getUniqueId(), toggled );
@@ -73,29 +73,17 @@ public class ToggleSoundSubCommand extends DJSubCommand
             sender.sendMessage( Utils.getMessage( "never-joined" ) );
             return;
         }
-        final Player target = Bukkit.getPlayer( uuid );
-        final boolean toggled;
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( uuid );
+        boolean toggled = !user.isSoundToggled();
 
-        if ( target == null )
-        {
-            toggled = !DonatorJoinPlus.i().getStorage().isSoundToggled( uuid );
-        }
-        else
-        {
-            final User user = DonatorJoinPlus.i().getUser( uuid );
+        user.setSoundToggled( toggled );
+        DonatorJoinPlus.i().getStorage().toggleSound( uuid, toggled );
 
-            if ( user != null )
-            {
-                toggled = !user.isSoundToggled();
-                user.setSoundToggled( toggled );
-            }
-            else
-            {
-                toggled = !DonatorJoinPlus.i().getStorage().isSoundToggled( uuid );
-            }
+        Player target = Bukkit.getPlayer( uuid );
+        if ( target != null )
+        {
             target.sendMessage( Utils.getMessage( "sound.toggle." + ( toggled ? "disabled" : "enabled" ) ) );
         }
-        DonatorJoinPlus.i().getStorage().toggleSound( uuid, toggled );
 
         sender.sendMessage(
                 Utils.getMessage( "sound.toggle." + ( toggled ? "disabled" : "enabled" ) + "-other" )

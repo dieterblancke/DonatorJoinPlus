@@ -36,50 +36,6 @@ public class SpigotUtils
     {
     }
 
-    public static void setMetaData( final Player player, final String key, final Object value )
-    {
-        // Removing first to be sure
-        player.removeMetadata( key, DonatorJoinPlus.i() );
-
-        // Setting meta data
-        player.setMetadata( key, new FixedMetadataValue( DonatorJoinPlus.i(), value ) );
-    }
-
-    public static <T> T getMetaData( final Player player, final String key )
-    {
-        return (T) getMetaData( player, key, null );
-    }
-
-    public static <T> T getMetaData( final Player player, final String key, T defaultValue )
-    {
-        if ( player == null )
-        {
-            return null;
-        }
-        for ( MetadataValue meta : player.getMetadata( key ) )
-        {
-            if ( meta.getOwningPlugin().getName().equalsIgnoreCase( DonatorJoinPlus.i().getName() ) )
-            {
-                return (T) meta.value();
-            }
-        }
-        return defaultValue;
-    }
-
-    public static boolean isVanished( Player player )
-    {
-        for ( MetadataValue meta : player.getMetadata( "vanished" ) )
-        {
-            if ( meta.asBoolean() )
-            {
-                DonatorJoinPlus.i().debug( player.getName() + " is currently vanished according to " + meta.getOwningPlugin().getName() + ", stopping ..." );
-                return true;
-            }
-        }
-        DonatorJoinPlus.i().debug( player.getName() + " is currently not vanished, continuing ..." );
-        return false;
-    }
-
     public static void spawnFirework( Location loc )
     {
         Firework firework = loc.getWorld().spawn( loc, Firework.class );

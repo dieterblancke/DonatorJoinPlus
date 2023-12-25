@@ -45,8 +45,8 @@ public class ToggleFireworkSubCommand extends DJSubCommand
             onExecute( (CommandSender) player, args );
             return;
         }
-        final User user = DonatorJoinPlus.i().getUser( player.getUniqueId() );
-        final boolean toggled = !user.isFireworkToggled();
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
+        boolean toggled = !user.isFireworkToggled();
 
         user.setFireworkToggled( toggled );
         DonatorJoinPlus.i().getStorage().toggleFirework( player.getUniqueId(), toggled );
@@ -66,36 +66,24 @@ public class ToggleFireworkSubCommand extends DJSubCommand
             sender.sendMessage( Utils.getMessage( "no-perm" ) );
             return;
         }
-        final String playerName = args[0];
-        final UUID uuid = SpigotUtils.getUuid( args[0] );
+        String playerName = args[0];
+        UUID uuid = SpigotUtils.getUuid( args[0] );
         if ( uuid == null )
         {
             sender.sendMessage( Utils.getMessage( "never-joined" ) );
             return;
         }
-        final Player target = Bukkit.getPlayer( uuid );
-        final boolean toggled;
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( uuid );
+        boolean toggled = !user.isFireworkToggled();
 
-        if ( target == null )
-        {
-            toggled = !DonatorJoinPlus.i().getStorage().isFireworkToggled( uuid );
-        }
-        else
-        {
-            final User user = DonatorJoinPlus.i().getUser( uuid );
+        user.setFireworkToggled( toggled );
+        DonatorJoinPlus.i().getStorage().toggleFirework( uuid, toggled );
 
-            if ( user != null )
-            {
-                toggled = !user.isFireworkToggled();
-                user.setFireworkToggled( toggled );
-            }
-            else
-            {
-                toggled = !DonatorJoinPlus.i().getStorage().isFireworkToggled( uuid );
-            }
+        Player target = Bukkit.getPlayer( uuid );
+        if ( target != null )
+        {
             target.sendMessage( Utils.getMessage( "firework.toggle." + ( toggled ? "disabled" : "enabled" ) ) );
         }
-        DonatorJoinPlus.i().getStorage().toggleFirework( uuid, toggled );
 
         sender.sendMessage(
                 Utils.getMessage( "firework.toggle." + ( toggled ? "disabled" : "enabled" ) + "-other" )

@@ -165,7 +165,7 @@ public class DonatorJoinEventHelper
     {
         for ( Player player : Bukkit.getOnlinePlayers() )
         {
-            final User user = SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+            User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
 
             if ( user == null || !user.isMessagesMuted() )
             {

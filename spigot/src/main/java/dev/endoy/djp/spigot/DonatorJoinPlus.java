@@ -16,22 +16,20 @@ import dev.endoy.djp.library.StandardLibrary;
 import dev.endoy.djp.spigot.commands.DJCommand;
 import dev.endoy.djp.spigot.data.RankData;
 import dev.endoy.djp.spigot.integrations.vanish.*;
-import dev.endoy.djp.spigot.integrations.vanish.*;
 import dev.endoy.djp.spigot.listeners.PlayerListener;
 import dev.endoy.djp.spigot.listeners.SlotListener;
+import dev.endoy.djp.spigot.manager.UserManager;
 import dev.endoy.djp.spigot.slots.SlotLimit;
 import dev.endoy.djp.spigot.slots.SlotResizer;
 import dev.endoy.djp.spigot.utils.SpigotUtils;
 import dev.endoy.djp.storage.AbstractStorageManager;
 import dev.endoy.djp.storage.managers.FileStorageManager;
-import dev.endoy.djp.user.User;
 import dev.endoy.djp.utils.Utils;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,7 +37,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 @Getter
@@ -58,6 +55,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
     private SlotResizer slotResizer;
     private IConfiguration messages;
     private VanishIntegration vanishIntegration;
+    private UserManager userManager;
 
     public static DonatorJoinPlus i()
     {
@@ -86,6 +84,7 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
             }
         }
 
+        this.userManager = new UserManager();
         this.slotResizer = new SlotResizer();
         this.vanishIntegration = this.detectVanishIntegration();
         this.vanishIntegration.register();
@@ -286,18 +285,6 @@ public class DonatorJoinPlus extends JavaPlugin implements DonatorJoinBase
         {
             getLogger().info( message );
         }
-    }
-
-    public User getUser( final UUID uuid )
-    {
-        final Player player = Bukkit.getPlayer( uuid );
-
-        if ( player == null )
-        {
-            return null;
-        }
-
-        return (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY );
     }
 
     @Override

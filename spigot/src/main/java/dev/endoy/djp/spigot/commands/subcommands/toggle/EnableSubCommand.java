@@ -26,9 +26,7 @@ public class EnableSubCommand extends ToggableSubCommand
     {
         if ( args.length == 0 )
         {
-            final UUID uuid = player.getUniqueId();
-
-            enable( uuid );
+            toggle( player.getUniqueId(), false );
         }
         else
         {
@@ -51,13 +49,13 @@ public class EnableSubCommand extends ToggableSubCommand
                 return;
             }
 
-            final UUID uuid = SpigotUtils.getUuid( args[0] );
+            UUID uuid = SpigotUtils.getUuid( args[0] );
             if ( uuid == null )
             {
                 sender.sendMessage( Utils.getMessage( "never-joined" ) );
                 return;
             }
-            enable( uuid );
+            toggle( uuid, false );
 
             sender.sendMessage( Utils.getMessage( "enabled-other" ).replace( "{player}", args[0] ) );
         }

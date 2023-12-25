@@ -1,11 +1,11 @@
 package dev.endoy.djp.spigot.commands.subcommands.toggle;
 
 import com.dbsoftwares.commandapi.command.SubCommand;
+import com.google.common.collect.ImmutableList;
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.utils.SpigotUtils;
 import dev.endoy.djp.user.User;
 import dev.endoy.djp.utils.Utils;
-import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,23 +49,9 @@ public class ToggableSubCommand extends SubCommand
     {
         if ( args.length == 0 )
         {
-            final UUID uuid = player.getUniqueId();
-            final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+            User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
 
-            if ( user == null )
-            {
-                return;
-            }
-            final boolean toggled = user.isToggled();
-
-            if ( toggled )
-            {
-                enable( uuid );
-            }
-            else
-            {
-                disable( uuid );
-            }
+            toggle( player.getUniqueId(), user.isToggled() );
         }
         else
         {
@@ -94,70 +80,26 @@ public class ToggableSubCommand extends SubCommand
                 sender.sendMessage( Utils.getMessage( "never-joined" ) );
                 return;
             }
-            final Player target = Bukkit.getPlayer( uuid );
-            final User user = (User) SpigotUtils.getMetaData( target, SpigotUtils.USER_KEY, null );
+            Player target = Bukkit.getPlayer( uuid );
+            User targetUser = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( target.getUniqueId() );
 
-            final boolean toggled;
-            if ( target == null || user == null )
-            {
-                toggled = DonatorJoinPlus.i().getStorage().isToggled( uuid );
-            }
-            else
-            {
-                toggled = user.isToggled();
-            }
-
-            if ( toggled )
-            {
-                enable( uuid );
-            }
-            else
-            {
-                disable( uuid );
-            }
+            toggle( uuid, targetUser.isToggled() );
         }
     }
 
-    protected void enable( final UUID uuid )
+    protected void toggle( UUID uuid, boolean toggled )
     {
-        final CompletableFuture<Void> future = CompletableFuture.runAsync( () -> DonatorJoinPlus.i().getStorage().toggle( uuid, false ) );
-        future.thenRun( () ->
-        {
-            final Player player = Bukkit.getPlayer( uuid );
-
-            if ( player != null && player.isOnline() )
-            {
-                final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
-
-                if ( user != null )
+        CompletableFuture.runAsync( () -> DonatorJoinPlus.i().getStorage().toggle( uuid, toggled ) )
+                .thenRun( () -> DonatorJoinPlus.i().getUserManager().getUser( uuid ).ifPresent( user ->
                 {
                     user.setToggled( false );
 
-                    player.sendMessage( Utils.getMessage( "enabled" ) );
-                }
-            }
-        } );
-    }
-
-    protected void disable( final UUID uuid )
-    {
-        final CompletableFuture<Void> future = CompletableFuture.runAsync( () -> DonatorJoinPlus.i().getStorage().toggle( uuid, true ) );
-        future.thenRun( () ->
-        {
-            final Player player = Bukkit.getPlayer( uuid );
-
-            if ( player != null && player.isOnline() )
-            {
-                final User user = (User) SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
-
-                if ( user != null )
-                {
-                    user.setToggled( true );
-
-                    player.sendMessage( Utils.getMessage( "disabled" ) );
-                }
-            }
-        } );
+                    Player player = Bukkit.getPlayer( uuid );
+                    if ( player != null )
+                    {
+                        player.sendMessage( Utils.getMessage( toggled ? "enabled" : "disabled" ) );
+                    }
+                } ) );
     }
 
     @Override

@@ -2,10 +2,10 @@ package dev.endoy.djp.spigot.integrations.vanish;
 
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.utils.DonatorJoinEventHelper;
-import dev.endoy.djp.spigot.utils.SpigotUtils;
 import dev.endoy.djp.user.User;
-import com.earth2me.essentials.Essentials;
-import net.ess3.api.events.VanishStatusChangeEvent;
+import de.myzelyam.api.vanish.PlayerHideEvent;
+import de.myzelyam.api.vanish.PlayerShowEvent;
+import de.myzelyam.api.vanish.VanishAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,22 +23,24 @@ public class SuperAndPremiumVanishIntegration implements VanishIntegration, List
     @Override
     public boolean isVanished( Player player )
     {
-        Essentials essentials = Essentials.getPlugin( Essentials.class );
-
-        return essentials.getUser( player ).isVanished() || essentials.getVanishedPlayersNew().contains( player.getName() );
+        return VanishAPI.isInvisible( player );
     }
 
     @EventHandler
-    public void onVanishStatusChange( VanishStatusChangeEvent event )
+    public void onPlayerShow( PlayerShowEvent event )
     {
-        Player player = event.getAffected().getBase();
-        User user = SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+        Player player = event.getPlayer();
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
 
-        if ( user == null )
-        {
-            return;
-        }
+        DonatorJoinEventHelper.executeEvent( user, true, null, player );
+    }
 
-        DonatorJoinEventHelper.executeEvent( user, !event.getValue(), null, player );
+    @EventHandler
+    public void onPlayerHide( PlayerHideEvent event )
+    {
+        Player player = event.getPlayer();
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
+
+        DonatorJoinEventHelper.executeEvent( user, false, null, player );
     }
 }

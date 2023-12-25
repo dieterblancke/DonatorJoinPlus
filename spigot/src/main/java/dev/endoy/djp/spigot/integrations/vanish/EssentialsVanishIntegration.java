@@ -2,11 +2,9 @@ package dev.endoy.djp.spigot.integrations.vanish;
 
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.utils.DonatorJoinEventHelper;
-import dev.endoy.djp.spigot.utils.SpigotUtils;
 import dev.endoy.djp.user.User;
-import de.myzelyam.api.vanish.PlayerHideEvent;
-import de.myzelyam.api.vanish.PlayerShowEvent;
-import de.myzelyam.api.vanish.VanishAPI;
+import com.earth2me.essentials.Essentials;
+import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,34 +22,19 @@ public class EssentialsVanishIntegration implements VanishIntegration, Listener
     @Override
     public boolean isVanished( Player player )
     {
-        return VanishAPI.isInvisible( player );
+        Essentials essentials = Essentials.getPlugin( Essentials.class );
+
+        return essentials.getUser( player ).isVanished() || essentials.getVanishedPlayersNew().contains( player.getName() );
     }
 
     @EventHandler
-    public void onPlayerShow( PlayerShowEvent event )
+    public void onVanishStatusChange( VanishStatusChangeEvent event )
     {
-        Player player = event.getPlayer();
-        User user = SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
+        Player player = event.getAffected().getBase();
+        User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
 
-        if ( user == null )
-        {
-            return;
-        }
+        DonatorJoinPlus.i().debug( "Essentials vanish status changed to " + event.getValue() + "." );
 
-        DonatorJoinEventHelper.executeEvent( user, true, null, player );
-    }
-
-    @EventHandler
-    public void onPlayerHide( PlayerHideEvent event )
-    {
-        Player player = event.getPlayer();
-        User user = SpigotUtils.getMetaData( player, SpigotUtils.USER_KEY, null );
-
-        if ( user == null )
-        {
-            return;
-        }
-
-        DonatorJoinEventHelper.executeEvent( user, false, null, player );
+        DonatorJoinEventHelper.executeEvent( user, !event.getValue(), null, player );
     }
 }
