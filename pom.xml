@@ -16,8 +16,8 @@
 
     <repositories>
         <repository>
-            <id>dieterblancke</id>
-            <url>https://repo.dieterblancke.xyz/artifactory/dieterblancke-public/</url>
+            <id>endoy</id>
+            <url>https://repo.endoy.dev/artifactory/dieterblancke-public/</url>
         </repository>
         <repository>
             <id>vault-repo</id>
