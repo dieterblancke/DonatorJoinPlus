@@ -1,5 +1,5 @@
 name: DonatorJoinPlus
-main: com.dbsoftwares.djp.bungee.DonatorJoinPlus
+main: dev.endoy.djp.bungee.DonatorJoinPlus
 version: ${project.version}
 author: didjee2
 softDepends:

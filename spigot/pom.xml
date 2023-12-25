@@ -77,7 +77,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>com.dbsoftwares.djp.metrics</shadedPattern>
+                            <shadedPattern>dev.endoy.djp.metrics</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

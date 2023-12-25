@@ -1,5 +1,5 @@
 name: DonatorJoinPlus
-main: com.dbsoftwares.djp.spigot.DonatorJoinPlus
+main: dev.endoy.djp.spigot.DonatorJoinPlus
 version: ${project.version}
 depend: [ Vault ]
 author: didjee2

@@ -3,12 +3,10 @@ package dev.endoy.djp.spigot.commands;
 import com.dbsoftwares.commandapi.command.MainSpigotCommand;
 import com.dbsoftwares.commandapi.command.SubCommand;
 import com.dbsoftwares.commandapi.utils.MessageConfig;
-import com.dbsoftwares.djp.spigot.commands.subcommands.*;
-import com.dbsoftwares.djp.spigot.commands.subcommands.toggle.*;
-import dev.endoy.djp.utils.Utils;
-import com.google.common.collect.Lists;
 import dev.endoy.djp.spigot.commands.subcommands.*;
 import dev.endoy.djp.spigot.commands.subcommands.toggle.*;
+import dev.endoy.djp.utils.Utils;
+import com.google.common.collect.Lists;
 import org.bukkit.command.CommandSender;
 
 public class DJCommand extends MainSpigotCommand

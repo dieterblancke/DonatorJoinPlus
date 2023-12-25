@@ -15,7 +15,7 @@ import dev.endoy.djp.library.Library;
 import dev.endoy.djp.library.StandardLibrary;
 import dev.endoy.djp.spigot.commands.DJCommand;
 import dev.endoy.djp.spigot.data.RankData;
-import com.dbsoftwares.djp.spigot.integrations.vanish.*;
+import dev.endoy.djp.spigot.integrations.vanish.*;
 import dev.endoy.djp.spigot.integrations.vanish.*;
 import dev.endoy.djp.spigot.listeners.PlayerListener;
 import dev.endoy.djp.spigot.listeners.SlotListener;
