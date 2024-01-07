@@ -22,6 +22,7 @@ public class EssentialsVanishIntegration implements VanishIntegration, Listener
     @Override
     public boolean isVanished( Player player )
     {
+        DonatorJoinPlus.i().debug( "Checking if user is vanished by Essentials." );
         Essentials essentials = Essentials.getPlugin( Essentials.class );
 
         return essentials.getUser( player ).isVanished() || essentials.getVanishedPlayersNew().contains( player.getName() );

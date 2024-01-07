@@ -23,6 +23,8 @@ public class SuperAndPremiumVanishIntegration implements VanishIntegration, List
     @Override
     public boolean isVanished( Player player )
     {
+        DonatorJoinPlus.i().debug( "Checking if user is vanished by Super/PremiumVanish." );
+
         return VanishAPI.isInvisible( player );
     }
 
@@ -32,6 +34,8 @@ public class SuperAndPremiumVanishIntegration implements VanishIntegration, List
         Player player = event.getPlayer();
         User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
 
+        DonatorJoinPlus.i().debug( "Player got unvanished by Super/PremiumVanish, sending join message." );
+
         DonatorJoinEventHelper.executeEvent( user, true, null, player );
     }
 
@@ -40,6 +44,8 @@ public class SuperAndPremiumVanishIntegration implements VanishIntegration, List
     {
         Player player = event.getPlayer();
         User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
+
+        DonatorJoinPlus.i().debug( "Player got vanished by Super/PremiumVanish, sending quit message." );
 
         DonatorJoinEventHelper.executeEvent( user, false, null, player );
     }

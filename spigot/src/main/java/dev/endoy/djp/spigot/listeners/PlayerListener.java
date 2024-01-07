@@ -1,8 +1,10 @@
 package dev.endoy.djp.spigot.listeners;
 
 import dev.endoy.djp.spigot.DonatorJoinPlus;
+import dev.endoy.djp.spigot.utils.Constants;
 import dev.endoy.djp.spigot.utils.DonatorJoinEventHelper;
 import dev.endoy.djp.spigot.utils.MessageBuilder;
+import dev.endoy.djp.spigot.utils.SpigotUtils;
 import dev.endoy.djp.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;
@@ -40,6 +42,8 @@ public class PlayerListener implements Listener
     public void onLoad( PlayerLoginEvent event )
     {
         Player player = event.getPlayer();
+
+        SpigotUtils.setMetaData( player, Constants.DJP_JOIN_TIME_KEY, System.currentTimeMillis() );
 
         DonatorJoinPlus.i().debug( "Initializing loading of storage for player " + player.getName() + "." );
         DonatorJoinPlus.i().getUserManager().loadUser( player.getUniqueId() );
