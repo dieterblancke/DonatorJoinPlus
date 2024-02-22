@@ -2,6 +2,7 @@ package dev.endoy.djp.spigot.utils;
 
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.data.EventData;
+import dev.endoy.djp.spigot.data.EventData.EventType;
 import dev.endoy.djp.spigot.data.RankData;
 import dev.endoy.djp.spigot.data.WorldEventData;
 import dev.endoy.djp.user.User;
@@ -31,7 +32,7 @@ public class DonatorJoinEventHelper
 
         for ( RankData data : DonatorJoinPlus.i().getRankData() )
         {
-            final EventData.EventType type = join ? EventData.EventType.JOIN : EventData.EventType.QUIT;
+            final EventType type = join ? EventType.JOIN : EventType.QUIT;
             final EventData eventData = ( world != null ? data.getWorldEvents() : data.getEvents() ).getOrDefault( type, null );
 
             if ( eventData == null )
@@ -120,11 +121,15 @@ public class DonatorJoinEventHelper
 
             if ( eventData.isSoundEnabled() && ( user == null || !user.isSoundToggled() ) )
             {
-                String soundName = user == null ? null : ( eventData.getType() == EventData.EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
+                String soundName = user == null ? null : ( eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
                 Optional<XSound> optionalXSound = ofNullable( Strings.emptyToNull( soundName ) ).flatMap( XSound::matchXSound );
 
-                float soundVolume = user == null ? eventData.getSoundVolume() : ( eventData.getType() == EventData.EventType.JOIN ? user.getJoinSoundVolume() : user.getLeaveSoundVolume() );
-                float soundPitch = user == null ? eventData.getSoundPitch() : ( eventData.getType() == EventData.EventType.JOIN ? user.getJoinSoundPitch() : user.getLeaveSoundPitch() );
+                Integer soundVolume = ofNullable(user )
+                        .map( it -> eventData.getType() == EventType.JOIN ? it.getJoinSoundVolume() : it.getLeaveSoundVolume() )
+                        .orElse( eventData.getSoundVolume() );
+                Integer soundPitch = ofNullable(user )
+                        .map( it -> eventData.getType() == EventType.JOIN ? it.getJoinSoundPitch() : it.getLeaveSoundPitch() )
+                        .orElse( eventData.getSoundPitch() );
 
                 if ( soundName != null && optionalXSound.isPresent() )
                 {

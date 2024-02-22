@@ -88,9 +88,9 @@ public abstract class AbstractStorageManager
 
     public abstract void setSlotGroup( UUID uuid, String slotGroup );
 
-    public abstract void setJoinSound( UUID uuid, String sound, float volume, float pitch );
+    public abstract void setJoinSound( UUID uuid, String sound, Integer volume, Integer pitch );
 
-    public abstract void setLeaveSound( UUID uuid, String sound, float volume, float pitch );
+    public abstract void setLeaveSound( UUID uuid, String sound, Integer volume, Integer pitch );
 
     public abstract void toggleSound( UUID uuid, boolean toggled );
 

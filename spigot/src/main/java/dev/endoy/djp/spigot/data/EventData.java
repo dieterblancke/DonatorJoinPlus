@@ -27,8 +27,8 @@ public class EventData
     private Object message;
     private boolean soundEnabled;
     private Sound sound;
-    private float soundPitch = -20F;
-    private float soundVolume = 20F;
+    private Integer soundPitch;
+    private Integer soundVolume;
     private boolean firework;
     private boolean commandsEnabled;
     private long delay;
@@ -80,11 +80,11 @@ public class EventData
 
             if ( sound.exists( "pitch" ) )
             {
-                this.soundPitch = sound.getFloat( "pitch" );
+                this.soundPitch = sound.getInteger( "pitch" );
             }
             if ( sound.exists( "volume" ) )
             {
-                this.soundVolume = sound.getFloat( "volume" );
+                this.soundVolume = sound.getInteger( "volume" );
             }
         }
         this.firework = section.getBoolean( "firework" );

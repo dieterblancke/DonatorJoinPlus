@@ -143,7 +143,7 @@ public class FileStorageManager extends AbstractStorageManager
     }
 
     @Override
-    public void setJoinSound( final UUID uuid, final String sound, final float volume, final float pitch )
+    public void setJoinSound( final UUID uuid, final String sound, final Integer volume, final Integer pitch )
     {
         final ISection userSection = storage.getSection( "users" );
         userSection.set( uuid + ".joinsound", sound );
@@ -154,7 +154,7 @@ public class FileStorageManager extends AbstractStorageManager
     }
 
     @Override
-    public void setLeaveSound( final UUID uuid, final String sound, final float volume, final float pitch )
+    public void setLeaveSound( final UUID uuid, final String sound, final Integer volume, final Integer pitch )
     {
         final ISection userSection = storage.getSection( "users" );
         userSection.set( uuid + ".leavesound", sound );
@@ -231,11 +231,11 @@ public class FileStorageManager extends AbstractStorageManager
                 getOrDefault( section, "toggled", false ),
                 getOrDefault( section, "slotgroup", "none" ),
                 getOrDefault( section, "joinsound", null ),
-                getOrDefault( section, "join_volume", 20 ),
-                getOrDefault( section, "join_pitch", -20 ),
+                getOrDefault( section, "join_volume", null ),
+                getOrDefault( section, "join_pitch", null ),
                 getOrDefault( section, "leavesound", null ),
-                getOrDefault( section, "leave_volume", 20 ),
-                getOrDefault( section, "leave_pitch", -20 ),
+                getOrDefault( section, "leave_volume", null ),
+                getOrDefault( section, "leave_pitch", null ),
                 getOrDefault( section, "soundtoggled", false ),
                 getOrDefault( section, "fireworktoggled", false ),
                 getOrDefault( section, "messagesmuted", false )

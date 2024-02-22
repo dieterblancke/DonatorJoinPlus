@@ -208,7 +208,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         if ( checkIfColumnDoesNotExist( connection, metaData, "join_volume" ) )
         {
             try ( PreparedStatement pstmt = connection.prepareStatement(
-                    "ALTER TABLE djp_data ADD join_volume " + intType + " DEFAULT 20;" )
+                    "ALTER TABLE djp_data ADD join_volume " + intType + " DEFAULT NULL;" )
             )
             {
                 pstmt.execute();
@@ -217,7 +217,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         if ( checkIfColumnDoesNotExist( connection, metaData, "join_pitch" ) )
         {
             try ( PreparedStatement pstmt = connection.prepareStatement(
-                    "ALTER TABLE djp_data ADD join_pitch " + intType + " DEFAULT -20;" )
+                    "ALTER TABLE djp_data ADD join_pitch " + intType + " DEFAULT NULL;" )
             )
             {
                 pstmt.execute();
@@ -226,7 +226,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         if ( checkIfColumnDoesNotExist( connection, metaData, "leave_volume" ) )
         {
             try ( PreparedStatement pstmt = connection.prepareStatement(
-                    "ALTER TABLE djp_data ADD leave_volume " + intType + " DEFAULT 20;" )
+                    "ALTER TABLE djp_data ADD leave_volume " + intType + " DEFAULT NULL;" )
             )
             {
                 pstmt.execute();
@@ -235,7 +235,7 @@ public abstract class HikariStorageManager extends AbstractStorageManager
         if ( checkIfColumnDoesNotExist( connection, metaData, "leave_pitch" ) )
         {
             try ( PreparedStatement pstmt = connection.prepareStatement(
-                    "ALTER TABLE djp_data ADD leave_pitch " + intType + " DEFAULT -20;" )
+                    "ALTER TABLE djp_data ADD leave_pitch " + intType + " DEFAULT NULL;" )
             )
             {
                 pstmt.execute();
@@ -391,15 +391,15 @@ public abstract class HikariStorageManager extends AbstractStorageManager
     }
 
     @Override
-    public void setJoinSound( final UUID uuid, final String sound, final float volume, final float pitch )
+    public void setJoinSound( final UUID uuid, final String sound, final Integer volume, final Integer pitch )
     {
         try ( Connection connection = getConnection() )
         {
             try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET joinsound = ?, join_volume = ?, join_pitch = ? WHERE uuid = ?;" ) )
             {
                 pstmt.setString( 1, sound );
-                pstmt.setInt( 2, (int) volume );
-                pstmt.setInt( 3, (int) pitch );
+                pstmt.setInt( 2, volume );
+                pstmt.setInt( 3, pitch );
                 pstmt.setString( 4, uuid.toString() );
                 pstmt.executeUpdate();
             }
@@ -411,15 +411,15 @@ public abstract class HikariStorageManager extends AbstractStorageManager
     }
 
     @Override
-    public void setLeaveSound( final UUID uuid, final String sound, final float volume, final float pitch )
+    public void setLeaveSound( final UUID uuid, final String sound, final Integer volume, final Integer pitch )
     {
         try ( Connection connection = getConnection() )
         {
             try ( PreparedStatement pstmt = connection.prepareStatement( "UPDATE djp_data SET leavesound = ?, leave_volume = ?, leave_pitch = ? WHERE uuid = ?;" ) )
             {
                 pstmt.setString( 1, sound );
-                pstmt.setInt( 2, (int) volume );
-                pstmt.setInt( 3, (int) pitch );
+                pstmt.setInt( 2, volume );
+                pstmt.setInt( 3, pitch );
                 pstmt.setString( 4, uuid.toString() );
                 pstmt.executeUpdate();
             }

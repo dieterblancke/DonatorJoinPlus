@@ -47,8 +47,8 @@ public class LeaveSoundSubCommand extends DJSubCommand
             return;
         }
         String sound = Utils.getFromArrayOrDefault( args, 0, "" );
-        float volume = Utils.getFromArrayOrDefault( args, 1, 20F, Float::parseFloat );
-        float pitch = Utils.getFromArrayOrDefault( args, 2, -20F, Float::parseFloat );
+        Integer volume = Utils.getFromArrayOrDefault( args, 1, null, Integer::parseInt );
+        Integer pitch = Utils.getFromArrayOrDefault( args, 2, null, Integer::parseInt );
         User user = DonatorJoinPlus.i().getUserManager().getOrLoadUserSync( player.getUniqueId() );
 
         if ( !validateSound( sound, player ) )
@@ -83,8 +83,8 @@ public class LeaveSoundSubCommand extends DJSubCommand
             return;
         }
         String sound = Utils.getFromArrayOrDefault( args, 0, "" );
-        float volume = Utils.getFromArrayOrDefault( args, 1, 20F, Float::parseFloat );
-        float pitch = Utils.getFromArrayOrDefault( args, 2, -20F, Float::parseFloat );
+        Integer volume = Utils.getFromArrayOrDefault( args, 1, null, Integer::parseInt );
+        Integer pitch = Utils.getFromArrayOrDefault( args, 2, null, Integer::parseInt );
         String playerName = Utils.getFromArrayOrDefault( args, 3, null );
 
         if ( !validateSound( sound, sender ) )

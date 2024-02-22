@@ -16,22 +16,22 @@ public class User
     private boolean toggled;
     private String slotGroup;
     private String joinSound;
-    private float joinSoundVolume;
-    private float joinSoundPitch;
+    private Integer joinSoundVolume;
+    private Integer joinSoundPitch;
     private String leaveSound;
-    private float leaveSoundVolume;
-    private float leaveSoundPitch;
+    private Integer leaveSoundVolume;
+    private Integer leaveSoundPitch;
     private boolean soundToggled;
     private boolean fireworkToggled;
     private boolean messagesMuted;
 
-    public void setJoinSound(String joinSound, float joinSoundVolume, float joinSoundPitch) {
+    public void setJoinSound(String joinSound, Integer joinSoundVolume, Integer joinSoundPitch) {
         this.joinSound = joinSound;
         this.joinSoundVolume = joinSoundVolume;
         this.joinSoundPitch = joinSoundPitch;
     }
 
-    public void setLeaveSound(String leaveSound, float leaveSoundVolume, float leaveSoundPitch) {
+    public void setLeaveSound(String leaveSound, Integer leaveSoundVolume, Integer leaveSoundPitch) {
         this.leaveSound = leaveSound;
         this.leaveSoundVolume = leaveSoundVolume;
         this.leaveSoundPitch = leaveSoundPitch;

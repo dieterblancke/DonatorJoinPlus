@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.commands.DJSubCommand;
 import dev.endoy.djp.spigot.utils.SpigotUtils;
-import dev.endoy.djp.user.User;
 import dev.endoy.djp.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -47,8 +46,8 @@ public class JoinSoundSubCommand extends DJSubCommand
             return;
         }
         String sound = Utils.getFromArrayOrDefault( args, 0, "" );
-        float volume = Utils.getFromArrayOrDefault( args, 1, 20F, Float::parseFloat );
-        float pitch = Utils.getFromArrayOrDefault( args, 2, -20F, Float::parseFloat );
+        Integer volume = Utils.getFromArrayOrDefault( args, 1, null, Integer::parseInt );
+        Integer pitch = Utils.getFromArrayOrDefault( args, 2, null, Integer::parseInt );
 
         if ( !validateSound( sound, player ) )
         {
@@ -80,8 +79,8 @@ public class JoinSoundSubCommand extends DJSubCommand
             return;
         }
         String sound = Utils.getFromArrayOrDefault( args, 0, "" );
-        float volume = Utils.getFromArrayOrDefault( args, 1, 20F, Float::parseFloat );
-        float pitch = Utils.getFromArrayOrDefault( args, 2, -20F, Float::parseFloat );
+        Integer volume = Utils.getFromArrayOrDefault( args, 1, null, Integer::parseInt );
+        Integer pitch = Utils.getFromArrayOrDefault( args, 2, null, Integer::parseInt );
         String playerName = Utils.getFromArrayOrDefault( args, 3, null );
 
         if ( !validateSound( sound, sender ) )
