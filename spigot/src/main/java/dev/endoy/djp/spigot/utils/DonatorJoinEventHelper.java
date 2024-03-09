@@ -1,12 +1,12 @@
 package dev.endoy.djp.spigot.utils;
 
+import com.google.common.base.Strings;
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.data.EventData;
 import dev.endoy.djp.spigot.data.EventData.EventType;
 import dev.endoy.djp.spigot.data.RankData;
 import dev.endoy.djp.spigot.data.WorldEventData;
 import dev.endoy.djp.user.User;
-import com.google.common.base.Strings;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -124,12 +124,14 @@ public class DonatorJoinEventHelper
                 String soundName = user == null ? null : ( eventData.getType() == EventType.JOIN ? user.getJoinSound() : user.getLeaveSound() );
                 Optional<XSound> optionalXSound = ofNullable( Strings.emptyToNull( soundName ) ).flatMap( XSound::matchXSound );
 
-                Integer soundVolume = ofNullable(user )
+                int soundVolume = ofNullable( user )
                         .map( it -> eventData.getType() == EventType.JOIN ? it.getJoinSoundVolume() : it.getLeaveSoundVolume() )
-                        .orElse( eventData.getSoundVolume() );
-                Integer soundPitch = ofNullable(user )
+                        .or( () -> ofNullable( eventData.getSoundVolume() ) )
+                        .orElse( 20 );
+                int soundPitch = ofNullable( user )
                         .map( it -> eventData.getType() == EventType.JOIN ? it.getJoinSoundPitch() : it.getLeaveSoundPitch() )
-                        .orElse( eventData.getSoundPitch() );
+                        .or( () -> ofNullable( eventData.getSoundPitch() ) )
+                        .orElse( -20 );
 
                 if ( soundName != null && optionalXSound.isPresent() )
                 {
