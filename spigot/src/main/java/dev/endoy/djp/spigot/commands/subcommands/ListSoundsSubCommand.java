@@ -69,7 +69,7 @@ public class ListSoundsSubCommand extends SubCommand
 
                 final StringBuilder builder = new StringBuilder();
 
-                builder.append( "Sounds for Spigot " ).append( ReflectionUtils.getVersionName() ).append( ": \n" );
+                builder.append( "Sounds for Spigot " ).append( ReflectionUtils.getSpigotVersion() ).append( ": \n" );
 
                 for ( Sound sound : Sound.values() )
                 {

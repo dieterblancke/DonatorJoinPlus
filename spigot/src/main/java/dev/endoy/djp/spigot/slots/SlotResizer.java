@@ -72,17 +72,16 @@ public class SlotResizer
 
     private int calculateMax()
     {
-        final int additional = slotLimits.values().stream().mapToInt( Integer::intValue ).sum();
+        int additional = slotLimits.values().stream().mapToInt( Integer::intValue ).sum();
 
         return max + additional;
     }
 
     private boolean resize()
     {
-        final int max = calculateMax();
-        final Class<?> craftServer = ReflectionUtils.getCraftBukkitClass( "CraftServer" );
-        final Object playerList = ReflectionUtils.getHandle( craftServer, Bukkit.getServer() );
-        final Field maxPlayers = ReflectionUtils.getField( playerList.getClass().getSuperclass(), "maxPlayers" );
+        int max = calculateMax();
+        Object playerList = ReflectionUtils.getHandle( Bukkit.getServer().getClass(), Bukkit.getServer() );
+        Field maxPlayers = ReflectionUtils.getField( playerList.getClass().getSuperclass(), "maxPlayers" );
 
         try
         {
