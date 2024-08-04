@@ -18,7 +18,7 @@
 
 package dev.endoy.djp.bungee.utils;
 
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.ISection;
 import com.google.common.collect.Lists;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;

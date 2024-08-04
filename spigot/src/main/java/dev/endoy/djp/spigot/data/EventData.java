@@ -6,7 +6,7 @@ package dev.endoy.djp.spigot.data;
  * Project: DonatorJoinPlus
  */
 
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.ISection;
 import dev.endoy.djp.DonatorJoinCore;
 import dev.endoy.djp.spigot.utils.XSound;
 import lombok.Data;

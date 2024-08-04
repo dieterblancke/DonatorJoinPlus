@@ -1,6 +1,6 @@
 package dev.endoy.djp.spigot.commands.subcommands;
 
-import com.dbsoftwares.commandapi.command.SubCommand;
+import dev.endoy.spigot.commandapi.command.SubCommand;
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.utils.Utils;
 import com.google.common.collect.ImmutableList;

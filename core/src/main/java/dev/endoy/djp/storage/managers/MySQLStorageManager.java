@@ -18,7 +18,7 @@
 
 package dev.endoy.djp.storage.managers;
 
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.ISection;
 import dev.endoy.djp.DonatorJoinCore;
 import com.zaxxer.hikari.HikariConfig;
 

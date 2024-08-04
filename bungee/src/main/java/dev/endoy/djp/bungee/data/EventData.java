@@ -6,7 +6,7 @@ package dev.endoy.djp.bungee.data;
  * Project: DonatorJoinPlus
  */
 
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.ISection;
 import lombok.Data;
 
 import java.util.List;

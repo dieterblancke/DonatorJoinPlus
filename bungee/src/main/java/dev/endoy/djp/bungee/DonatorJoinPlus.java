@@ -1,7 +1,7 @@
 package dev.endoy.djp.bungee;
 
-import be.dieterblancke.configuration.api.IConfiguration;
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.IConfiguration;
+import dev.endoy.configuration.api.ISection;
 import dev.endoy.djp.DonatorJoinBase;
 import dev.endoy.djp.DonatorJoinCore;
 import dev.endoy.djp.bungee.commands.DJCommand;

@@ -6,7 +6,7 @@ package dev.endoy.djp.utils;
  * Project: DonatorJoinPlus
  */
 
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.ISection;
 import dev.endoy.djp.DonatorJoinCore;
 
 import java.util.function.Function;

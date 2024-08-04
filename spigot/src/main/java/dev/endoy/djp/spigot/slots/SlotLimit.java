@@ -1,6 +1,6 @@
 package dev.endoy.djp.spigot.slots;
 
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.ISection;
 import lombok.Data;
 
 @Data

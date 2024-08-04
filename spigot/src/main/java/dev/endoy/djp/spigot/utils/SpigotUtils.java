@@ -126,16 +126,7 @@ public class SpigotUtils
         }
     }
 
-    public static String c( final String s )
-    {
-        if ( ReflectionUtils.getNumericVersion() > 160 )
-        {
-            return applyColor( s );
-        }
-        return ChatColor.translateAlternateColorCodes( '&', s );
-    }
-
-    private static String applyColor( String message )
+    public static String c( String message )
     {
         Matcher matcher = HEX_PATTERN.matcher( message );
         while ( matcher.find() )

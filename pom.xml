@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.dbsoftwares.donatorjoin</groupId>
+    <groupId>dev.endoy.donatorjoinplus</groupId>
     <artifactId>DonatorJoinPlus</artifactId>
     <packaging>pom</packaging>
-    <version>2.4.5</version>
+    <version>2.4.6</version>
     <modules>
         <module>core</module>
         <module>spigot</module>
@@ -17,7 +17,7 @@
     <repositories>
         <repository>
             <id>endoy</id>
-            <url>https://repo.endoy.dev/artifactory/dieterblancke-public/</url>
+            <url>https://repo.endoy.dev/artifactory/endoy-public/</url>
         </repository>
         <repository>
             <id>vault-repo</id>
@@ -76,15 +76,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>be.dieterblancke.configuration</groupId>
+            <groupId>dev.endoy.configuration</groupId>
             <artifactId>ConfigurationAPI</artifactId>
-            <version>3.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.dbsoftwares.commandapi</groupId>
-            <artifactId>CommandAPI</artifactId>
-            <version>1.1.0</version>
+            <version>4.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

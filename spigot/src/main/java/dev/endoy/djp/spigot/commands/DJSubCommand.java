@@ -1,6 +1,6 @@
 package dev.endoy.djp.spigot.commands;
 
-import com.dbsoftwares.commandapi.command.SubCommand;
+import dev.endoy.spigot.commandapi.command.SubCommand;
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.utils.XSound;
 import dev.endoy.djp.utils.Utils;

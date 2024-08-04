@@ -1,8 +1,8 @@
 package dev.endoy.djp.spigot.commands;
 
-import com.dbsoftwares.commandapi.command.MainSpigotCommand;
-import com.dbsoftwares.commandapi.command.SubCommand;
-import com.dbsoftwares.commandapi.utils.MessageConfig;
+import dev.endoy.spigot.commandapi.command.MainSpigotCommand;
+import dev.endoy.spigot.commandapi.command.SubCommand;
+import dev.endoy.spigot.commandapi.utils.MessageConfig;
 import dev.endoy.djp.spigot.commands.subcommands.*;
 import dev.endoy.djp.spigot.commands.subcommands.toggle.*;
 import dev.endoy.djp.utils.Utils;

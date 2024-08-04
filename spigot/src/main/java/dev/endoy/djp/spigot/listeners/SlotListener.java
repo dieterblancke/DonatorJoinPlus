@@ -1,6 +1,6 @@
 package dev.endoy.djp.spigot.listeners;
 
-import be.dieterblancke.configuration.api.IConfiguration;
+import dev.endoy.configuration.api.IConfiguration;
 import dev.endoy.djp.spigot.DonatorJoinPlus;
 import dev.endoy.djp.spigot.slots.SlotLimit;
 import dev.endoy.djp.spigot.slots.SlotResizer;

@@ -1,7 +1,7 @@
 package dev.endoy.djp;
 
-import be.dieterblancke.configuration.api.IConfiguration;
-import be.dieterblancke.configuration.api.ISection;
+import dev.endoy.configuration.api.IConfiguration;
+import dev.endoy.configuration.api.ISection;
 import dev.endoy.djp.storage.AbstractStorageManager;
 
 import java.io.File;

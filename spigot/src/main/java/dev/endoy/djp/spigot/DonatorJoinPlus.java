@@ -6,9 +6,9 @@ package dev.endoy.djp.spigot;
  * Project: DonatorJoinPlus
  */
 
-import be.dieterblancke.configuration.api.IConfiguration;
-import be.dieterblancke.configuration.api.ISection;
-import com.dbsoftwares.commandapi.CommandManager;
+import dev.endoy.configuration.api.IConfiguration;
+import dev.endoy.configuration.api.ISection;
+import dev.endoy.spigot.commandapi.CommandManager;
 import dev.endoy.djp.DonatorJoinBase;
 import dev.endoy.djp.DonatorJoinCore;
 import dev.endoy.djp.library.Library;
